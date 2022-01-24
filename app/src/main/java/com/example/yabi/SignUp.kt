@@ -25,56 +25,74 @@ class SignUp : AppCompatActivity() {
 
     fun onPressSignUp(view: android.view.View) {
 
-        val email = editTextTextEmailAddress
-        val pass = editTextTextPassword
+        val email = editTextTextEmailAddress.text
+        val pass = editTextTextPassword.text
 
         val queue = Volley.newRequestQueue(this)
         val url = "www.example.com/signup?email=$email&password=$pass"
 
-        // Request a string response from the provided URL.
-        val stringRequest = JsonObjectRequest(Request.Method.GET, url, null,
-            { response ->
-                try {
 
-                    if(response.getBoolean("accountCreated"))
-                    {
-                        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-                        val editor = sharedPreferences.edit()
+        when {
+            email.isEmpty() -> {
+                Toast.makeText(
+                    applicationContext,
+                    "Error: Email cannot be blank.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            pass.isEmpty() -> {
+                Toast.makeText(
+                    applicationContext,
+                    "Error: Password cannot be blank.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            else -> {
+                // Request a string response from the provided URL.
+                val stringRequest = JsonObjectRequest(Request.Method.GET, url, null,
+                    { response ->
+                        try {
 
-                        editor.putBoolean("isGuest", false)
-                        editor.putInt("userID", response.getInt("userId"))
-                        editor.apply()
+                            if (response.getBoolean("accountCreated")) {
+                                val sharedPreferences =
+                                    getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+                                val editor = sharedPreferences.edit()
 
-                        this.onSignUpSuccess()
-                    }
-                    else
+                                editor.putInt("userID", response.getInt("userId"))
+                                editor.apply()
+
+                                this.onSignUpSuccess()
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Error: Account Creation failed.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        } catch (e: JSONException) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Error: There was an error in the response.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } catch (e: RuntimeException) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Error: There was an error in the runtime.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    },
                     {
                         Toast.makeText(
                             applicationContext,
-                            "Error: Account Creation failed.",
-                            Toast.LENGTH_LONG
+                            "Error: The request failed",
+                            Toast.LENGTH_SHORT
                         ).show()
-                    }
-                }
-                catch (e: JSONException)
-                {
-                    Toast.makeText(
-                        applicationContext,
-                        "Error: There was an error in the response.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                catch(e: RuntimeException)
-                {
-                    Toast.makeText(
-                        applicationContext,
-                        "Error: There was an error in the runtime.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            },
-            { Toast.makeText(applicationContext, "Error: The request failed", Toast.LENGTH_SHORT).show() })
-        queue.add(stringRequest)
+                    })
+                queue.add(stringRequest)
+            }
+        }
     }
 
     private fun onSignUpSuccess()
@@ -93,7 +111,6 @@ class SignUp : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        editor.putBoolean("isGuest", false)
         editor.putInt("userID", -1)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
