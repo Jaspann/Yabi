@@ -10,4 +10,5 @@
     <string name="create_an_account">Create an Account</string>
     <string name="create_account">Create Account</string>
     <string name="create_account_instead">Create Account Instead</string>
+    <string name="name">Name</string>
 </resources>
