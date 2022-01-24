@@ -25,11 +25,12 @@ class SignUp : AppCompatActivity() {
 
     fun onPressSignUp(view: android.view.View) {
 
-        val email = editTextTextEmailAddress.text
-        val pass = editTextTextPassword.text
+        val email = editTextEmailAddress.text
+        val pass = editTextPassword.text
+        val name = editTextName.text
 
         val queue = Volley.newRequestQueue(this)
-        val url = "www.example.com/signup?email=$email&password=$pass"
+        val url = "www.example.com/signup?email=$email&password=$pass&name=$name"
 
 
         when {
@@ -44,6 +45,13 @@ class SignUp : AppCompatActivity() {
                 Toast.makeText(
                     applicationContext,
                     "Error: Password cannot be blank.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            name.isEmpty() -> {
+                Toast.makeText(
+                    applicationContext,
+                    "Error: Name cannot be blank.",
                     Toast.LENGTH_LONG
                 ).show()
             }

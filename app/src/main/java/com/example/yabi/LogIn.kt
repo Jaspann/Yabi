@@ -19,8 +19,8 @@ class LogIn : AppCompatActivity() {
 
     fun onPressLogIn(view: android.view.View) {
 
-        val email = editTextTextEmailAddress.text
-        val pass = editTextTextPassword.text
+        val email = editTextEmailAddress.text
+        val pass = editTextPassword.text
 
         val queue = Volley.newRequestQueue(this)
         val url = "www.example.com/LogIn?email=$email&password=$pass"
