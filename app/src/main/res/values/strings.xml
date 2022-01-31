@@ -11,4 +11,11 @@
     <string name="create_account">Create Account</string>
     <string name="create_account_instead">Create Account Instead</string>
     <string name="name">Name</string>
+    <string name="home">Home</string>
+    <string name="account">Account</string>
+    <string name="chats">Chats</string>
+    <string name="your_posts">Your Posts</string>
+    <string name="completed_offers">Completed Offers</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
 </resources>
