@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "388284463743",
+    "project_id": "yabi-cs204",
+    "storage_bucket": "yabi-cs204.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388284463743:android:73cef752b7afcb0e7ddd4a",
+        "android_client_info": {
+          "package_name": "com.example.yabi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388284463743-iaonmn1mb1d4s40lj3c53a2ogqlls5u0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgIgVRessatcuJC1rwTCESZ42koQJM_20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388284463743-iaonmn1mb1d4s40lj3c53a2ogqlls5u0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
