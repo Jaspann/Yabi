@@ -4,11 +4,22 @@
     <string name="e_mail">E-mail</string>
     <string name="password">Password</string>
     <string name="sign_up">Sign up</string>
-    <string name="log_in">Log in</string>
+    <string name="log_in">Log In</string>
     <string name="log_in_instead">Log In Instead</string>
     <string name="browse_as_guest">Browse as Guest</string>
     <string name="create_an_account">Create an Account</string>
     <string name="create_account">Create Account</string>
     <string name="create_account_instead">Create Account Instead</string>
     <string name="name">Name</string>
+    <string name="home">Home</string>
+    <string name="account">Account</string>
+    <string name="chats">Chats</string>
+    <string name="your_posts">Your Posts</string>
+    <string name="completed_offers">Completed Offers</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="search">Search</string>
+    <string name="for_you">For You</string>
+    <string name="local">Local</string>
+    <string name="new_listings">New</string>
 </resources>

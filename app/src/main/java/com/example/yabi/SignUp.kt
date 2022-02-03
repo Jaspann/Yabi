@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -17,6 +18,7 @@ import java.lang.RuntimeException
 
 class SignUp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
@@ -120,6 +122,7 @@ class SignUp : AppCompatActivity() {
         val editor = sharedPreferences.edit()
 
         editor.putInt("userID", -1)
+        editor.apply()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }

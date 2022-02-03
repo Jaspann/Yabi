@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_baseline_account_circle_24"
+            android:title="@string/account" />
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_baseline_message_24"
+            android:title="@string/chats" />
+        <item
+            android:id="@+id/nav_posts"
+            android:icon="@drawable/ic_baseline_trip_origin_24"
+            android:title="@string/your_posts" />
+        <item
+            android:id="@+id/nav_complete"
+            android:icon="@drawable/ic_baseline_repeat_24"
+            android:title="@string/completed_offers"/>
+    </group>
+</menu>

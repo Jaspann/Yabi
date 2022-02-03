@@ -21,7 +21,7 @@
         android:id="@+id/currentScreenText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log In"
+        android:text="@string/log_in"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +64,8 @@
         android:text="@string/log_in"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
+        android:backgroundTint="@color/YabiGreen"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -82,7 +83,8 @@
             android:onClick="onPressSignUp"
             android:text="@string/create_account_instead"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="@color/YabiGreen"/>
 
         <Button
             android:id="@+id/BrowseAsGuestButton"
@@ -93,7 +95,8 @@
             android:text="@string/browse_as_guest"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/CreateAccountButton" />
+            app:layout_constraintTop_toBottomOf="@+id/CreateAccountButton"
+            android:backgroundTint="@color/YabiGreen"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

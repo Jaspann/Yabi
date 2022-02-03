@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/for_you"
+        android:title="@string/for_you"
+        android:icon="@drawable/ic_baseline_favorite_24"/>
+    <item
+        android:id="@+id/local"
+        android:title="@string/local"
+        android:icon="@drawable/ic_baseline_location_on_24"/>
+    <item
+        android:id="@+id/new_postings"
+        android:title="@string/new_listings"
+        android:icon="@drawable/ic_baseline_explore_24"/>
+    <item
+        android:id="@+id/your_posts"
+        android:title="@string/your_posts"
+        android:icon="@drawable/ic_baseline_trip_origin_24"/>
+</menu>
