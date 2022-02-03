@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#21B878"
+            android:background="@color/YabiGreen"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,10 +32,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:menu="@menu/main_bottom_nav"
-            app:itemRippleColor="#21B878"
+            app:itemRippleColor="@color/YabiGreen"
             app:itemTextColor="#FFF"
             app:itemIconTint="#FFF"
-            android:background="#21B878"/>
+            android:background="@color/YabiGreen"/>
 
         <FrameLayout
             android:id="@+id/fragment_container"
