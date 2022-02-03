@@ -18,4 +18,8 @@
     <string name="completed_offers">Completed Offers</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="search">Search</string>
+    <string name="for_you">For You</string>
+    <string name="local">Local</string>
+    <string name="new_listings">New</string>
 </resources>
