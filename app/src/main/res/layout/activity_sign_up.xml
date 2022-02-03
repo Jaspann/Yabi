@@ -77,7 +77,8 @@
         android:text="@string/create_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+        android:backgroundTint="#21B878"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -95,7 +96,8 @@
             android:onClick="onPressLogIn"
             android:text="@string/log_in_instead"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="#21B878"/>
 
         <Button
             android:id="@+id/BrowseAsGuestButton"
@@ -105,6 +107,7 @@
             android:onClick="onPressBrowseAsGuest"
             android:text="@string/browse_as_guest"
             app:layout_constraintStart_toEndOf="@+id/logInButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="#21B878"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
