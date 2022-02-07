@@ -22,4 +22,6 @@
     <string name="for_you">For You</string>
     <string name="local">Local</string>
     <string name="new_listings">New</string>
+    <string name="exampleDescription">Here is some text! Here is some text! Here is some text! Here is some text! Here is some text! Here is some text! Here is some text! Here is some text! Here is some text!</string>
+    <string name="ExampleTitle">Very Long Ad Title Name Very Long Ad Title Name Very Long Ad Title Name</string>
 </resources>

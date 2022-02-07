@@ -5,20 +5,25 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
         nav_view.setNavigationItemSelectedListener(this)
+        bottomBar.setOnItemSelectedListener(this)
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar,
@@ -73,6 +78,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_complete -> {
                 val intent = Intent(this, CompletedOffers::class.java)
                 startActivity(intent)
+            }
+            R.id.for_you -> {
+                forYouRecycler.visibility = View.VISIBLE
+                LocalRecycler.visibility = View.GONE
+                NewPostsRecycler.visibility = View.GONE
+                YourPostsRecycler.visibility = View.GONE
+
+            }
+            R.id.local -> {
+                forYouRecycler.visibility = View.GONE
+                LocalRecycler.visibility = View.VISIBLE
+                NewPostsRecycler.visibility = View.GONE
+                YourPostsRecycler.visibility = View.GONE
+
+            }
+            R.id.new_postings -> {
+                forYouRecycler.visibility = View.GONE
+                LocalRecycler.visibility = View.GONE
+                NewPostsRecycler.visibility = View.VISIBLE
+                YourPostsRecycler.visibility = View.GONE
+
+            }
+            R.id.your_posts -> {
+                forYouRecycler.visibility = View.GONE
+                LocalRecycler.visibility = View.GONE
+                NewPostsRecycler.visibility = View.GONE
+                YourPostsRecycler.visibility = View.VISIBLE
+
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)
