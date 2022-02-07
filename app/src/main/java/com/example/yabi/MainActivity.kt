@@ -1,12 +1,14 @@
 package com.example.yabi
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.MainThread
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
@@ -31,6 +33,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
         drawer_layout.addDrawerListener(toggle)
     }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+
+        val users = arrayOf("Francis Lapointe", "William Parker", "Darian Fisher", "Utpal Datta")
+        val scores = arrayOf(92, 76, 95, 98)
+        val titles = arrayOf("Android Phone", "Used Kids Toys", "Christmas Tree", "Star Wars Original Poster")
+        val tags = arrayOf( arrayOf("$30.00", "Manchester", "New Hampshire", "Mobile", "Tech", "Used"),
+                            arrayOf("$10.00", "Litchfield", "New Hampshire", "Kids", "Toys", "Used"),
+                            arrayOf("$50.00", "Manchester", "New Hampshire", "Christmas"),
+                            arrayOf("$300.00", "Manchester", "New Hampshire", "Movies", "Ads"))
+        val desc = arrayOf( "Would like to replace my Samsung 2013, any phone will do, as long as it works",
+                            "Relitive is having a kid soon, would like some toys in case they come over",
+                            "Looking for Christmas Trees!",
+                            "Star Wars I - VI original movie posters. Must be in good condition.")
+
+        super.onPostCreate(savedInstanceState)
+    }
+
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
