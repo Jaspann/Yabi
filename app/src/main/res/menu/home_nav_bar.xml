@@ -6,4 +6,11 @@
         android:title="@string/search"
         android:icon="@drawable/ic_baseline_search_24"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/add_post_button"
+        android:title="@string/add_item"
+        android:icon="@drawable/ic_baseline_add_circle_24"
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        />
 </menu>

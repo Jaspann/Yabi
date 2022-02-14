@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/activity_account.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/activity_add_post.xml" value="0.25" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/activity_completed_offers.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/activity_log_in.xml" value="0.29375" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/activity_main.xml" value="0.33" />
@@ -17,6 +19,7 @@
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/nav_drawer_header.xml" value="0.29483695652173914" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/user_tag.xml" value="0.67" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/want_ad_card.xml" value="0.67" />
+        <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/layout/your_post_card.xml" value="0.67" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/menu/activity_main_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/menu/home_nav_bar.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/menu/main_bottom_nav.xml" value="0.36666666666666664" />
