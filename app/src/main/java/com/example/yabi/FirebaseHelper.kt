@@ -56,6 +56,34 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             }
     }
 
+    fun createListing(itemname: String, requestedprice: String, covershipping: Boolean, coveredshipping: Int,
+        itemdescription: String, shippingstreet: String, shippingcity: String, shippingcountry: String,
+        postalcode: String) {
+
+        val listing = hashMapOf(
+            "itemname" to itemname,
+            "requestedprice" to requestedprice,
+            "covershipping" to covershipping,
+            "coveredshipping" to coveredshipping,
+            "itemdescription" to itemdescription,
+            "shippingstreet" to shippingstreet,
+            "shippingcity" to shippingcity,
+            "shippingcountry" to shippingcountry,
+            "postalcode" to postalcode
+        )
+
+        db.collection("listings")
+            .add(listing)
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding document", e)
+            }
+
+
+    }
+
 
 
 }
