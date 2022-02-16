@@ -10,6 +10,14 @@ import com.google.firebase.ktx.Firebase
 
 class FirebaseHelper(var db: FirebaseFirestore) {
 
+    var previousTaskFinished: Boolean = false
+    var previousTaskSuccess: Boolean = false
+
+    fun resetStatusFlags() {
+        previousTaskFinished = false
+        previousTaskSuccess = false
+    }
+
     fun authenticateUser(email: String, password: String): Boolean {
 
         var pwordmatch = false
@@ -31,10 +39,11 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)
             }
+
         return pwordmatch
     }
 
-    fun createUser(email: String, name: String, password: String,) {
+    fun createUser(email: String, name: String, password: String,){
 
         //TODO Add code that converts raw password to SHA512
 
@@ -49,10 +58,14 @@ class FirebaseHelper(var db: FirebaseFirestore) {
         db.collection("users")
             .add(user)
             .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                Log.d(TAG, "User document added with ID: ${documentReference.id}")
+                previousTaskFinished = true
+                previousTaskSuccess = true
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
+                Log.w(TAG, "Error adding user document", e)
+                previousTaskFinished = true
+                previousTaskSuccess = false
             }
     }
 
