@@ -1,31 +1,18 @@
 package com.example.yabi
 
 import android.Manifest
-import android.R.attr
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.app.ActivityCompat.startActivityForResult
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
-import android.R.attr.data
 import android.net.Uri
-import androidx.core.app.ActivityCompat.startActivityForResult
 import pub.devrel.easypermissions.EasyPermissions
-import androidx.constraintlayout.widget.ConstraintLayout
-
-import androidx.constraintlayout.widget.ConstraintSet
-import android.R.attr.right
-
-import android.R.attr.left
 
 class AddPost : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +21,53 @@ class AddPost : AppCompatActivity() {
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        // If Statement chain to autofill counter offers
+        if(intent.hasExtra("isCounter"))
+        {
+            toolbar.title = "Create Offer"
+            postButton.text = getString(R.string.submit_offer)
+        }
+        if(intent.hasExtra("title"))
+        {
+            editTextItemName.setText(intent.getStringExtra("title"))
+        }
+        if(intent.hasExtra("price"))
+        {
+            editTextRequestingPrice.setText(String.format("%.2f",intent.getDoubleExtra("price", 0.00)))
+        }
+        if(intent.hasExtra("location"))
+        {
+            presetLocationLineOne.text = intent.getStringExtra("location")
+            presetLocationLineTwo.visibility = View.GONE
+        }
+        else
+        {
+            buttonLocationLineOne.visibility = View.GONE
+            presetLocationLineOne.visibility = View.GONE
+            presetLocationLineTwo.visibility = View.GONE
+        }
+        if(intent.hasExtra("shippingSeller"))
+        {
+            if(intent.getBooleanExtra("shippingSeller", false))
+                sellerCoverShippingButton.isChecked = true
+            else
+                buyerCoverShippingButton.isChecked = true
+        }
+        if(intent.hasExtra("covering"))
+        {
+            if(intent.getDoubleExtra("covering", -1.0) == -1.0)
+                coverShippingFullButton.isChecked = true
+            else {
+                coverShippingPartButton.isChecked = true
+                editTextCoverShippingUntil.setText(String.format("%.2f",intent.getDoubleExtra("covering", 0.0)))
+            }
+        }
+    }
+
+
+    fun onPressPost(view: android.view.View) {
+        //TODO: Have post go to database, with logic for if post or offer
     }
 
     fun onPressAddImage(view: android.view.View) {
@@ -73,7 +107,7 @@ class AddPost : AppCompatActivity() {
             }
             val columnIndex = cursor!!.getColumnIndex(filePathColumn[0])
             val picturePath = cursor.getString(columnIndex)
-            cursor.close();
+            cursor.close()
             userImage.setImageBitmap(BitmapFactory.decodeFile(picturePath))
         }
         else

@@ -35,12 +35,32 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         holder.titleTextVew.text = ItemsViewModel.title
         holder.descTextView.text = ItemsViewModel.desc
         holder.imageView.setImageResource(ItemsViewModel.img)
+        val price = "$" + String.format("%.2f", ItemsViewModel.price)
+        holder.price.text = price
+        holder.location.text = ItemsViewModel.location
 
-        holder.wantAdButton.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                val intent = Intent(ItemsViewModel.context, Account::class.java)
-                ItemsViewModel.context.startActivity(intent)
-            }})
+        var shipText = "Shipping: "
+        shipText += if(ItemsViewModel.shippingSeller)
+            "Seller, "
+        else
+            "Buyer, "
+
+        shipText += if(ItemsViewModel.shipCover == -1.0)
+            "In Full"
+        else
+            "Up To $" + String.format("%.2f", ItemsViewModel.shipCover)
+        holder.shipping.text = shipText
+
+        holder.wantAdButton.setOnClickListener {
+            val intent = Intent(ItemsViewModel.context, AddPost::class.java)
+            intent.putExtra("isCounter", true)
+            intent.putExtra("title", ItemsViewModel.title)
+            intent.putExtra("price", ItemsViewModel.price)
+            intent.putExtra("location", ItemsViewModel.location)
+            intent.putExtra("shippingSeller", ItemsViewModel.shippingSeller)
+            intent.putExtra("covering", ItemsViewModel.shipCover)
+            ItemsViewModel.context.startActivity(intent)
+        }
 
 
     }
@@ -65,6 +85,9 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         val descTextView: TextView = itemView.findViewById(R.id.descriptionText)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val wantAdButton: Button = itemView.findViewById(R.id.wantAdButton)
+        val price: TextView = itemView.findViewById(R.id.priceTextView)
+        val location: TextView = itemView.findViewById(R.id.locTextView)
+        val shipping: TextView = itemView.findViewById(R.id.shipTextView)
     }
 
 }

@@ -78,12 +78,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewShipping">
 
                 <RadioButton
+                    android:id="@+id/buyerCoverShippingButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:text="@string/buyer_covers_shipping" />
 
                 <RadioButton
+                    android:id="@+id/sellerCoverShippingButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
@@ -100,12 +102,14 @@
                 android:layout_marginStart="20dp">
 
                 <RadioButton
+                    android:id="@+id/coverShippingFullButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:text="@string/covers_shipping_in_full" />
 
                 <RadioButton
+                    android:id="@+id/coverShippingPartButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
@@ -167,6 +171,7 @@
                 app:layout_constraintTop_toBottomOf="@id/textViewLocation">
 
                 <RadioButton
+                    android:id="@+id/buttonLocationLineOne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
@@ -212,6 +217,7 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/radioGroupLocation"
                 app:layout_constraintTop_toBottomOf="@+id/presetLocationLineOne" />
+
 
             <EditText
                 android:id="@+id/editTextStreetNumber"
@@ -338,6 +344,7 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/postButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_post"
@@ -345,6 +352,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="20dp"
+        android:onClick="onPressPost"
         />
 
 

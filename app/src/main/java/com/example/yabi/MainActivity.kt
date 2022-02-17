@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val photos = arrayOf(0)
 
         for (i in users.indices) {
-            data.add(WantAdViewModel(users[i], scores[i], titles[i], desc[i], photos[i], this))
+            data.add(WantAdViewModel(users[i], scores[i], titles[i], desc[i], photos[i], 50.00, "Manchester, NH", true, 5.0, this))
         }
 
 
