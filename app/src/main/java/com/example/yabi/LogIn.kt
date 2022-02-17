@@ -11,6 +11,9 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.json.JSONException
 import java.lang.RuntimeException
 
+
+
+
 class LogIn : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +43,7 @@ class LogIn : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             }
-            else -> {
+              else -> {
                 // Request a string response from the provided URL.
                 val stringRequest = JsonObjectRequest(
                     Request.Method.GET, url, null,
@@ -87,26 +90,25 @@ class LogIn : AppCompatActivity() {
                 queue.add(stringRequest)
             }
         }
-    }
 
-    private fun onLogInSuccess()
-    {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
+        }
 
-    fun onPressSignUp(view: android.view.View) {
-        val intent = Intent(this, SignUp::class.java)
-        startActivity(intent)
-    }
+        private fun onLogInSuccess() {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
-    fun onPressBrowseAsGuest(view: android.view.View)
-    {
-        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        fun onPressSignUp(view: android.view.View) {
+            val intent = Intent(this, SignUp::class.java)
+            startActivity(intent)
+        }
 
-        editor.putInt("userID", -1)
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        fun onPressBrowseAsGuest(view: android.view.View) {
+            val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+
+            editor.putInt("userID", -1)
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
-}
