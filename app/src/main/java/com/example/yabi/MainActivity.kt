@@ -55,10 +55,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val titles = arrayOf("Obj I want")
         val desc = arrayOf("If anyone has this object, please reach out.")
         val photos = arrayOf(0)
-        val offers = arrayOf(2)
+        val offers = arrayOf(1)
 
         for (i in titles.indices) {
-            data.add(YourPostViewModel(titles[i], desc[i], photos[i], offers[i]))
+            data.add(YourPostViewModel(titles[i], desc[i], photos[i], offers[i], 10.00, "New York, NY", false, -1.0, this))
         }
         val recyclerview = findViewById<RecyclerView>(R.id.YourPostsRecycler)
 
