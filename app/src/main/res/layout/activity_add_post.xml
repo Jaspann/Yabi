@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".AddPost">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/YabiGreen"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="New Post" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextItemName"
+                android:layout_width="360dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="@string/item_name"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/requestingPriceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/requesting_price"
+                android:textColor="#000"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextRequestingPrice"
+                app:layout_constraintStart_toStartOf="@+id/editTextItemName"
+                app:layout_constraintTop_toTopOf="@+id/editTextRequestingPrice" />
+
+            <EditText
+                android:id="@+id/editTextRequestingPrice"
+                android:layout_width="142dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:hint="@string/_00_00"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                app:layout_constraintStart_toEndOf="@+id/textView11"
+                app:layout_constraintTop_toBottomOf="@+id/editTextItemName"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupShipping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="@+id/requestingPriceText"
+                app:layout_constraintTop_toBottomOf="@+id/textViewShipping">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/do_not_cover_shipping" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/cover_shipping_in_full" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/cover_shipping_until" />
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/editTextCoverShippingUntil"
+                android:layout_width="123dp"
+                android:layout_height="48dp"
+                android:ems="10"
+                android:hint="@string/_00_00"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/radioGroupShipping"
+                app:layout_constraintStart_toEndOf="@+id/textView10" />
+
+            <TextView
+                android:id="@+id/textViewMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/message"
+                android:textColor="#000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/radioGroupShipping"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroupShipping" />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/enter_description_for_item"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:minHeight="80dp"
+                app:layout_constraintStart_toStartOf="@+id/textViewMessage"
+                app:layout_constraintTop_toBottomOf="@+id/textViewMessage" />
+
+            <TextView
+                android:id="@+id/textViewLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/location"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/editTextTextMultiLine"
+                app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="96dp"
+                app:layout_constraintStart_toStartOf="@id/textViewLocation"
+                app:layout_constraintTop_toBottomOf="@id/textViewLocation">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/preset_location" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/custom_location" />
+            </RadioGroup>
+
+
+            <TextView
+                android:id="@+id/textViewShipping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/shipping"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/requestingPriceText"
+                app:layout_constraintTop_toBottomOf="@+id/editTextRequestingPrice" />
+
+            <TextView
+                android:id="@+id/presetLocationLineOne"
+                android:layout_width="215dp"
+                android:layout_height="24dp"
+                android:maxHeight="24dp"
+                android:text="@string/address_line_1"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/radioGroupLocation"
+                app:layout_constraintTop_toTopOf="@+id/radioGroupLocation" />
+
+            <TextView
+                android:id="@+id/presetLocationLineTwo"
+                android:layout_width="215dp"
+                android:layout_height="24dp"
+                android:maxHeight="24dp"
+                android:text="@string/address_line_2"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/radioGroupLocation"
+                app:layout_constraintTop_toBottomOf="@+id/presetLocationLineOne" />
+
+            <EditText
+                android:id="@+id/editTextStreetNumber"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:hint="@string/number"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:minHeight="48dp"
+                app:layout_constraintStart_toStartOf="@+id/radioGroupLocation"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroupLocation" />
+
+            <EditText
+                android:id="@+id/editTextStreet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:autofillHints="postalAddress"
+                android:ems="10"
+                android:hint="@string/street"
+                android:inputType="textPostalAddress"
+                android:minHeight="48dp"
+                app:layout_constraintStart_toEndOf="@+id/editTextStreetNumber"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroupLocation" />
+
+            <EditText
+                android:id="@+id/editTextCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints="postalAddress"
+                android:ems="10"
+                android:hint="@string/city"
+                android:inputType="textPostalAddress"
+                app:layout_constraintStart_toStartOf="@+id/editTextStreetNumber"
+                app:layout_constraintTop_toBottomOf="@+id/editTextStreetNumber" />
+
+            <EditText
+                android:id="@+id/editTextState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints="postalAddress"
+                android:ems="10"
+                android:hint="@string/state"
+                android:inputType="textPostalAddress"
+                android:minHeight="48dp"
+                app:layout_constraintStart_toStartOf="@+id/editTextCity"
+                app:layout_constraintTop_toBottomOf="@+id/editTextCity" />
+
+            <EditText
+                android:id="@+id/editTextCountry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints="postalAddress"
+                android:ems="10"
+                android:hint="@string/country"
+                android:inputType="textPostalAddress"
+                app:layout_constraintStart_toStartOf="@+id/editTextState"
+                app:layout_constraintTop_toBottomOf="@+id/editTextState" />
+
+            <EditText
+                android:id="@+id/editTextPostal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints="postalAddress"
+                android:ems="10"
+                android:hint="@string/postal_code"
+                android:inputType="numberDecimal"
+                app:layout_constraintStart_toStartOf="@+id/editTextState"
+                app:layout_constraintTop_toBottomOf="@+id/editTextCountry" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dollar_sign"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextCoverShippingUntil"
+                app:layout_constraintStart_toEndOf="@+id/radioGroupShipping"
+                app:layout_constraintTop_toTopOf="@+id/editTextCoverShippingUntil" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/dollar_sign"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/requestingPriceText"
+                app:layout_constraintStart_toEndOf="@+id/requestingPriceText"
+                app:layout_constraintTop_toTopOf="@+id/requestingPriceText"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onPressAddImage"
+                android:text="@string/get_photos"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="200dp"
+                android:backgroundTint="#6eeef4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPostal"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/userImage"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="gone"
+                android:layout_marginBottom="200dp"
+                android:contentDescription="@string/your_photo" />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_post"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="20dp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
