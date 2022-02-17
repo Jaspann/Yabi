@@ -51,11 +51,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val data = ArrayList<YourPostViewModel>()
 
-        /*
+        // Used For testing, remove when implementing database
+        val titles = arrayOf("Obj I want")
+        val desc = arrayOf("If anyone has this object, please reach out.")
+        val photos = arrayOf(0)
+        val offers = arrayOf(2)
+
         for (i in titles.indices) {
-            data.add(YourPostViewModel(titles[i], desc[i], photos[i]))
+            data.add(YourPostViewModel(titles[i], desc[i], photos[i], offers[i]))
         }
-        */
         val recyclerview = findViewById<RecyclerView>(R.id.YourPostsRecycler)
 
         recyclerview.layoutManager = LinearLayoutManager(this)
@@ -67,14 +71,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun fillHome()
     {
-
-
         val data = ArrayList<WantAdViewModel>()
-        /*
+
+        // Used For testing, remove when implementing database
+        val users = arrayOf("Even Grant")
+        val scores = arrayOf(98)
+        val titles = arrayOf("Magic \"connect to database\" wire")
+        val desc = arrayOf("I really need help connecting to Noah's database, if you have a magic wire to do this, I am willing to pay whatever is needed.")
+        val photos = arrayOf(0)
+
         for (i in users.indices) {
-            data.add(WantAdViewModel(users[i], scores[i], titles[i], desc[i], photos[i]))
+            data.add(WantAdViewModel(users[i], scores[i], titles[i], desc[i], photos[i], this))
         }
-        */
+
 
         val recyclerview = findViewById<RecyclerView>(R.id.forYouRecycler)
 

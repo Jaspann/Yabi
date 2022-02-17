@@ -71,16 +71,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="10dp"
                     android:backgroundTint="#E9C958"
                     android:includeFontPadding="false"
-                    android:textSize="13sp"
                     android:text="@string/offers_button"
-                    app:cornerRadius="20dp"
                     android:textAllCaps="false"
+                    android:textSize="13sp"
+                    app:cornerRadius="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/descriptionText"/>
+                    app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
 
-                <com.google.android.material.button.MaterialButton
+                    <com.google.android.material.button.MaterialButton
                     android:id="@+id/editButton"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"

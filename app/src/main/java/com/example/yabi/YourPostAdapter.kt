@@ -3,8 +3,10 @@ package com.example.yabi
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 
 class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView.Adapter<YourPostAdapter.ViewHolder>() {
@@ -22,11 +24,17 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val ItemsViewModel = mList[position]
+        val itemsViewModel = mList[position]
 
-        holder.titleTextVew.text = ItemsViewModel.title
-        holder.descTextView.text = ItemsViewModel.desc
-        holder.imageView.setImageResource(ItemsViewModel.img)
+        holder.titleTextVew.text = itemsViewModel.title
+        holder.descTextView.text = itemsViewModel.desc
+        holder.imageView.setImageResource(itemsViewModel.img)
+        val offerText = itemsViewModel.offers.toString() + " Offers"
+        holder.offerButton.text = offerText
+
+        //TODO: holder.offerButton.setOnClickListener()
+        //TODO: holder.editButton.setOnClickListener()
+        //TODO: holder.deleteButton.setOnClickListener()
 
     }
 
@@ -41,5 +49,8 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
         val titleTextVew: TextView = itemView.findViewById(R.id.titleText)
         val descTextView: TextView = itemView.findViewById(R.id.descriptionText)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val offerButton: Button = itemView.findViewById(R.id.offerButton)
+        val editButton: Button = itemView.findViewById(R.id.editButton)
+        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
     }
 }

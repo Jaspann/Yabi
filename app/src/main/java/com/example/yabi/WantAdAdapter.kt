@@ -1,6 +1,8 @@
 package com.example.yabi
 
 import android.content.ClipData
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,8 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 
 class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Adapter<WantAdAdapter.ViewHolder>() {
+
+    //var context : Context
 
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,8 +36,20 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         holder.descTextView.text = ItemsViewModel.desc
         holder.imageView.setImageResource(ItemsViewModel.img)
 
+        holder.wantAdButton.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                val intent = Intent(ItemsViewModel.context, Account::class.java)
+                ItemsViewModel.context.startActivity(intent)
+            }})
+
 
     }
+/*
+    fun onPressWantAd()
+    {
+        val intent = Intent(context, Account::class.java)
+        context.startActivity(intent)
+    }*/
 
 
     // return the number of the items in the list
@@ -48,7 +64,7 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         val titleTextVew: TextView = itemView.findViewById(R.id.titleText)
         val descTextView: TextView = itemView.findViewById(R.id.descriptionText)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        //val offerButton: Button = itemView.findViewById(R.id.offerButton)
+        val wantAdButton: Button = itemView.findViewById(R.id.wantAdButton)
     }
 
 }
