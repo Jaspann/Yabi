@@ -14,7 +14,13 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.json.JSONException
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.getField
+import com.google.firebase.ktx.Firebase
 import java.lang.RuntimeException
+
+
 
 class SignUp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,15 +28,15 @@ class SignUp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-
     }
 
     fun onPressSignUp(view: android.view.View) {
 
+        var db = Firebase.firestore
+        var helper = FirebaseHelper(db)
         val email = editTextEmailAddress.text
         val pass = editTextPassword.text
         val name = editTextName.text
-
         val queue = Volley.newRequestQueue(this)
         val url = "www.example.com/signup?email=$email&password=$pass&name=$name"
 
@@ -58,49 +64,16 @@ class SignUp : AppCompatActivity() {
                 ).show()
             }
             else -> {
-                // Request a string response from the provided URL.
-                val stringRequest = JsonObjectRequest(Request.Method.GET, url, null,
-                    { response ->
-                        try {
-
-                            if (response.getBoolean("accountCreated")) {
-                                val sharedPreferences =
-                                    getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-                                val editor = sharedPreferences.edit()
-
-                                editor.putInt("userID", response.getInt("userId"))
-                                editor.apply()
-
-                                this.onSignUpSuccess()
-                            } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Error: Account Creation failed.",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        } catch (e: JSONException) {
-                            Toast.makeText(
-                                applicationContext,
-                                "Error: There was an error in the response.",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: RuntimeException) {
-                            Toast.makeText(
-                                applicationContext,
-                                "Error: There was an error in the runtime.",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    },
-                    {
-                        Toast.makeText(
-                            applicationContext,
-                            "Error: The request failed",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    })
-                queue.add(stringRequest)
+                val email: String = editTextEmailAddress.text.toString().trim { it <= ' '}
+                val password : String = editTextPassword.text.toString().trim { it <= ' '} //trims spaces
+                val name : String = editTextName.text.toString().trim {it <= ' '}
+                //user creation
+                helper.createUser(email,name, password)
+                Toast.makeText(
+                    this@SignUp,
+                    "register attempt Successful",
+                    Toast.LENGTH_SHORT
+                )
             }
         }
     }
