@@ -33,6 +33,7 @@
                     android:id="@+id/titleText"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:maxHeight="50dp"
                     android:paddingTop="5dp"
                     android:layout_marginStart="16dp"
@@ -53,7 +54,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/titleText">
 
                     <TextView
-                        android:id="@+id/priceTextView"
+                        android:id="@+id/yourPriceTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
@@ -74,7 +75,7 @@
                     app:layout_constraintTop_toTopOf="@+id/priceCard">
 
                     <TextView
-                        android:id="@+id/locTextView"
+                        android:id="@+id/yourLocTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
@@ -95,7 +96,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/priceCard">
 
                     <TextView
-                        android:id="@+id/shipTextView"
+                        android:id="@+id/yourShipTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
@@ -117,7 +118,7 @@
 
 
                 <TextView
-                    android:id="@+id/descriptionText"
+                    android:id="@+id/yourDescriptionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
@@ -145,7 +146,7 @@
                     app:cornerRadius="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+                    app:layout_constraintTop_toBottomOf="@+id/yourDescriptionText" />
 
                     <com.google.android.material.button.MaterialButton
                     android:id="@+id/editButton"
@@ -159,7 +160,7 @@
                     android:textSize="13sp"
                     app:cornerRadius="20dp"
                     app:layout_constraintStart_toEndOf="@+id/offerButton"
-                    app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+                    app:layout_constraintTop_toBottomOf="@+id/yourDescriptionText" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/deleteButton"
@@ -172,7 +173,7 @@
                     android:textAllCaps="false"
                     app:cornerRadius="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+                    app:layout_constraintTop_toBottomOf="@+id/yourDescriptionText" />
 
                 <androidx.constraintlayout.helper.widget.Flow
                     android:id="@+id/tagFlow"

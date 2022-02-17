@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.your_post_card.view.*
 import org.w3c.dom.Text
 
 class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView.Adapter<YourPostAdapter.ViewHolder>() {
@@ -51,9 +52,9 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
 
         holder.offerButton.setOnClickListener {
             val intent = Intent(itemsViewModel.context, ViewOffers::class.java)
-            intent.putExtra("isCounter", true)
+            //intent.putExtra("isCounter", true)
             intent.putExtra("title", itemsViewModel.title)
-            intent.putExtra("title", itemsViewModel.desc)
+            intent.putExtra("desc", itemsViewModel.desc)
             intent.putExtra("price", itemsViewModel.price)
             intent.putExtra("location", itemsViewModel.location)
             intent.putExtra("shippingSeller", itemsViewModel.shippingSeller)
@@ -76,11 +77,11 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
     // Holds the views for adding it to image and text
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         val titleTextVew: TextView = itemView.findViewById(R.id.titleText)
-        val descTextView: TextView = itemView.findViewById(R.id.descriptionText)
+        val descTextView: TextView = itemView.findViewById(R.id.yourDescriptionText)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val price: TextView = itemView.findViewById(R.id.priceTextView)
-        val location: TextView = itemView.findViewById(R.id.locTextView)
-        val shipping: TextView = itemView.findViewById(R.id.shipTextView)
+        val price: TextView = itemView.findViewById(R.id.yourPriceTextView)
+        val location: TextView = itemView.findViewById(R.id.yourLocTextView)
+        val shipping: TextView = itemView.findViewById(R.id.yourShipTextView)
         val offerButton: Button = itemView.findViewById(R.id.offerButton)
         val editButton: Button = itemView.findViewById(R.id.editButton)
         val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
