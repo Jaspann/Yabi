@@ -2,89 +2,126 @@ package com.example.yabi
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue.serverTimestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.getField
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.ktx.toObjects
 
 
 class FirebaseHelper(var db: FirebaseFirestore) {
 
-    fun authenticateUser(email: String, password: String): Boolean {
+    var previousTaskFinished: Boolean = false
+    var previousTaskSuccess: Boolean = false
+    var sessionPassword: String = ""
+    var queryResult = mutableListOf<DocumentSnapshot>()
 
-        var pwordmatch = false
+    fun resetStatusFlags() {
+        previousTaskFinished = false
+        previousTaskSuccess = false
+    }
 
-        var doc = db.collection("users")
+    //Gets a user password associated with a given email and stores it in sessionPassword
+    fun getPassword(email: String) {
+        db.collection("users")
             .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener { results ->
-                for (document in results) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
-                    var user = document.data
-                    var pword = user.getValue("password")
-                    if (pword == password) {
-                        pwordmatch = true
-                        break
-                    }
-                }
+                Log.d(TAG, "Successfully found account with matching email.")
+                previousTaskFinished = true
+                previousTaskSuccess = true
+                sessionPassword = results.documents[0].get("password").toString()
             }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error getting authenticating user: ", e)
+                previousTaskFinished = true
+                previousTaskSuccess = false
             }
-        return pwordmatch
     }
 
-    fun createUser(email: String, name: String, password: String,) {
+    //Gets all listings
+    fun getListings() {
+        db.collection("listings")
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d(TAG, "Listings retrieved.")
+                queryResult = results.documents
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG, "Failed to retrieve listings.", e)
+            }
+    }
 
-        //TODO Add code that converts raw password to SHA512
+    fun createUser(email: String, name: String, password: String,){
+
+        //TODO Add code that converts raw password to SHA512 (actually should be
 
         //TODO Check if email is already used
+
+        //TODO Add creation date
 
         val user = hashMapOf(
             "email" to email,
             "name" to name,
-            "password" to password
+            "password" to password,
+            "creationTimestamp" to serverTimestamp()
         )
 
         db.collection("users")
             .add(user)
             .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                Log.d(TAG, "User document added with ID: ${documentReference.id}")
+                previousTaskFinished = true
+                previousTaskSuccess = true
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
+                Log.w(TAG, "Error adding user document", e)
+                previousTaskFinished = true
+                previousTaskSuccess = false
             }
     }
 
-    fun createListing(itemname: String, requestedprice: String, covershipping: Boolean, coveredshipping: Int,
-        itemdescription: String, shippingstreet: String, shippingcity: String, shippingcountry: String,
-        postalcode: String) {
+    fun createListing(itemName: String,
+                      requestedPrice: Int,
+                      coverShipping: Boolean,
+                      coveredShipping: Int,
+                      itemDescription: String,
+                      shippingStreet: String,
+                      shippingCity: String,
+                      shippingState: String,
+                      shippingCountry: String,
+                      postalCode: Int) {
+
+        //TODO Add creation date
 
         val listing = hashMapOf(
-            "itemname" to itemname,
-            "requestedprice" to requestedprice,
-            "covershipping" to covershipping,
-            "coveredshipping" to coveredshipping,
-            "itemdescription" to itemdescription,
-            "shippingstreet" to shippingstreet,
-            "shippingcity" to shippingcity,
-            "shippingcountry" to shippingcountry,
-            "postalcode" to postalcode
+            "itemName" to itemName,
+            "requestedPrice" to requestedPrice,
+            "coverShipping" to coverShipping,
+            "coveredShipping" to coveredShipping,
+            "itemDescription" to itemDescription,
+            "shippingStreet" to shippingStreet,
+            "shippingCity" to shippingCity,
+            "shippingState" to shippingState,
+            "shippingCountry" to shippingCountry,
+            "postalCode" to postalCode,
+            "creationTimestamp" to serverTimestamp()
         )
 
         db.collection("listings")
             .add(listing)
             .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                Log.d(TAG, "Listing document added with ID: ${documentReference.id}")
+                previousTaskFinished = true
+                previousTaskSuccess = true
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
+                Log.w(TAG, "Error adding listing document", e)
+                previousTaskFinished = true
+                previousTaskSuccess = false
             }
-
-
     }
-
-
-
 }
 
