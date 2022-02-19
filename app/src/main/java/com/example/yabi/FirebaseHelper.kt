@@ -4,8 +4,10 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue.serverTimestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
 
 
@@ -63,7 +65,8 @@ class FirebaseHelper(var db: FirebaseFirestore) {
         val user = hashMapOf(
             "email" to email,
             "name" to name,
-            "password" to password
+            "password" to password,
+            "creationTimestamp" to serverTimestamp()
         )
 
         db.collection("users")
@@ -103,7 +106,8 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             "shippingCity" to shippingCity,
             "shippingState" to shippingState,
             "shippingCountry" to shippingCountry,
-            "postalCode" to postalCode
+            "postalCode" to postalCode,
+            "creationTimestamp" to serverTimestamp()
         )
 
         db.collection("listings")
