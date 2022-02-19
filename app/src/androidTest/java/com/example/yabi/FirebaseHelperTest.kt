@@ -11,8 +11,17 @@ class FirebaseHelperTest {
     fun getPassword() {
         val db = Firebase.firestore
         val testFirebaseHelper = FirebaseHelper(db)
-        val result = testFirebaseHelper.getPassword("darian.fisher@snhu.edu")
-        //while(!testFirebaseHelper.previousTaskFinished) {}
+        testFirebaseHelper.getPassword("darian.fisher@snhu.edu")
+        while(!testFirebaseHelper.previousTaskFinished) {}
+        assert(testFirebaseHelper.previousTaskSuccess)
+        testFirebaseHelper.resetStatusFlags()
+    }
+
+    @Test
+    fun getListings() {
+        val db = Firebase.firestore
+        val testFirebaseHelper = FirebaseHelper(db)
+        testFirebaseHelper.getListings()
         while(!testFirebaseHelper.previousTaskFinished) {}
         assert(testFirebaseHelper.previousTaskSuccess)
         testFirebaseHelper.resetStatusFlags()

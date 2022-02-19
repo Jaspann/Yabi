@@ -2,14 +2,19 @@ package com.example.yabi
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.toObjects
 
 
 class FirebaseHelper(var db: FirebaseFirestore) {
 
     var previousTaskFinished: Boolean = false
     var previousTaskSuccess: Boolean = false
-    private var sessionPassword: String = ""
+    var sessionPassword: String = ""
+    var queryResult = mutableListOf<DocumentSnapshot>()
 
     fun resetStatusFlags() {
         previousTaskFinished = false
@@ -34,9 +39,22 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             }
     }
 
+    //Gets all listings
+    fun getListings() {
+        db.collection("listings")
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d(TAG, "Listings retrieved.")
+                queryResult = results.documents
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG, "Failed to retrieve listings.", e)
+            }
+    }
+
     fun createUser(email: String, name: String, password: String,){
 
-        //TODO Add code that converts raw password to SHA512
+        //TODO Add code that converts raw password to SHA512 (actually should be
 
         //TODO Check if email is already used
 
