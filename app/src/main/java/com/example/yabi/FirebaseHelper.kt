@@ -118,7 +118,6 @@ class FirebaseHelper(var db: FirebaseFirestore) {
                 previousTaskFinished = true
                 previousTaskSuccess = false
             }
-
     }
-
 }
+
