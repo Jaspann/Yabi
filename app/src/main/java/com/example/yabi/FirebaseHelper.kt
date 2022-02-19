@@ -2,11 +2,8 @@ package com.example.yabi
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.FieldValue.serverTimestamp
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
 
@@ -84,7 +81,7 @@ class FirebaseHelper(var db: FirebaseFirestore) {
     }
 
     fun createListing(itemName: String,
-                      requestedPrice: Int,
+                      requestedPrice: Double,
                       coverShipping: Boolean,
                       coveredShipping: Int,
                       itemDescription: String,
@@ -121,6 +118,56 @@ class FirebaseHelper(var db: FirebaseFirestore) {
                 Log.w(TAG, "Error adding listing document", e)
                 previousTaskFinished = true
                 previousTaskSuccess = false
+            }
+    }
+
+    fun createOffer(listingDocumentID: String,
+                    offeringUserDocumentID: String,
+                    receivingUserDocumentID: String,
+                    offerPrice: Double) {
+        val offer = hashMapOf(
+            "listingDocumentID" to listingDocumentID,
+            "offeringUserDocumentID" to offeringUserDocumentID,
+            "receivingUserDocumentID" to receivingUserDocumentID,
+            "offerPrice" to offerPrice
+        )
+        db.collection("offers")
+            .add(offer)
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "Offer document added with ID: ${documentReference.id}")
+                previousTaskFinished = true
+                previousTaskSuccess = true
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding offer document", e)
+                previousTaskFinished = true
+                previousTaskSuccess = false
+            }
+    }
+
+    fun getOfferByDocumentID(offerDocumentID: String) {
+        db.collection("offers")
+            .whereEqualTo(FieldPath.documentId(), offerDocumentID)
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d(TAG, "Listings retrieved.")
+                queryResult = results.documents
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG, "Failed to retrieve listings.", e)
+            }
+    }
+
+    fun getOffersByListingDocumentID(listingDocumentID: String) {
+        db.collection("offers")
+            .whereEqualTo("listingDocumentID", listingDocumentID)
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d(TAG, "Listings retrieved.")
+                queryResult = results.documents
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG, "Failed to retrieve listings.", e)
             }
     }
 }
