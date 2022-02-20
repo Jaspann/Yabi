@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/D_00_00"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/white"/>
 
 
                 </androidx.cardview.widget.CardView>
@@ -80,7 +80,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/sometown_aa"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/white" />
 
 
                 </androidx.cardview.widget.CardView>
@@ -101,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/shipping_buyer_in_full"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/white" />
 
 
                 </androidx.cardview.widget.CardView>
