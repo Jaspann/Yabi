@@ -22,7 +22,24 @@ class AddPost : AppCompatActivity() {
             finish()
         }
 
+        fillScreen()
+    }
+
+
+    fun onPressPost(view: android.view.View) {
+        //TODO: Have post go to database, with logic for if post, offer or edit
+
+        finish()
+    }
+
+    fun fillScreen()
+    {
         // If Statement chain to autofill counter offers
+        if(intent.hasExtra("isEdit"))
+        {
+            toolbar.title = "Edit Posting"
+            postButton.text = getString(R.string.save_changes)
+        }
         if(intent.hasExtra("isCounter"))
         {
             toolbar.title = "Create Offer"
@@ -63,11 +80,6 @@ class AddPost : AppCompatActivity() {
                 editTextCoverShippingUntil.setText(String.format("%.2f",intent.getDoubleExtra("covering", 0.0)))
             }
         }
-    }
-
-
-    fun onPressPost(view: android.view.View) {
-        //TODO: Have post go to database, with logic for if post or offer
     }
 
     fun onPressAddImage(view: android.view.View) {
