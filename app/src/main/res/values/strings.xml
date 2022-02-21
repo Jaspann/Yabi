@@ -64,4 +64,5 @@
     <string name="sometown_aa">Sometown, AA</string>
     <string name="submit_offer">Submit Offer</string>
     <string name="shipping_buyer_in_full">Shipping: Buyer, In Full</string>
+    <string name="save_changes">Save changes</string>
 </resources>

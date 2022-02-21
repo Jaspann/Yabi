@@ -32,7 +32,11 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
         holder.titleTextVew.text = itemsViewModel.title
         holder.descTextView.text = itemsViewModel.desc
         holder.imageView.setImageResource(itemsViewModel.img)
-        val offerText = itemsViewModel.offers.toString() + " Offers"
+        val offerText = if(itemsViewModel.offers == 1) {
+            itemsViewModel.offers.toString() + " Offer"
+        } else{
+            itemsViewModel.offers.toString() + " Offers"
+        }
         holder.offerButton.text = offerText
         val price = "$" + String.format("%.2f", itemsViewModel.price)
         holder.price.text = price
@@ -63,7 +67,20 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
             itemsViewModel.context.startActivity(intent)
         }
 
-        //TODO: holder.editButton.setOnClickListener()
+        holder.editButton.setOnClickListener(){
+            val intent = Intent(itemsViewModel.context, AddPost::class.java)
+            intent.putExtra("isEdit", true)
+            intent.putExtra("title", itemsViewModel.title)
+            intent.putExtra("desc", itemsViewModel.desc)
+            intent.putExtra("price", itemsViewModel.price)
+            intent.putExtra("location", itemsViewModel.location)
+            intent.putExtra("shippingSeller", itemsViewModel.shippingSeller)
+            intent.putExtra("offers", itemsViewModel.offers)
+            intent.putExtra("covering", itemsViewModel.shipCover)
+            itemsViewModel.context.startActivity(intent)
+        }
+
+
         //TODO: holder.deleteButton.setOnClickListener()
 
     }
