@@ -42,10 +42,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
 
-        var test: Long
-        test = 10L
-        test.toDouble()
-
         db.collection("listings")
             .get()
             .addOnSuccessListener { results ->
