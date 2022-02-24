@@ -6,11 +6,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_add_post.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_view_offers.*
-import kotlinx.android.synthetic.main.want_ad_card.view.*
 import kotlinx.android.synthetic.main.want_ad_card.view.titleText
 import kotlinx.android.synthetic.main.your_post_card.view.*
 

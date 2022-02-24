@@ -1,24 +1,22 @@
 package com.example.yabi
 
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.MainThread
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
-import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
@@ -41,14 +39,55 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         super.onPostCreate(savedInstanceState)
 
-        fillHome()
+        val db = Firebase.firestore
+        var queryResult: MutableList<DocumentSnapshot>
+
+        var test: Long
+        test = 10L
+        test.toDouble()
+
+        db.collection("listings")
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d("TAG", "Listings retrieved.")
+                queryResult = results.documents
+                var tempLong: Long
+                val itemNames = arrayListOf<String>()
+                val itemDescriptions = arrayListOf<String>()
+                val itemPrices = arrayListOf<Double>()
+                val locations = arrayListOf<String>()
+                val coverShipping = arrayListOf<Boolean>()
+                val coveredShipping = arrayListOf<Double>()
+                for (document in queryResult) {
+                    try {
+                        itemNames.add(document.get("itemName") as String)
+                        itemDescriptions.add(document.get("itemDescription") as String)
+                        tempLong = document.get("requestedPrice") as Long
+                        itemPrices.add(tempLong.toDouble())
+                        locations.add(document.get("shippingCity") as String + ", " + document.get("shippingState") as String)
+                        coverShipping.add(document.get("coverShipping") as Boolean)
+                        tempLong = document.get("coveredShipping") as Long
+                        coveredShipping.add(tempLong.toDouble())
+                    } catch(e: NullPointerException) {
+                        Log.e("MainActivity", "Error processing listings", e)
+                    } catch(e: ClassCastException) {
+                        Log.e("MainActivity", "Error casting listing types", e)
+                    }
+                }
+
+                fillHome(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+            }
+            .addOnFailureListener{ e ->
+                Log.w("TAG", "Failed to retrieve listings.", e)
+            }
+
 
         fillYourPosts()
     }
 
-    fun fillYourPosts()
+    //TODO Make listing class and pass array of listings
+    private fun fillYourPosts()
     {
-
         val data = ArrayList<YourPostViewModel>()
 
         // Used For testing, remove when implementing database
@@ -58,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val offers = arrayOf(1)
 
         for (i in titles.indices) {
-            data.add(YourPostViewModel(titles[i], desc[i], photos[i], offers[i], 10.00, "New York, NY", false, -1.0, this))
+            data.add(YourPostViewModel(titles[i], desc[i], photos[0], offers[0], 10.00, "New York, NY", false, -1.0, this))
         }
         val recyclerview = findViewById<RecyclerView>(R.id.YourPostsRecycler)
 
@@ -69,19 +108,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         recyclerview.adapter = adapter
     }
 
-    fun fillHome()
+    fun fillHome(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
+                 locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
         val data = ArrayList<WantAdViewModel>()
 
-        // Used For testing, remove when implementing database
-        val users = arrayOf("Even Grant")
-        val scores = arrayOf(98)
-        val titles = arrayOf("Magic \"connect to database\" wire")
-        val desc = arrayOf("I really need help connecting to Noah's database, if you have a magic wire to do this, I am willing to pay whatever is needed.")
         val photos = arrayOf(0)
 
-        for (i in users.indices) {
-            data.add(WantAdViewModel(users[i], scores[i], titles[i], desc[i], photos[i], 50.00, "Manchester, NH", true, 5.0, this))
+        for (i in itemNames.indices) {
+            data.add(WantAdViewModel("Darian Fisher", 98, itemNames[i],
+                itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
+                coveredShipping[i], this))
         }
 
 
