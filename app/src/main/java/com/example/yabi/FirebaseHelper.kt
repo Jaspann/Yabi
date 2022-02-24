@@ -51,7 +51,7 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             }
     }
 
-    fun createUser(email: String, name: String, password: String,){
+    fun createUser(email: String, name: String, password: String){
 
         //TODO Add code that converts raw password to SHA512 (actually should be
 
@@ -83,7 +83,7 @@ class FirebaseHelper(var db: FirebaseFirestore) {
     fun createListing(itemName: String,
                       requestedPrice: Double,
                       coverShipping: Boolean,
-                      coveredShipping: Int,
+                      coveredShipping: Double,
                       itemDescription: String,
                       shippingStreet: String,
                       shippingCity: String,

@@ -30,8 +30,12 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
 
         // sets the text to the textview from our itemHolder class
         holder.userTextView.text = ItemsViewModel.username
-        val rating = ItemsViewModel.rating.toString() + "%"
-        holder.ratingTextView.text = rating
+        if(ItemsViewModel.rating == -1)
+            holder.ratingTextView.visibility = View.GONE
+        else {
+            val rating = ItemsViewModel.rating.toString() + "%"
+            holder.ratingTextView.text = rating
+        }
         holder.titleTextVew.text = ItemsViewModel.title
         holder.descTextView.text = ItemsViewModel.desc
         holder.imageView.setImageResource(ItemsViewModel.img)

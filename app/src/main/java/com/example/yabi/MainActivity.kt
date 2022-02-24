@@ -51,7 +51,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
                 queryResult = results.documents
+                //TODO: Find permanent solution to workaround in assignment of longs
                 var tempLong: Long
+                var tempLongTwo: Long
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
@@ -62,12 +64,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     try {
                         itemNames.add(document.get("itemName") as String)
                         itemDescriptions.add(document.get("itemDescription") as String)
-                        tempLong = document.get("requestedPrice") as Long
+                        tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as Long
                         itemPrices.add(tempLong.toDouble())
                         locations.add(document.get("shippingCity") as String + ", " + document.get("shippingState") as String)
                         coverShipping.add(document.get("coverShipping") as Boolean)
-                        tempLong = document.get("coveredShipping") as Long
-                        coveredShipping.add(tempLong.toDouble())
+                        tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as Long
+                        coveredShipping.add(tempLongTwo.toDouble())
                     } catch(e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
                     } catch(e: ClassCastException) {
@@ -87,7 +89,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     //TODO Make listing class and pass array of listings
     private fun fillYourPosts()
-    {
+    {/*
         val data = ArrayList<YourPostViewModel>()
 
         // Used For testing, remove when implementing database
@@ -106,6 +108,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val adapter = YourPostAdapter(data)
 
         recyclerview.adapter = adapter
+        */
     }
 
     fun fillHome(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
@@ -113,10 +116,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     {
         val data = ArrayList<WantAdViewModel>()
 
-        val photos = arrayOf(0)
+        //val photos = arrayOf(0)
 
         for (i in itemNames.indices) {
-            data.add(WantAdViewModel("Darian Fisher", 98, itemNames[i],
+            data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
                 coveredShipping[i], this))
         }
