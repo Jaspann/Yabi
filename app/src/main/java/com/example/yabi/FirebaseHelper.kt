@@ -1,6 +1,5 @@
 package com.example.yabi
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.FieldValue.serverTimestamp
@@ -10,6 +9,7 @@ import com.google.firebase.firestore.ktx.toObjects
 
 class FirebaseHelper(var db: FirebaseFirestore) {
 
+    private val TAG: String = "FirebaseHelper"
     var previousTaskFinished: Boolean = false
     var previousTaskSuccess: Boolean = false
     var sessionPassword: String = ""
