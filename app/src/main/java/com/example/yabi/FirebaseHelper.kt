@@ -20,37 +20,7 @@ class FirebaseHelper(var db: FirebaseFirestore) {
         previousTaskSuccess = false
     }
 
-    //Gets a user password associated with a given email and stores it in sessionPassword
-    fun getPassword(email: String) {
-        db.collection("users")
-            .whereEqualTo("email", email)
-            .get()
-            .addOnSuccessListener { results ->
-                Log.d(TAG, "Successfully found account with matching email.")
-                previousTaskFinished = true
-                previousTaskSuccess = true
-                sessionPassword = results.documents[0].get("password").toString()
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error getting authenticating user: ", e)
-                previousTaskFinished = true
-                previousTaskSuccess = false
-            }
-    }
-
-    //Gets all listings
-    fun getListings() {
-        db.collection("listings")
-            .get()
-            .addOnSuccessListener { results ->
-                Log.d(TAG, "Listings retrieved.")
-                queryResult = results.documents
-            }
-            .addOnFailureListener{ e ->
-                Log.w(TAG, "Failed to retrieve listings.", e)
-            }
-    }
-
+    //BEGIN INSERTIONS
     fun createUser(email: String, name: String, password: String){
 
         //TODO Add code that converts raw password to SHA512 (actually should be
@@ -144,6 +114,40 @@ class FirebaseHelper(var db: FirebaseFirestore) {
                 previousTaskSuccess = false
             }
     }
+    //END INSERTIONS
+
+    //BEGIN QUERIES. NOTICE: NOT WORKING AS INTENDED. CREATE QUERIES IN ACTIVITIES.
+    //TODO Fix queries in FirebaseHelper. Look into backtracking?
+    //Gets a user password associated with a given email and stores it in sessionPassword
+    fun getPassword(email: String) {
+        db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d(TAG, "Successfully found account with matching email.")
+                previousTaskFinished = true
+                previousTaskSuccess = true
+                sessionPassword = results.documents[0].get("password").toString()
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error getting authenticating user: ", e)
+                previousTaskFinished = true
+                previousTaskSuccess = false
+            }
+    }
+
+    //Gets all listings
+    fun getListings() {
+        db.collection("listings")
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d(TAG, "Listings retrieved.")
+                queryResult = results.documents
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG, "Failed to retrieve listings.", e)
+            }
+    }
 
     fun getOfferByDocumentID(offerDocumentID: String) {
         db.collection("offers")
@@ -170,5 +174,6 @@ class FirebaseHelper(var db: FirebaseFirestore) {
                 Log.w(TAG, "Failed to retrieve listings.", e)
             }
     }
+    //END QUERIES
 }
 
