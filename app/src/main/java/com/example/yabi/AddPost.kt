@@ -12,6 +12,9 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import android.net.Uri
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_log_in.*
 import pub.devrel.easypermissions.EasyPermissions
 
 class AddPost : AppCompatActivity() {
@@ -27,7 +30,26 @@ class AddPost : AppCompatActivity() {
 
 
     fun onPressPost(view: android.view.View) {
-        //TODO: Have post go to database, with logic for if post, offer or edit
+
+        if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
+        {
+            val itemName = editTextItemName.text.toString()
+            val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
+            val coverShipping = buyerCoverShippingButton.isChecked
+            val coveredShipping = if(coverShippingFullButton.isChecked) {-1.0} else {editTextCoverShippingUntil.text.toString().toDouble()}
+            val itemDescription = editTextTextMultiLine.text.toString()
+            val shippingStreet = editTextStreetNumber.text.toString() + " " + editTextStreet.text.toString()
+            val shippingCity = editTextCity.text.toString()
+            val shippingState = editTextState.text.toString()
+            val shippingCountry = editTextCountry.text.toString()
+            val postalCode = editTextPostal.text.toString().toInt()
+
+            val db = Firebase.firestore
+            val helper = FirebaseHelper(db)
+
+            helper.createListing(itemName, requestedPrice, coverShipping, coveredShipping, itemDescription, shippingStreet, shippingCity, shippingState, shippingCountry, postalCode)
+
+        }
 
         finish()
     }
@@ -60,7 +82,7 @@ class AddPost : AppCompatActivity() {
         }
         else
         {
-            buttonLocationLineOne.visibility = View.GONE
+            buttonLocationLineOne.isEnabled = false
             presetLocationLineOne.visibility = View.GONE
             presetLocationLineTwo.visibility = View.GONE
         }

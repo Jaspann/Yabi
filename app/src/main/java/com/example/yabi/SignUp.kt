@@ -32,13 +32,11 @@ class SignUp : AppCompatActivity() {
 
     fun onPressSignUp(view: android.view.View) {
 
-        var db = Firebase.firestore
-        var helper = FirebaseHelper(db)
+        val db = Firebase.firestore
+        val helper = FirebaseHelper(db)
         val email = editTextEmailAddress.text
         val pass = editTextPassword.text
         val name = editTextName.text
-        val queue = Volley.newRequestQueue(this)
-        val url = "www.example.com/signup?email=$email&password=$pass&name=$name"
 
 
         when {
@@ -64,23 +62,24 @@ class SignUp : AppCompatActivity() {
                 ).show()
             }
             else -> {
-                val email: String = editTextEmailAddress.text.toString().trim { it <= ' '}
-                val password : String = editTextPassword.text.toString().trim { it <= ' '} //trims spaces
-                val name : String = editTextName.text.toString().trim {it <= ' '}
+                val emailText: String = editTextEmailAddress.text.toString().trim { it <= ' '}
+                val passwordText : String = editTextPassword.text.toString().trim { it <= ' '} //trims spaces
+                val nameText : String = editTextName.text.toString().trim {it <= ' '}
                 //user creation
-                helper.createUser(email,name, password)
+                helper.createUser(emailText, nameText, passwordText)
                 Toast.makeText(
                     this@SignUp,
                     "register attempt Successful",
                     Toast.LENGTH_SHORT
-                )
+                ).show()
+                onSignUpSuccess()
             }
         }
     }
 
     private fun onSignUpSuccess()
     {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, LogIn::class.java) //TODO: Set intent back to Main page
         startActivity(intent)
     }
 
