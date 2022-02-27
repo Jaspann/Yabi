@@ -3,8 +3,6 @@ package com.example.yabi
 import android.util.Log
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.FieldValue.serverTimestamp
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObjects
 
 
 class FirebaseHelper(var db: FirebaseFirestore) {
@@ -146,6 +144,84 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             }
             .addOnFailureListener{ e ->
                 Log.w(TAG, "Failed to retrieve listings.", e)
+            }
+    }
+
+    fun searchListingsCoverShipping(isCovered: Boolean) {
+        db.collection("listings")
+            .whereEqualTo("coverShipping", isCovered)
+            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { results ->
+                queryResult = results.documents
+            }
+            .addOnFailureListener{ e ->
+                Log.e("FirebaseHelper", "Warning", e)
+            }
+    }
+
+    fun searchListingsCoveredShipping(coveredShippingMin: Double, coveredShippingMax: Double) {
+        db.collection("listings")
+            .whereGreaterThanOrEqualTo("coveredShipping", coveredShippingMin)
+            .whereLessThanOrEqualTo("coveredShipping", coveredShippingMax)
+            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { results ->
+                queryResult = results.documents
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirebaseHelper", "Warning", e)
+            }
+    }
+
+    fun searchListingsByPrice(requestedPriceMin: Double, requestedPriceMax: Double) {
+        db.collection("listings")
+            .whereGreaterThanOrEqualTo("coveredShipping", requestedPriceMin)
+            .whereLessThanOrEqualTo("coveredShipping", requestedPriceMax)
+            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { results ->
+                queryResult = results.documents
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirebaseHelper", "Warning", e)
+            }
+    }
+
+    //Firestore doesn't natively offer full-text search, so we have to do client side search.
+    //DOES NOT SCALE
+    //Would need to use 3rd party search
+    //More info here: https://firebase.google.com/docs/firestore/solutions/search
+    fun searchListingsByTitle(searchTerm: String) {
+        queryResult.clear()
+        db.collection("listings")
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d(TAG, "Listings retrieved.")
+                for (document in results) {
+                    val match = document.get("itemName").toString().contains(searchTerm, true)
+                    if (match) {
+                        queryResult.add(document)
+                    }
+                }
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG, "Failed to retrieve listings.", e)
+            }
+    }
+    fun searchListingsByState(shippingState: String) {
+        db.collection("listings")
+            .whereEqualTo("shippingState", shippingState)
+            .get()
+            .addOnSuccessListener { results ->
+                queryResult.clear()
+                Log.d("FirebaseFirestore", "Successfully completed search by state")
+                for (document in results) {
+                    queryResult.add(document)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirestoreHelper", "Error", e)
             }
     }
 
