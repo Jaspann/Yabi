@@ -48,6 +48,7 @@ class Search : AppCompatActivity() {
 
     private fun getData()
     {
+        //TODO: call appropriate function, currently has temp data
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
 
@@ -57,7 +58,6 @@ class Search : AppCompatActivity() {
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
                 queryResult = results.documents
-                //TODO: Find permanent solution to workaround in assignment of longs
                 var tempLong: Long
                 var tempLongTwo: Long
                 val itemNames = arrayListOf<String>()
@@ -95,15 +95,6 @@ class Search : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.filter_search_button -> {
-                showFilterAlert()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun fillSearch(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
                  locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
@@ -127,18 +118,65 @@ class Search : AppCompatActivity() {
         recyclerview.adapter = adapter
     }
 
-    private val items = arrayOf("Worldwide", "Your State", "Your City")
-    var checkedItem = 0
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.filter_location -> {
+                showFilterLocationAlert()
+            }
+            R.id.filter_shipping -> {
+                showFilterShippingAlert()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
-    private fun showFilterAlert()
-    {
+    private val shippingItems = arrayOf("All", "Seller", "Buyer")
+    private var checkedShippingItem = 0
+
+    private fun showFilterShippingAlert(){
         var newItem = -1
 
         val alertDialog: AlertDialog.Builder = AlertDialog.Builder(this)
-        .setTitle("Filter Search")
+            .setTitle("Filter by Shipping")
+
+            .setSingleChoiceItems(
+                shippingItems, checkedShippingItem
+            ) { dialog, which ->
+                when (which) {
+                    0 -> newItem = 0
+                    1 -> newItem = 1
+                    2 -> newItem = 2
+                }
+            }
+
+            .setPositiveButton("Apply"
+            ) { dialog, _ ->
+                if(newItem >= 0)
+                    checkedShippingItem = newItem
+                //TODO: Save filter here (Not sure if this solution is valid)
+                dialog.cancel()
+            }
+            .setNegativeButton("Cancel"
+            ) { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert: AlertDialog = alertDialog.create()
+        alert.setCanceledOnTouchOutside(true)
+        alert.show()
+    }
+
+    private val locationItems = arrayOf("Worldwide", "State", "City")
+    private var checkedLocationItem = 0
+
+    private fun showFilterLocationAlert() {
+        var newItem = -1
+
+        val alertDialog: AlertDialog.Builder = AlertDialog.Builder(this)
+        .setTitle("Filter by Location")
 
         .setSingleChoiceItems(
-            items, checkedItem
+            locationItems, checkedLocationItem
         ) { dialog, which ->
             when (which) {
                 0 -> newItem = 0
@@ -150,7 +188,7 @@ class Search : AppCompatActivity() {
         .setPositiveButton("Apply"
         ) { dialog, _ ->
             if(newItem >= 0)
-                checkedItem = newItem
+                checkedLocationItem = newItem
             //TODO: Save filter here (Not sure if this solution is valid)
             dialog.cancel()
         }
