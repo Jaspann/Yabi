@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
         refreshYourPosts.setOnRefreshListener(OnRefreshListener {
             refreshYourPosts.isRefreshing = false
-            //getData()
+            //fillYourPosts()
         })
     }
 
@@ -230,6 +230,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 LocalRecycler.visibility = View.GONE
                 NewPostsRecycler.visibility = View.GONE
                 YourPostsRecycler.visibility = View.GONE
+                refreshForYou.visibility = View.VISIBLE
+                refreshLocal.visibility = View.GONE
+                refreshNewPosts.visibility = View.GONE
+                refreshYourPosts.visibility = View.GONE
 
             }
             R.id.local -> {
@@ -237,6 +241,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 LocalRecycler.visibility = View.VISIBLE
                 NewPostsRecycler.visibility = View.GONE
                 YourPostsRecycler.visibility = View.GONE
+                refreshForYou.visibility = View.GONE
+                refreshLocal.visibility = View.VISIBLE
+                refreshNewPosts.visibility = View.GONE
+                refreshYourPosts.visibility = View.GONE
 
             }
             R.id.new_postings -> {
@@ -244,6 +252,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 LocalRecycler.visibility = View.GONE
                 NewPostsRecycler.visibility = View.VISIBLE
                 YourPostsRecycler.visibility = View.GONE
+                refreshForYou.visibility = View.GONE
+                refreshLocal.visibility = View.GONE
+                refreshNewPosts.visibility = View.VISIBLE
+                refreshYourPosts.visibility = View.GONE
 
             }
             R.id.your_posts -> {
@@ -251,6 +263,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 LocalRecycler.visibility = View.GONE
                 NewPostsRecycler.visibility = View.GONE
                 YourPostsRecycler.visibility = View.VISIBLE
+                refreshForYou.visibility = View.GONE
+                refreshLocal.visibility = View.GONE
+                refreshNewPosts.visibility = View.GONE
+                refreshYourPosts.visibility = View.VISIBLE
                 //toolbar.menu.getItem(R.id.add_post_button).isVisible = true
 
             }

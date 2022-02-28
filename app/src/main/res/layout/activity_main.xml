@@ -65,7 +65,8 @@
                 android:id="@+id/refreshLocal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".MainActivity">
+                tools:context=".MainActivity"
+                android:visibility="gone">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/LocalRecycler"
@@ -78,7 +79,8 @@
                 android:id="@+id/refreshNewPosts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".MainActivity">
+                tools:context=".MainActivity"
+                android:visibility="gone">
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/NewPostsRecycler"
                     android:layout_width="match_parent"
@@ -90,7 +92,8 @@
                 android:id="@+id/refreshYourPosts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".MainActivity">
+                tools:context=".MainActivity"
+                android:visibility="gone">
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/YourPostsRecycler"
                     android:layout_width="match_parent"
