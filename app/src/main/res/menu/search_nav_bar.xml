@@ -4,7 +4,7 @@
     <item
         android:id="@+id/filter_search_button"
         android:title="@string/filter"
-        android:icon="@drawable/ic_baseline_language_24"
+        android:icon="@drawable/ic_baseline_filter_alt_24"
         app:showAsAction="always"
         />
 </menu>

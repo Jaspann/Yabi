@@ -19,6 +19,9 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +44,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(this, Settings::class.java)
                 startActivity(intent)
             }
+        setRefreshRecyclers()
 
+    }
+
+    private fun setRefreshRecyclers()
+    {
+        refreshForYou.setOnRefreshListener(OnRefreshListener {
+            refreshForYou.isRefreshing = false
+            getData()
+        })
+        refreshLocal.setOnRefreshListener(OnRefreshListener {
+            refreshLocal.isRefreshing = false
+            getData()
+        })
+        refreshNewPosts.setOnRefreshListener(OnRefreshListener {
+            refreshNewPosts.isRefreshing = false
+            getData()
+        })
+        refreshYourPosts.setOnRefreshListener(OnRefreshListener {
+            refreshYourPosts.isRefreshing = false
+            //getData()
+        })
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
 
         super.onPostCreate(savedInstanceState)
+
+        getData()
+    }
+
+    private fun getData(){
 
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
