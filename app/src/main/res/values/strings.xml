@@ -65,4 +65,12 @@
     <string name="submit_offer">Submit Offer</string>
     <string name="shipping_buyer_in_full">Shipping: Buyer, In Full</string>
     <string name="save_changes">Save changes</string>
+    <string name="settings">Settings</string>
+    <string name="clear_input">Clear Input</string>
+    <string name="filter">Filter</string>
+    <string name="ex_boston">ex: Boston</string>
+    <string name="city_">City:</string>
+    <string name="state_">State:</string>
+    <string name="price_min">Price Min: $</string>
+    <string name="price_max">Price Max: $</string>
 </resources>

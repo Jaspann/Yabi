@@ -33,6 +33,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
         drawer_layout.addDrawerListener(toggle)
+
+        if(intent.hasExtra("SignUp"))
+            if(intent.getBooleanExtra("SignUp", false))
+            {
+                val intent = Intent(this, Settings::class.java)
+                startActivity(intent)
+            }
+
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -180,6 +188,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_complete -> {
                 val intent = Intent(this, CompletedOffers::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_settings -> {
+                val intent = Intent(this, Settings::class.java)
                 startActivity(intent)
             }
             R.id.for_you -> {
