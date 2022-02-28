@@ -140,7 +140,7 @@
 
             <EditText
                 android:id="@+id/editTextTextMultiLine"
-                android:layout_width="360dp"
+                android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:ems="10"
@@ -198,7 +198,7 @@
 
             <TextView
                 android:id="@+id/presetLocationLineOne"
-                android:layout_width="215dp"
+                android:layout_width="180dp"
                 android:layout_height="24dp"
                 android:maxHeight="24dp"
                 android:text="@string/address_line_1"
@@ -209,7 +209,7 @@
 
             <TextView
                 android:id="@+id/presetLocationLineTwo"
-                android:layout_width="215dp"
+                android:layout_width="180dp"
                 android:layout_height="24dp"
                 android:maxHeight="24dp"
                 android:text="@string/address_line_2"

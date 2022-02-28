@@ -79,7 +79,8 @@ class SignUp : AppCompatActivity() {
 
     private fun onSignUpSuccess()
     {
-        val intent = Intent(this, LogIn::class.java) //TODO: Set intent back to Main page
+        val intent = Intent(this, Settings::class.java)
+        intent.putExtra("SignUp", true)
         startActivity(intent)
     }
 

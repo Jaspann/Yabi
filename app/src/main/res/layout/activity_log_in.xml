@@ -73,7 +73,9 @@
             android:text="@string/log_in"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
+            android:outlineAmbientShadowColor="@color/white"
+            android:outlineSpotShadowColor="@color/white"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -92,7 +94,9 @@
                 android:onClick="onPressSignUp"
                 android:text="@string/create_account_instead"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:outlineAmbientShadowColor="@color/white"
+                android:outlineSpotShadowColor="@color/white"/>
 
             <Button
                 android:id="@+id/BrowseAsGuestButton"
@@ -104,7 +108,9 @@
                 android:text="@string/browse_as_guest"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/CreateAccountButton" />
+                app:layout_constraintTop_toBottomOf="@+id/CreateAccountButton"
+                android:outlineAmbientShadowColor="@color/white"
+                android:outlineSpotShadowColor="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

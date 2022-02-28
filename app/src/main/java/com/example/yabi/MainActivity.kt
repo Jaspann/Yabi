@@ -19,6 +19,9 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,11 +37,45 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
         drawer_layout.addDrawerListener(toggle)
+
+        if(intent.hasExtra("SignUp"))
+            if(intent.getBooleanExtra("SignUp", false))
+            {
+                val intent = Intent(this, Settings::class.java)
+                startActivity(intent)
+            }
+        setRefreshRecyclers()
+
+    }
+
+    private fun setRefreshRecyclers()
+    {
+        refreshForYou.setOnRefreshListener(OnRefreshListener {
+            refreshForYou.isRefreshing = false
+            getData()
+        })
+        refreshLocal.setOnRefreshListener(OnRefreshListener {
+            refreshLocal.isRefreshing = false
+            getData()
+        })
+        refreshNewPosts.setOnRefreshListener(OnRefreshListener {
+            refreshNewPosts.isRefreshing = false
+            getData()
+        })
+        refreshYourPosts.setOnRefreshListener(OnRefreshListener {
+            refreshYourPosts.isRefreshing = false
+            //fillYourPosts()
+        })
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
 
         super.onPostCreate(savedInstanceState)
+
+        getData()
+    }
+
+    private fun getData(){
 
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
@@ -184,11 +221,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(this, CompletedOffers::class.java)
                 startActivity(intent)
             }
+            R.id.nav_settings -> {
+                val intent = Intent(this, Settings::class.java)
+                startActivity(intent)
+            }
             R.id.for_you -> {
                 forYouRecycler.visibility = View.VISIBLE
                 LocalRecycler.visibility = View.GONE
                 NewPostsRecycler.visibility = View.GONE
                 YourPostsRecycler.visibility = View.GONE
+                refreshForYou.visibility = View.VISIBLE
+                refreshLocal.visibility = View.GONE
+                refreshNewPosts.visibility = View.GONE
+                refreshYourPosts.visibility = View.GONE
 
             }
             R.id.local -> {
@@ -196,6 +241,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 LocalRecycler.visibility = View.VISIBLE
                 NewPostsRecycler.visibility = View.GONE
                 YourPostsRecycler.visibility = View.GONE
+                refreshForYou.visibility = View.GONE
+                refreshLocal.visibility = View.VISIBLE
+                refreshNewPosts.visibility = View.GONE
+                refreshYourPosts.visibility = View.GONE
 
             }
             R.id.new_postings -> {
@@ -203,6 +252,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 LocalRecycler.visibility = View.GONE
                 NewPostsRecycler.visibility = View.VISIBLE
                 YourPostsRecycler.visibility = View.GONE
+                refreshForYou.visibility = View.GONE
+                refreshLocal.visibility = View.GONE
+                refreshNewPosts.visibility = View.VISIBLE
+                refreshYourPosts.visibility = View.GONE
 
             }
             R.id.your_posts -> {
@@ -210,6 +263,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 LocalRecycler.visibility = View.GONE
                 NewPostsRecycler.visibility = View.GONE
                 YourPostsRecycler.visibility = View.VISIBLE
+                refreshForYou.visibility = View.GONE
+                refreshLocal.visibility = View.GONE
+                refreshNewPosts.visibility = View.GONE
+                refreshYourPosts.visibility = View.VISIBLE
                 //toolbar.menu.getItem(R.id.add_post_button).isVisible = true
 
             }
