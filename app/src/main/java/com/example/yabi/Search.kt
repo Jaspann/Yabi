@@ -29,6 +29,7 @@ class Search : AppCompatActivity() {
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 getData()
