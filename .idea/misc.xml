@@ -33,10 +33,13 @@
         <entry key="app/src/main/res/layout/activity_your_posts.xml" value="0.11096014492753623" />
         <entry key="app/src/main/res/layout/want_ad_card.xml" value="0.25" />
         <entry key="app/src/main/res/layout/your_post_card.xml" value="0.11096014492753623" />
+        <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.19375" />
+        <entry key="app/src/main/res/menu/main_bottom_nav.xml" value="0.19375" />
+        <entry key="app/src/main/res/menu/search_nav_bar.xml" value="0.19375" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

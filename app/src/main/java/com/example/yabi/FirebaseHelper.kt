@@ -178,8 +178,8 @@ class FirebaseHelper(var db: FirebaseFirestore) {
 
     fun searchListingsByPrice(requestedPriceMin: Double, requestedPriceMax: Double) {
         db.collection("listings")
-            .whereGreaterThanOrEqualTo("coveredShipping", requestedPriceMin)
-            .whereLessThanOrEqualTo("coveredShipping", requestedPriceMax)
+            .whereGreaterThanOrEqualTo("requestedPrice", requestedPriceMin)
+            .whereLessThanOrEqualTo("requestedPrice", requestedPriceMax)
             .orderBy("creationTimestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { results ->

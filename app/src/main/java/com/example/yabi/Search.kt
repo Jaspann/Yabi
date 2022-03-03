@@ -1,16 +1,15 @@
 package com.example.yabi
 
 import android.app.AlertDialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
-import android.content.DialogInterface
 import android.util.Log
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,8 +19,16 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_search.*
+import java.lang.NumberFormatException
 
 class Search : AppCompatActivity() {
+
+    val TAG: String = "Search"
+
+    var requestedPriceMin: Double = 0.0
+    var requestedPriceMax: Double = 999999.0
+    var searchTerm: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -32,7 +39,8 @@ class Search : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                getData()
+                searchTerm = searchView.query.toString()
+                searchListings()
                 return false
             }
 
@@ -41,23 +49,75 @@ class Search : AppCompatActivity() {
             }
         })
 
+        EditTextPriceMin.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                try {
+                    requestedPriceMin = p0.toString().toDouble()
+                    searchListings()
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(
+                        this@Search,
+                        "Invalid text. Only numbers allowed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+
+        EditTextPriceMax.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                try {
+                    requestedPriceMax = p0.toString().toDouble()
+                    searchListings()
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(
+                        this@Search,
+                        "Invalid text. Only numbers allowed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+
         refreshSearch.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             refreshSearch.isRefreshing = false
-            getData()
+            searchListings()
         })
     }
 
-    private fun getData()
+    private fun searchListings()
     {
         val db = Firebase.firestore
-        var queryResult: MutableList<DocumentSnapshot>
+        var queryResult = mutableListOf<DocumentSnapshot>()
+
+
 
         db.collection("listings")
-            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
+            .whereGreaterThanOrEqualTo("requestedPrice", requestedPriceMin)
+            .whereLessThanOrEqualTo("requestedPrice", requestedPriceMax)
+            .orderBy("requestedPrice", Query.Direction.DESCENDING)
+            //.orderBy("creationTimestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { results ->
-                Log.d("TAG", "Listings retrieved.")
-                queryResult = results.documents
+                Log.d(TAG, "Listings retrieved.")
+                for (document in results) {
+                    if (searchTerm != "") {
+                        val isMatch = document.get("itemName").toString().contains(searchTerm, true)
+                        if (isMatch) {
+                            queryResult.add(document)
+                        }
+                    } else {
+                        queryResult.add(document)
+                    }
+                }
                 //TODO: Find permanent solution to workaround in assignment of longs
                 var tempLong: Long
                 var tempLongTwo: Long
@@ -78,16 +138,15 @@ class Search : AppCompatActivity() {
                         tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as Long
                         coveredShipping.add(tempLongTwo.toDouble())
                     } catch(e: NullPointerException) {
-                        Log.e("MainActivity", "Error processing listings", e)
+                        Log.e(TAG, "Error processing listings", e)
                     } catch(e: ClassCastException) {
-                        Log.e("MainActivity", "Error casting listing types", e)
+                        Log.e(TAG, "Error casting listing types", e)
                     }
                 }
-
                 fillSearch(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
             }
             .addOnFailureListener{ e ->
-                Log.w("TAG", "Failed to retrieve listings.", e)
+                Log.w(TAG, "Failed to retrieve listings.", e)
             }
     }
 
