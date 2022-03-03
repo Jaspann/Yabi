@@ -16,7 +16,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Settings"/>
+        app:title="Settings"
+        app:menu="@menu/options_nav_bar"/>
 
     <ScrollView
         android:layout_width="match_parent"

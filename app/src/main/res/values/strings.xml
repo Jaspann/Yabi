@@ -73,4 +73,7 @@
     <string name="state_">State:</string>
     <string name="price_min">Price Min: $</string>
     <string name="price_max">Price Max: $</string>
+    <string name="filter_by_location">Filter Location</string>
+    <string name="filter_shipping">Filter Shipping</string>
+    <string name="confirm">Confirm</string>
 </resources>

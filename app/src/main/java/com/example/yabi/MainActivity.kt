@@ -38,12 +38,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
         drawer_layout.addDrawerListener(toggle)
 
-        if(intent.hasExtra("SignUp"))
-            if(intent.getBooleanExtra("SignUp", false))
-            {
-                val intent = Intent(this, Settings::class.java)
-                startActivity(intent)
-            }
         setRefreshRecyclers()
 
     }

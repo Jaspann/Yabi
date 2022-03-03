@@ -2,9 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/filter_search_button"
-        android:title="@string/filter"
-        android:icon="@drawable/ic_baseline_filter_alt_24"
-        app:showAsAction="always"
+        android:id="@+id/filter_location"
+        android:title="@string/filter_by_location"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/filter_shipping"
+        android:title="@string/filter_shipping"
+        app:showAsAction="never"
         />
 </menu>

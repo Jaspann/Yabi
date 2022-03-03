@@ -65,22 +65,25 @@ class SignUp : AppCompatActivity() {
                 val emailText: String = editTextEmailAddress.text.toString().trim { it <= ' '}
                 val passwordText : String = editTextPassword.text.toString().trim { it <= ' '} //trims spaces
                 val nameText : String = editTextName.text.toString().trim {it <= ' '}
-                //user creation
-                helper.createUser(emailText, nameText, passwordText, "placeholder", "PL")
+                //user creation                
+                helper.createUser(emailText, nameText, passwordText)
                 Toast.makeText(
                     this@SignUp,
-                    "Registration successful",
+                    "register step Successful",
                     Toast.LENGTH_SHORT
                 ).show()
-                onSignUpSuccess()
+                onSignUpSuccess(emailText, passwordText, nameText)
             }
         }
     }
 
-    private fun onSignUpSuccess()
+    private fun onSignUpSuccess(email : String, pass : String, name : String)
     {
         val intent = Intent(this, Settings::class.java)
         intent.putExtra("SignUp", true)
+        intent.putExtra("email", email)
+        intent.putExtra("pass", pass)
+        intent.putExtra("name", name)
         startActivity(intent)
     }
 
