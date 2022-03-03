@@ -66,7 +66,7 @@ class SignUp : AppCompatActivity() {
                 val passwordText : String = editTextPassword.text.toString().trim { it <= ' '} //trims spaces
                 val nameText : String = editTextName.text.toString().trim {it <= ' '}
                 //user creation                
-                helper.createUser(emailText, nameText, passwordText)
+                helper.createUser(emailText, nameText, passwordText, "placeholder", "placeholder")
                 Toast.makeText(
                     this@SignUp,
                     "register step Successful",
