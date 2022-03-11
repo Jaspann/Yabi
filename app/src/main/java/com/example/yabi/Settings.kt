@@ -88,7 +88,7 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     intent.getBooleanExtra("SignUp", false) -> {
 
                         if (name != null && pass != null && email != null) {
-                            helper.createUser(email, pass, name, state, city.toString())
+                            helper.createUser(email, name, pass, state, city.toString())
                         }
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)

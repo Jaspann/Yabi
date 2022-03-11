@@ -75,6 +75,13 @@ class SignUp : AppCompatActivity() {
 
     private fun onSignUpSuccess(email : String, pass : String, name : String)
     {
+
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        editor.putBoolean("isGuest", false)
+        editor.apply()
+
         val intent = Intent(this, Settings::class.java)
         intent.putExtra("SignUp", true)
         intent.putExtra("email", email)
