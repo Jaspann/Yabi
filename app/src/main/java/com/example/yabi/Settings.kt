@@ -62,11 +62,9 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val email = intent.getStringExtra("email")
         val pass = intent.getStringExtra("pass")
         val name = intent.getStringExtra("name")
-        Toast.makeText(
-            applicationContext,
-            state,
-            Toast.LENGTH_LONG
-        ).show()
+
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
 
         when (item.itemId) {
             R.id.confirm -> {
@@ -78,6 +76,7 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             Toast.LENGTH_LONG
                         ).show()
                     }
+
                     city.isEmpty() -> {
                         Toast.makeText(
                             applicationContext,
@@ -85,15 +84,26 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             Toast.LENGTH_LONG
                         ).show()
                     }
+
                     intent.getBooleanExtra("SignUp", false) -> {
+
                         if (name != null && pass != null && email != null) {
-                            //TODO: helper.createUser(email, pass, name, state, city) (createUser needs to take state & city)
+                            helper.createUser(email, pass, name, state, city.toString())
                         }
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     }
+
                     !intent.getBooleanExtra("SignUp", false) -> {
+
+                        if(buyerOnlySwitch.isChecked)
+                            editor.putBoolean("buyerOnly", true)
+                        else
+                            editor.putBoolean("buyerOnly", false)
+                        editor.apply()
+
                         //TODO: add ability to change state and city of account
+
                         finish()
                     }
                 }

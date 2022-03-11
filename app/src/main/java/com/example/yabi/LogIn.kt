@@ -79,7 +79,7 @@ class LogIn : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        editor.putInt("userID", -1)
+        editor.putBoolean("isGuest", true)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }

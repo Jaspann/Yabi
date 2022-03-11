@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationBarView
@@ -38,7 +39,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
         drawer_layout.addDrawerListener(toggle)
 
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+
         setRefreshRecyclers()
+
+        if(sharedPreferences.getBoolean("buyerOnly", false))
+        {
+            bottomBar.visibility = View.GONE
+
+            YourPostsRecycler.visibility = View.VISIBLE
+            refreshYourPosts.visibility = View.VISIBLE
+        }
+        else
+        {
+            forYouRecycler.visibility = View.VISIBLE
+            refreshForYou.visibility = View.VISIBLE
+        }
 
     }
 
@@ -140,8 +156,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         */
     }
 
-    fun fillHome(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                 locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
+    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
+                         locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
         val data = ArrayList<WantAdViewModel>()
 
@@ -171,101 +187,130 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    override fun onResume() {
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+
+        if(sharedPreferences.getBoolean("buyerOnly", false))
+        {
+            bottomBar.visibility = View.GONE
+            hideScreens()
+
+            YourPostsRecycler.visibility = View.VISIBLE
+            refreshYourPosts.visibility = View.VISIBLE
+        }
+        else
+        {
+            bottomBar.visibility = View.VISIBLE
+            hideScreens()
+            forYouRecycler.visibility = View.VISIBLE
+            refreshForYou.visibility = View.VISIBLE
+        }
+
+        super.onResume()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_nav_bar, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+
         when (item.itemId) {
             R.id.search_button -> {
                 val intent = Intent(this, Search::class.java)
                 startActivity(intent)
             }
             R.id.add_post_button -> {
-                val intent = Intent(this, AddPost::class.java)
-                startActivity(intent)
+                if(sharedPreferences.getBoolean("isGuest", false))
+                {
+                    Toast.makeText(
+                        applicationContext,
+                        "Please sign in first",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                else {
+                    val intent = Intent(this, AddPost::class.java)
+                    startActivity(intent)
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_home -> {
-                Toast.makeText(
-                    applicationContext,
-                    "Already on Home Page",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            R.id.nav_account -> {
-                val intent = Intent(this, Account::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_chat -> {
-                val intent = Intent(this, Messaging::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_posts -> {
-                val intent = Intent(this, YourPosts::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_complete -> {
-                val intent = Intent(this, CompletedOffers::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_settings -> {
-                val intent = Intent(this, Settings::class.java)
-                startActivity(intent)
-            }
-            R.id.for_you -> {
-                forYouRecycler.visibility = View.VISIBLE
-                LocalRecycler.visibility = View.GONE
-                NewPostsRecycler.visibility = View.GONE
-                YourPostsRecycler.visibility = View.GONE
-                refreshForYou.visibility = View.VISIBLE
-                refreshLocal.visibility = View.GONE
-                refreshNewPosts.visibility = View.GONE
-                refreshYourPosts.visibility = View.GONE
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
 
-            }
-            R.id.local -> {
-                forYouRecycler.visibility = View.GONE
-                LocalRecycler.visibility = View.VISIBLE
-                NewPostsRecycler.visibility = View.GONE
-                YourPostsRecycler.visibility = View.GONE
-                refreshForYou.visibility = View.GONE
-                refreshLocal.visibility = View.VISIBLE
-                refreshNewPosts.visibility = View.GONE
-                refreshYourPosts.visibility = View.GONE
-
-            }
-            R.id.new_postings -> {
-                forYouRecycler.visibility = View.GONE
-                LocalRecycler.visibility = View.GONE
-                NewPostsRecycler.visibility = View.VISIBLE
-                YourPostsRecycler.visibility = View.GONE
-                refreshForYou.visibility = View.GONE
-                refreshLocal.visibility = View.GONE
-                refreshNewPosts.visibility = View.VISIBLE
-                refreshYourPosts.visibility = View.GONE
-
-            }
-            R.id.your_posts -> {
-                forYouRecycler.visibility = View.GONE
-                LocalRecycler.visibility = View.GONE
-                NewPostsRecycler.visibility = View.GONE
-                YourPostsRecycler.visibility = View.VISIBLE
-                refreshForYou.visibility = View.GONE
-                refreshLocal.visibility = View.GONE
-                refreshNewPosts.visibility = View.GONE
-                refreshYourPosts.visibility = View.VISIBLE
-                //toolbar.menu.getItem(R.id.add_post_button).isVisible = true
-
+        if (item.itemId == R.id.local)
+        {
+            hideScreens()
+            LocalRecycler.visibility = View.VISIBLE
+            refreshLocal.visibility = View.VISIBLE
+        }
+        else if (item.itemId == R.id.for_you)
+        {
+            hideScreens()
+            forYouRecycler.visibility = View.VISIBLE
+            refreshForYou.visibility = View.VISIBLE
+        }
+        else if (item.itemId == R.id.new_postings)
+        {
+            hideScreens()
+            NewPostsRecycler.visibility = View.VISIBLE
+            refreshNewPosts.visibility = View.VISIBLE
+        }
+        else if(!sharedPreferences.getBoolean("isGuest", false))
+        {
+            when (item.itemId) {
+                R.id.nav_account -> {
+                    val intent = Intent(this, Account::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_chat -> {
+                    val intent = Intent(this, Messaging::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_posts -> {
+                    val intent = Intent(this, YourPosts::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_complete -> {
+                    val intent = Intent(this, CompletedOffers::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_settings -> {
+                    val intent = Intent(this, Settings::class.java)
+                    startActivity(intent)
+                }
+                R.id.your_posts -> {
+                    hideScreens()
+                    YourPostsRecycler.visibility = View.VISIBLE
+                    refreshYourPosts.visibility = View.VISIBLE
+                }
             }
         }
+        else
+            Toast.makeText(
+                applicationContext,
+                "Please sign in first",
+                Toast.LENGTH_LONG
+            ).show()
+
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+    private fun hideScreens()
+    {
+
+        forYouRecycler.visibility = View.GONE
+        LocalRecycler.visibility = View.GONE
+        NewPostsRecycler.visibility = View.GONE
+        YourPostsRecycler.visibility = View.GONE
+        refreshForYou.visibility = View.GONE
+        refreshLocal.visibility = View.GONE
+        refreshNewPosts.visibility = View.GONE
+        refreshYourPosts.visibility = View.GONE
     }
 }

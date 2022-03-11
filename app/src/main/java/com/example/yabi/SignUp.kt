@@ -32,8 +32,6 @@ class SignUp : AppCompatActivity() {
 
     fun onPressSignUp(view: android.view.View) {
 
-        val db = Firebase.firestore
-        val helper = FirebaseHelper(db)
         val email = editTextEmailAddress.text
         val pass = editTextPassword.text
         val name = editTextName.text
@@ -65,8 +63,6 @@ class SignUp : AppCompatActivity() {
                 val emailText: String = editTextEmailAddress.text.toString().trim { it <= ' '}
                 val passwordText : String = editTextPassword.text.toString().trim { it <= ' '} //trims spaces
                 val nameText : String = editTextName.text.toString().trim {it <= ' '}
-                //user creation                
-                helper.createUser(emailText, nameText, passwordText)
                 Toast.makeText(
                     this@SignUp,
                     "register step Successful",
@@ -97,7 +93,7 @@ class SignUp : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        editor.putInt("userID", -1)
+        editor.putBoolean("isGuest", true)
         editor.apply()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

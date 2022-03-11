@@ -76,4 +76,5 @@
     <string name="filter_by_location">Filter Location</string>
     <string name="filter_shipping">Filter Shipping</string>
     <string name="confirm">Confirm</string>
+    <string name="buyer_only_mode">Buyer Only Mode</string>
 </resources>
