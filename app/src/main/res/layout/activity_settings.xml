@@ -99,13 +99,49 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/zipConstraint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                app:layout_constraintStart_toStartOf="@+id/stateConstraint"
+                app:layout_constraintTop_toBottomOf="@+id/stateConstraint">
+
+                <TextView
+                    android:id="@+id/textZip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/zip_code_"
+                    android:textColor="#000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editTextZip"
+                    android:layout_width="77dp"
+                    android:layout_height="48dp"
+                    android:ems="10"
+                    android:hint="@string/_12345"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textZip"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/buyerOnlySwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/buyer_only_mode"
-                app:layout_constraintStart_toStartOf="@+id/stateConstraint"
-                app:layout_constraintTop_toBottomOf="@+id/stateConstraint" />
+                app:layout_constraintStart_toStartOf="@+id/zipConstraint"
+                app:layout_constraintTop_toBottomOf="@+id/zipConstraint" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

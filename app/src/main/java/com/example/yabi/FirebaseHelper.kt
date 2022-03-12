@@ -19,7 +19,7 @@ class FirebaseHelper(var db: FirebaseFirestore) {
     }
 
     //BEGIN INSERTIONS
-    fun createUser(email: String, name: String, password: String, city: String, state: String){
+    fun createUser(email: String, name: String, password: String, city: String, state: String, zip: Int){
 
         //TODO Add code that converts raw password to SHA512 (actually should be
 
@@ -33,6 +33,7 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             "password" to password,
             "city" to city,
             state to state,
+            "zip" to zip,
             "creationTimestamp" to serverTimestamp()
         )
 

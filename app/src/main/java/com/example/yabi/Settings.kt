@@ -54,17 +54,18 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val db = Firebase.firestore
-        val helper = FirebaseHelper(db)
-        val state: String = spinnerState.selectedItem as String
-        val city = editTextCity.text
-
-        val email = intent.getStringExtra("email")
-        val pass = intent.getStringExtra("pass")
-        val name = intent.getStringExtra("name")
 
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
+        if(buyerOnlySwitch.isChecked)
+            editor.putBoolean("buyerOnly", true)
+        else
+            editor.putBoolean("buyerOnly", false)
+        editor.apply()
+
+        val state: String = spinnerState.selectedItem as String
+        val city = editTextCity.text
+        val zip = editTextZip.text
 
         when (item.itemId) {
             R.id.confirm -> {
@@ -76,7 +77,6 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             Toast.LENGTH_LONG
                         ).show()
                     }
-
                     city.isEmpty() -> {
                         Toast.makeText(
                             applicationContext,
@@ -84,23 +84,19 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             Toast.LENGTH_LONG
                         ).show()
                     }
+                    zip.isEmpty() -> {
+                        Toast.makeText(
+                            applicationContext,
+                            "Error: Zip code cannot be blank.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
 
                     intent.getBooleanExtra("SignUp", false) -> {
-
-                        if (name != null && pass != null && email != null) {
-                            helper.createUser(email, name, pass, state, city.toString())
-                        }
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
+                        createAccount()
                     }
 
                     !intent.getBooleanExtra("SignUp", false) -> {
-
-                        if(buyerOnlySwitch.isChecked)
-                            editor.putBoolean("buyerOnly", true)
-                        else
-                            editor.putBoolean("buyerOnly", false)
-                        editor.apply()
 
                         //TODO: add ability to change state and city of account
 
@@ -110,6 +106,30 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun createAccount()
+    {
+        val db = Firebase.firestore
+        val helper = FirebaseHelper(db)
+
+        val email = intent.getStringExtra("email")
+        val pass = intent.getStringExtra("pass")
+        val name = intent.getStringExtra("name")
+
+        val state: String = spinnerState.selectedItem as String
+        val cityVal = editTextCity.text.toString()
+        val zipVal = editTextZip.text.toString().toInt()
+
+            if (intent.getBooleanExtra("SignUp", false))
+            {
+                if (name != null && pass != null && email != null)
+                {
+                    helper.createUser(email, name, pass, cityVal, state, zipVal)
+                }
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
     }
 
     // Add required Spinner methods
