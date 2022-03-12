@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     //TODO Make listing class and pass array of listings
     private fun fillYourPosts()
-    {/*
+    {
         val data = ArrayList<YourPostViewModel>()
 
         // Used For testing, remove when implementing database
@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val adapter = YourPostAdapter(data)
 
         recyclerview.adapter = adapter
-        */
+
     }
 
     private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
@@ -193,17 +193,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(sharedPreferences.getBoolean("buyerOnly", false))
         {
             bottomBar.visibility = View.GONE
-            hideScreens()
-
-            YourPostsRecycler.visibility = View.VISIBLE
-            refreshYourPosts.visibility = View.VISIBLE
+            hideScreens(R.id.your_posts)
         }
         else
         {
             bottomBar.visibility = View.VISIBLE
-            hideScreens()
-            forYouRecycler.visibility = View.VISIBLE
-            refreshForYou.visibility = View.VISIBLE
+            hideScreens(bottomBar.selectedItemId)
         }
 
         super.onResume()
@@ -245,21 +240,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (item.itemId == R.id.local)
         {
-            hideScreens()
-            LocalRecycler.visibility = View.VISIBLE
-            refreshLocal.visibility = View.VISIBLE
+            hideScreens(item.itemId)
         }
         else if (item.itemId == R.id.for_you)
         {
-            hideScreens()
-            forYouRecycler.visibility = View.VISIBLE
-            refreshForYou.visibility = View.VISIBLE
+            hideScreens(item.itemId)
         }
         else if (item.itemId == R.id.new_postings)
         {
-            hideScreens()
-            NewPostsRecycler.visibility = View.VISIBLE
-            refreshNewPosts.visibility = View.VISIBLE
+            hideScreens(item.itemId)
         }
         else if(!sharedPreferences.getBoolean("isGuest", false))
         {
@@ -285,9 +274,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     startActivity(intent)
                 }
                 R.id.your_posts -> {
-                    hideScreens()
-                    YourPostsRecycler.visibility = View.VISIBLE
-                    refreshYourPosts.visibility = View.VISIBLE
+                    hideScreens(item.itemId)
                 }
             }
         }
@@ -301,9 +288,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
-    private fun hideScreens()
-    {
 
+    //hides all recyclers except for argument screen. pass 0 to hide all
+    private fun hideScreens(screen : Int)
+    {
         forYouRecycler.visibility = View.GONE
         LocalRecycler.visibility = View.GONE
         NewPostsRecycler.visibility = View.GONE
@@ -312,5 +300,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         refreshLocal.visibility = View.GONE
         refreshNewPosts.visibility = View.GONE
         refreshYourPosts.visibility = View.GONE
+
+        when(screen) {
+            R.id.for_you ->{
+                forYouRecycler.visibility = View.VISIBLE
+                refreshForYou.visibility = View.VISIBLE
+            }
+            R.id.local ->{
+                LocalRecycler.visibility = View.VISIBLE
+                refreshLocal.visibility = View.VISIBLE
+            }
+            R.id.new_postings ->{
+                NewPostsRecycler.visibility = View.VISIBLE
+                refreshNewPosts.visibility = View.VISIBLE
+            }
+            R.id.your_posts ->{
+                YourPostsRecycler.visibility = View.VISIBLE
+                refreshYourPosts.visibility = View.VISIBLE
+            }
+        }
+
     }
 }
