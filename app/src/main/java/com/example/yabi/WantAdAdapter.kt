@@ -56,14 +56,22 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         holder.shipping.text = shipText
 
         holder.wantAdButton.setOnClickListener {
-            val intent = Intent(ItemsViewModel.context, AddPost::class.java)
-            intent.putExtra("isCounter", true)
-            intent.putExtra("title", ItemsViewModel.title)
-            intent.putExtra("price", ItemsViewModel.price)
-            intent.putExtra("location", ItemsViewModel.location)
-            intent.putExtra("shippingSeller", ItemsViewModel.shippingSeller)
-            intent.putExtra("covering", ItemsViewModel.shipCover)
-            ItemsViewModel.context.startActivity(intent)
+            if(ItemsViewModel.context.toString().substringBefore('@') == "com.example.yabi.ViewOffers")
+            {
+                val intent = Intent(ItemsViewModel.context, PostChat::class.java)
+                intent.putExtra("username", ItemsViewModel.username)
+                ItemsViewModel.context.startActivity(intent)
+            }
+            else {
+                val intent = Intent(ItemsViewModel.context, AddPost::class.java)
+                intent.putExtra("isCounter", true)
+                intent.putExtra("title", ItemsViewModel.title)
+                intent.putExtra("price", ItemsViewModel.price)
+                intent.putExtra("location", ItemsViewModel.location)
+                intent.putExtra("shippingSeller", ItemsViewModel.shippingSeller)
+                intent.putExtra("covering", ItemsViewModel.shipCover)
+                ItemsViewModel.context.startActivity(intent)
+            }
         }
 
 

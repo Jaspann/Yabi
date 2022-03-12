@@ -87,14 +87,22 @@ class ViewOffers : AppCompatActivity() {
         val data = ArrayList<WantAdViewModel>()
 
         // Used For testing, remove when implementing database
-        val users = arrayOf("Francis Lapointe")
-        val scores = arrayOf(98)
-        val titles = arrayOf("Obj I want")
-        val desc = arrayOf("I have this object! It is in great condition and I am willing to pay shipping.")
-        val photos = arrayOf(0)
+        val users = arrayOf("Francis Lapointe", "Francis Lapointe", "Francis Lapointe")
+        val scores = arrayOf(98, 33, 2)
+        val titles = arrayOf("Obj I want", "Obj I want", "Obj I want")
+        val desc = arrayOf("I have this object! It is in great condition and I am willing to pay shipping.",
+            "I have this object! It is in great condition and I am willing to pay shipping.",
+            "I have this object! It is in great condition and I am willing to pay shipping.")
+        val photos = arrayOf(0, 0, 0)
+        val prices = arrayOf(34.00, 33.00, 56.00)
+        val locations = arrayOf("here", "there", "anywhere")
+        val shippings = arrayOf(true, true, true)
+        val coverings = arrayOf(14.00, 22.00, 55.98)
 
-        for (i in users.indices) {
-            data.add(WantAdViewModel(users[i], scores[i], titles[i], desc[i], photos[i], 15.00, "New York, NY", true, 20.0, this))
+        var i = 0
+        while (i < 30) {
+            data.add(WantAdViewModel(users[0], scores[0], titles[0], desc[0], photos[0], prices[0], locations[0], shippings[0], coverings[0], this))
+            i++
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.offersRecycler)
