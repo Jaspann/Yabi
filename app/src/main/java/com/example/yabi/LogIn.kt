@@ -47,19 +47,32 @@ class LogIn : AppCompatActivity() {
                     .get()
                     .addOnSuccessListener { results ->
                         Log.d("TAG", "Successfully found account with matching email.")
-                        dbpass = results.documents[0].get("password").toString()
-                        if (pass == dbpass) {
-                            onLogInSuccess()
+                        if  (results.documents.isNotEmpty()) {
+                            dbpass = results.documents[0].get("password").toString()
+                            if (pass == dbpass) {
+                                onLogInSuccess()
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Error: Invalid password.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         } else {
                             Toast.makeText(
                                 applicationContext,
-                                "Error: Invalid password.",
+                                "Error: No account matches that email.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
                     }
                     .addOnFailureListener { e ->
                         Log.w("TAG", "Error getting authenticating user: ", e)
+                        Toast.makeText(
+                            applicationContext,
+                            "Error: Something went wrong.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
             }
         }
