@@ -3,21 +3,22 @@ package com.example.yabi
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_settings.toolbar
 
 class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+
+    private val TAG = "Settings activity"
 
     private val stateUSList = arrayOf(
         "--", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN",
@@ -93,14 +94,11 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     }
 
                     intent.getBooleanExtra("SignUp", false) -> {
-                        createAccount()
+                        updateUserLocation()
                     }
 
                     !intent.getBooleanExtra("SignUp", false) -> {
-
-                        //TODO: add ability to change state and city of account
-
-                        finish()
+                        updateUserLocation()
                     }
                 }
             }
@@ -108,28 +106,34 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun createAccount()
+    private fun updateUserLocation()
     {
         val db = Firebase.firestore
-        val helper = FirebaseHelper(db)
-
-        val email = intent.getStringExtra("email")
-        val pass = intent.getStringExtra("pass")
-        val name = intent.getStringExtra("name")
 
         val state: String = spinnerState.selectedItem as String
         val cityVal = editTextCity.text.toString()
         val zipVal = editTextZip.text.toString().toInt()
+        val userID = intent.getStringExtra("userID")
 
-            if (intent.getBooleanExtra("SignUp", false))
-            {
-                if (name != null && pass != null && email != null)
-                {
-                    helper.createUser(email, name, pass, cityVal, state, zipVal)
+        val location = hashMapOf(
+            "city" to cityVal,
+            "state" to state,
+            "zip" to zipVal
+        )
+        if (userID != null) {
+            db.collection("users").document(userID)
+                .set(location, SetOptions.merge())
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "User location added to user ID: $userID")
                 }
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding user document", e)
+                }
+        }
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("userID", userID)
+        startActivity(intent)
+
     }
 
     // Add required Spinner methods

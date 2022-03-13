@@ -19,21 +19,16 @@ class FirebaseHelper(var db: FirebaseFirestore) {
     }
 
     //BEGIN INSERTIONS
-    fun createUser(email: String, name: String, password: String, city: String, state: String, zip: Int){
+    fun createUser(email: String, name: String, password: String){
 
         //TODO Add code that converts raw password to SHA512 (actually should be
 
         //TODO Check if email is already used
 
-        //TODO Add creation date
-
         val user = hashMapOf(
             "email" to email,
             "name" to name,
             "password" to password,
-            "city" to city,
-            state to state,
-            "zip" to zip,
             "creationTimestamp" to serverTimestamp()
         )
 
@@ -41,6 +36,26 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             .add(user)
             .addOnSuccessListener { documentReference ->
                 Log.d(TAG, "User document added with ID: ${documentReference.id}")
+                previousTaskFinished = true
+                previousTaskSuccess = true
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding user document", e)
+                previousTaskFinished = true
+                previousTaskSuccess = false
+            }
+    }
+
+    fun addUserLocation(userID: String, city: String, state: String, zip: Int) {
+        val location = hashMapOf(
+            "city" to city,
+            "state" to state,
+            "zip" to zip
+        )
+        db.collection("users").document(userID)
+            .set(location, SetOptions.merge())
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "User location added to user ID: $userID")
                 previousTaskFinished = true
                 previousTaskSuccess = true
             }

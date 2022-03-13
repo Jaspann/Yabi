@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.android.volley.Request
@@ -12,6 +13,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.firebase.firestore.FieldValue
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.json.JSONException
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,11 +25,13 @@ import java.lang.RuntimeException
 
 
 class SignUp : AppCompatActivity() {
+
+    private val TAG = "Sign up activity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-
     }
 
     fun onPressSignUp(view: android.view.View) {
@@ -36,6 +40,7 @@ class SignUp : AppCompatActivity() {
         val pass = editTextPassword.text
         val name = editTextName.text
 
+        val db = Firebase.firestore
 
         when {
             email.isEmpty() -> {
@@ -63,17 +68,39 @@ class SignUp : AppCompatActivity() {
                 val emailText: String = editTextEmailAddress.text.toString().trim { it <= ' '}
                 val passwordText : String = editTextPassword.text.toString().trim { it <= ' '} //trims spaces
                 val nameText : String = editTextName.text.toString().trim {it <= ' '}
-                Toast.makeText(
-                    this@SignUp,
-                    "register step Successful",
-                    Toast.LENGTH_SHORT
-                ).show()
-                onSignUpSuccess(emailText, passwordText, nameText)
+
+                val user = hashMapOf(
+                    "email" to emailText,
+                    "name" to nameText,
+                    "password" to passwordText,
+                    "creationTimestamp" to FieldValue.serverTimestamp()
+                )
+
+                db.collection("users")
+                    .add(user)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "User document added with ID: ${documentReference.id}")
+                        val userID = documentReference.id
+                        Toast.makeText(
+                            this@SignUp,
+                            "Registration successful",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        onSignUpSuccess(userID)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error adding user document", e)
+                        Toast.makeText(
+                            this@SignUp,
+                            "Something went wrong",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
             }
         }
     }
 
-    private fun onSignUpSuccess(email : String, pass : String, name : String)
+    private fun onSignUpSuccess(userID: String)
     {
 
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
@@ -84,9 +111,7 @@ class SignUp : AppCompatActivity() {
 
         val intent = Intent(this, Settings::class.java)
         intent.putExtra("SignUp", true)
-        intent.putExtra("email", email)
-        intent.putExtra("pass", pass)
-        intent.putExtra("name", name)
+        intent.putExtra("userID", userID)
         startActivity(intent)
     }
 

@@ -271,6 +271,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 R.id.nav_settings -> {
                     val intent = Intent(this, Settings::class.java)
+                    val userID = this.intent.getStringExtra("userID")
+                    intent.putExtra("userID", userID)
+                    intent.putExtra("SignUp", false)
                     startActivity(intent)
                 }
                 R.id.your_posts -> {
