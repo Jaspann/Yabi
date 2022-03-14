@@ -79,4 +79,9 @@
     <string name="buyer_only_mode">Buyer Only Mode</string>
     <string name="zip_code_">Zip Code:</string>
     <string name="_12345">12345</string>
+    <string name="message_here">message here</string>
+    <string name="post_info">Post Info</string>
+    <string name="original_post">Original Post</string>
+    <string name="current_offer">Current Offer</string>
+    <string name="original_offer">Original Offer</string>
 </resources>
