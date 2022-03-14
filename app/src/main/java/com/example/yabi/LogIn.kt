@@ -24,6 +24,7 @@ class LogIn : AppCompatActivity() {
         val email: String = editTextTextEmailAddress.text.toString()
         val pass: String = editTextTextPassword.text.toString()
         var dbpass: String
+        var userID = ""
 
         when {
             email.isEmpty() -> {
@@ -47,25 +48,39 @@ class LogIn : AppCompatActivity() {
                     .get()
                     .addOnSuccessListener { results ->
                         Log.d("TAG", "Successfully found account with matching email.")
-                        dbpass = results.documents[0].get("password").toString()
-                        if (pass == dbpass) {
-                            onLogInSuccess()
+                        if  (results.documents.isNotEmpty()) {
+                            dbpass = results.documents[0].get("password").toString()
+                            userID = results.documents[0].id
+                            if (pass == dbpass) {
+                                onLogInSuccess(userID)
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Error: Invalid password.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         } else {
                             Toast.makeText(
                                 applicationContext,
-                                "Error: Invalid password.",
+                                "Error: No account matches that email.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
                     }
                     .addOnFailureListener { e ->
                         Log.w("TAG", "Error getting authenticating user: ", e)
+                        Toast.makeText(
+                            applicationContext,
+                            "Error: Something went wrong.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
             }
         }
     }
 
-    private fun onLogInSuccess() {
+    private fun onLogInSuccess(userID: String) {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
@@ -73,6 +88,7 @@ class LogIn : AppCompatActivity() {
         editor.apply()
 
         val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("userID", userID)
         startActivity(intent)
     }
 

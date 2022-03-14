@@ -12,12 +12,17 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import android.net.Uri
+import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_log_in.*
 import pub.devrel.easypermissions.EasyPermissions
 
 class AddPost : AppCompatActivity() {
+
+    private val TAG = "Add post actvity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_post)
@@ -45,13 +50,44 @@ class AddPost : AppCompatActivity() {
             val postalCode = editTextPostal.text.toString().toInt()
 
             val db = Firebase.firestore
-            val helper = FirebaseHelper(db)
 
-            helper.createListing(itemName, requestedPrice, coverShipping, coveredShipping, itemDescription, shippingStreet, shippingCity, shippingState, shippingCountry, postalCode)
+            val listingUserID = intent.getStringExtra("userID")
 
+            val listing = hashMapOf(
+                "userID" to listingUserID,
+                "itemName" to itemName,
+                "requestedPrice" to requestedPrice,
+                "coverShipping" to coverShipping,
+                "coveredShipping" to coveredShipping,
+                "itemDescription" to itemDescription,
+                "shippingStreet" to shippingStreet,
+                "shippingCity" to shippingCity,
+                "shippingState" to shippingState,
+                "shippingCountry" to shippingCountry,
+                "postalCode" to postalCode,
+                "creationTimestamp" to FieldValue.serverTimestamp()
+            )
+
+            db.collection("listings")
+                .add(listing)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "Listing document added with ID: ${documentReference.id}")
+                    Toast.makeText(
+                        applicationContext,
+                        "Listing created successfully.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding listing document", e)
+                    Toast.makeText(
+                        applicationContext,
+                        "Error: failed to create listing.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
         }
-
-        finish()
     }
 
     fun fillScreen()
