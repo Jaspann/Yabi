@@ -128,6 +128,7 @@ class SignUp : AppCompatActivity() {
         editor.putBoolean("isGuest", true)
         editor.apply()
         val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("userID", "guest")
         startActivity(intent)
     }
 

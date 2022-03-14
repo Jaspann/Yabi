@@ -90,6 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
+        val userID = intent.getStringExtra("userID")
 
         db.collection("listings")
             .orderBy("creationTimestamp", Query.Direction.DESCENDING)
@@ -108,14 +109,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val coveredShipping = arrayListOf<Double>()
                 for (document in queryResult) {
                     try {
-                        itemNames.add(document.get("itemName") as String)
-                        itemDescriptions.add(document.get("itemDescription") as String)
-                        tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as Long
-                        itemPrices.add(tempLong.toDouble())
-                        locations.add(document.get("shippingCity") as String + ", " + document.get("shippingState") as String)
-                        coverShipping.add(document.get("coverShipping") as Boolean)
-                        tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as Long
-                        coveredShipping.add(tempLongTwo.toDouble())
+                        if (document.get("userID") != userID) {
+                            itemNames.add(document.get("itemName") as String)
+                            itemDescriptions.add(document.get("itemDescription") as String)
+                            tempLong =
+                                document.get("requestedPrice").toString().substringBefore('.')
+                                    .toLong() as Long
+                            itemPrices.add(tempLong.toDouble())
+                            locations.add(
+                                document.get("shippingCity") as String + ", " + document.get(
+                                    "shippingState"
+                                ) as String
+                            )
+                            coverShipping.add(document.get("coverShipping") as Boolean)
+                            tempLongTwo =
+                                document.get("coveredShipping").toString().substringBefore('.')
+                                    .toLong() as Long
+                            coveredShipping.add(tempLongTwo.toDouble())
+                        }
                     } catch(e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
                     } catch(e: ClassCastException) {
