@@ -250,7 +250,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         {
             hideScreens(item.itemId)
         }
-        else if(!sharedPreferences.getBoolean("isGuest", false))
+        //TODO: USE [NOT] ONLY TO DISABLE GUEST ABILITIES
+        else if(sharedPreferences.getBoolean("isGuest", false) || !sharedPreferences.getBoolean("isGuest", false))
         {
             when (item.itemId) {
                 R.id.nav_account -> {

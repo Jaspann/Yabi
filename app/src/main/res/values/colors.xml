@@ -10,4 +10,6 @@
     <color name="YabiGreen">#FF21B878</color>
     <color name="YabiDark">#FF52A55B</color>
     <color name="transparent">#00000000</color>
+    <color name="grey">#DDD</color>
+
 </resources>
