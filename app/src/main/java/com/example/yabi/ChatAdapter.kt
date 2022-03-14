@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONException
+
 
 class ChatAdapter(
     var context: Context,
@@ -85,6 +87,14 @@ class ChatAdapter(
         else
         {
             (holder as MessageViewHolder).userText.text = descriptions[position]
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(holder.constraint)
+            if(accounts[position] == "them")
+                constraintSet.connect(R.id.cardBox,ConstraintSet.LEFT,R.id.messageConstraint,ConstraintSet.LEFT,5)
+            if(accounts[position] == "us")
+                constraintSet.connect(R.id.cardBox,ConstraintSet.RIGHT,R.id.messageConstraint,ConstraintSet.RIGHT,5)
+            constraintSet.applyTo(holder.constraint);
+
         }
     }
 
@@ -107,6 +117,7 @@ class ChatAdapter(
 
     internal class MessageViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
+        val constraint: androidx.constraintlayout.widget.ConstraintLayout = itemView.findViewById(R.id.messageConstraint)
         val cardBox: androidx.cardview.widget.CardView = itemView.findViewById(R.id.cardBox)
         val userText: TextView = itemView.findViewById(R.id.userText)
     }

@@ -43,7 +43,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             android:foreground="@drawable/ic_baseline_add_24"
             android:outlineSpotShadowColor="@color/transparent"
@@ -54,7 +54,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:outlineSpotShadowColor="#00000000"
-                android:onClick="onPressCreateOffer"/>
+                android:onClick="onPressCreateOffer"
+                android:shadowColor="@color/transparent"
+                android:outlineAmbientShadowColor="@color/transparent"/>
 
         </androidx.cardview.widget.CardView>
 
@@ -64,8 +66,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@+id/createPost"
             android:outlineSpotShadowColor="@color/transparent"
             app:cardBackgroundColor="#EEE"
