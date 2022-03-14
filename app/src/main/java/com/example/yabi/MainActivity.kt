@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
+        setSupportActionBar(toolbar)
         nav_view.setNavigationItemSelectedListener(this)
         bottomBar.setOnItemSelectedListener(this)
 
@@ -228,6 +229,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 else {
                     val intent = Intent(this, AddPost::class.java)
+                    val userID = this.intent.getStringExtra("userID")
+                    intent.putExtra("userID", userID)
                     startActivity(intent)
                 }
             }

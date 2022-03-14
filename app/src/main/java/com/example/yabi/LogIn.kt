@@ -24,6 +24,7 @@ class LogIn : AppCompatActivity() {
         val email: String = editTextTextEmailAddress.text.toString()
         val pass: String = editTextTextPassword.text.toString()
         var dbpass: String
+        var userID = ""
 
         when {
             email.isEmpty() -> {
@@ -49,8 +50,9 @@ class LogIn : AppCompatActivity() {
                         Log.d("TAG", "Successfully found account with matching email.")
                         if  (results.documents.isNotEmpty()) {
                             dbpass = results.documents[0].get("password").toString()
+                            userID = results.documents[0].id
                             if (pass == dbpass) {
-                                onLogInSuccess()
+                                onLogInSuccess(userID)
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -78,7 +80,7 @@ class LogIn : AppCompatActivity() {
         }
     }
 
-    private fun onLogInSuccess() {
+    private fun onLogInSuccess(userID: String) {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
@@ -86,6 +88,7 @@ class LogIn : AppCompatActivity() {
         editor.apply()
 
         val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("userID", userID)
         startActivity(intent)
     }
 

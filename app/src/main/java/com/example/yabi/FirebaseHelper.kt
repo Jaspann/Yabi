@@ -77,8 +77,6 @@ class FirebaseHelper(var db: FirebaseFirestore) {
                       shippingCountry: String,
                       postalCode: Int) {
 
-        //TODO Add creation date
-
         val listing = hashMapOf(
             "itemName" to itemName,
             "requestedPrice" to requestedPrice,
