@@ -6,14 +6,26 @@ import android.os.Bundle
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
+
+
+//stuff used in tags
+import android.annotation.SuppressLint
+import androidx.annotation.NonNull
 import android.view.View
+import  android.view.ViewGroup
 import android.widget.Toast
+import  android.widget.Spinner
+import  android.widget.Adapter
+import android.widget.ArrayAdapter
+import android.widget.ListAdapter
+import android.widget.AdapterView
+import  android.widget.TextView
+//end of used in tags
+
 
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import android.net.Uri
-import android.util.Log
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_log_in.*
@@ -21,73 +33,68 @@ import pub.devrel.easypermissions.EasyPermissions
 
 class AddPost : AppCompatActivity() {
 
-    private val TAG = "Add post actvity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_post)
         toolbar.setNavigationOnClickListener {
             finish()
+            // Create an ArrayAdapter
+            val adapter = ArrayAdapter.createFromResource(this, R.array.tag_list, android.R.layout.simple_spinner_item)
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+            fillScreen()
         }
 
-        fillScreen()
+        fun getValues(view: View) {
+            Toast.makeText(
+                this, "Spinner 1 " + spinner.selectedItem.toString(), Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
 
     fun onPressPost(view: android.view.View) {
 
-        if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
-        {
+        if (!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter")) {
             val itemName = editTextItemName.text.toString()
             val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked
-            val coveredShipping = if(coverShippingFullButton.isChecked) {-1.0} else {editTextCoverShippingUntil.text.toString().toDouble()}
+            val coveredShipping = if (coverShippingFullButton.isChecked) {
+                -1.0
+            } else {
+                editTextCoverShippingUntil.text.toString().toDouble()
+            }
             val itemDescription = editTextTextMultiLine.text.toString()
-            val shippingStreet = editTextStreetNumber.text.toString() + " " + editTextStreet.text.toString()
+            val shippingStreet =
+                editTextStreetNumber.text.toString() + " " + editTextStreet.text.toString()
             val shippingCity = editTextCity.text.toString()
             val shippingState = editTextState.text.toString()
             val shippingCountry = editTextCountry.text.toString()
             val postalCode = editTextPostal.text.toString().toInt()
-
+            val tag = spinner.selectedItem.toString()
             val db = Firebase.firestore
-
-            val listingUserID = intent.getStringExtra("userID")
-
-            val listing = hashMapOf(
-                "userID" to listingUserID,
-                "itemName" to itemName,
-                "requestedPrice" to requestedPrice,
-                "coverShipping" to coverShipping,
-                "coveredShipping" to coveredShipping,
-                "itemDescription" to itemDescription,
-                "shippingStreet" to shippingStreet,
-                "shippingCity" to shippingCity,
-                "shippingState" to shippingState,
-                "shippingCountry" to shippingCountry,
-                "postalCode" to postalCode,
-                "creationTimestamp" to FieldValue.serverTimestamp()
+            val helper = FirebaseHelper(db)
+            helper.createListing(
+                itemName,
+                requestedPrice,
+                coverShipping,
+                coveredShipping,
+                itemDescription,
+                shippingStreet,
+                shippingCity,
+                shippingState,
+                shippingCountry,
+                postalCode,
+                tag
             )
 
-            db.collection("listings")
-                .add(listing)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "Listing document added with ID: ${documentReference.id}")
-                    Toast.makeText(
-                        applicationContext,
-                        "Listing created successfully.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding listing document", e)
-                    Toast.makeText(
-                        applicationContext,
-                        "Error: failed to create listing.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+
         }
+
+        finish()
     }
 
     fun fillScreen()
