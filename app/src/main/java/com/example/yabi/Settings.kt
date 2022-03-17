@@ -29,10 +29,10 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        setSupportActionBar(toolbar)
         toolbar.setNavigationOnClickListener {
             finish()
         }
-        setSupportActionBar(toolbar)
 
         //TODO: load in the current values from the database
 
