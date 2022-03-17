@@ -1,14 +1,17 @@
 package com.example.yabi
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.activity_post_chat.*
+
 
 class PostChat : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +23,18 @@ class PostChat : AppCompatActivity() {
         }
 
         getDatabaseMessages()
+
+        userMessageInput.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN &&
+                keyCode == KeyEvent.KEYCODE_ENTER
+            ) {
+                //TODO: send user message to database
+
+                userMessageInput.text = null
+                return@OnKeyListener true
+            }
+            false
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

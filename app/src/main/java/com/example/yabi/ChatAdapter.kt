@@ -2,6 +2,7 @@ package com.example.yabi
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,6 +66,26 @@ class ChatAdapter(
             else
                 holder.userTextVew.text = accounts[position] + "'s Offer"
 
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(holder.constraint)
+            if(accounts[position] == "them") {
+                constraintSet.connect(
+                    R.id.offerUserText,
+                    ConstraintSet.LEFT,
+                    R.id.parentConstraint,
+                    ConstraintSet.LEFT,
+                )
+            }
+            if(accounts[position] == "us") {
+                constraintSet.connect(
+                    R.id.offerUserText,
+                    ConstraintSet.RIGHT,
+                    R.id.parentConstraint,
+                    ConstraintSet.RIGHT,
+                )
+            }
+            constraintSet.applyTo(holder.constraint)
+
             holder.descTextView.text = descriptions[position]
             holder.priceTextView.text = String.format("$%.2f", prices[position])
             val fromText = "From: " + locationFrom[position]
@@ -89,11 +110,26 @@ class ChatAdapter(
             (holder as MessageViewHolder).userText.text = descriptions[position]
             val constraintSet = ConstraintSet()
             constraintSet.clone(holder.constraint)
-            if(accounts[position] == "them")
-                constraintSet.connect(R.id.cardBox,ConstraintSet.LEFT,R.id.messageConstraint,ConstraintSet.LEFT,5)
-            if(accounts[position] == "us")
-                constraintSet.connect(R.id.cardBox,ConstraintSet.RIGHT,R.id.messageConstraint,ConstraintSet.RIGHT,5)
-            constraintSet.applyTo(holder.constraint);
+            if(accounts[position] == "them") {
+                constraintSet.connect(
+                    R.id.cardBox,
+                    ConstraintSet.LEFT,
+                    R.id.messageConstraint,
+                    ConstraintSet.LEFT,
+                    5
+                )
+                holder.cardBox.setCardBackgroundColor(Color.DKGRAY)
+            }
+            if(accounts[position] == "us") {
+                constraintSet.connect(
+                    R.id.cardBox,
+                    ConstraintSet.RIGHT,
+                    R.id.messageConstraint,
+                    ConstraintSet.RIGHT,
+                    5
+                )
+            }
+            constraintSet.applyTo(holder.constraint)
 
         }
     }
@@ -104,6 +140,7 @@ class ChatAdapter(
 
     internal class OfferViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
+        val constraint: androidx.constraintlayout.widget.ConstraintLayout = itemView.findViewById(R.id.parentConstraint)
         val userTextVew: TextView = itemView.findViewById(R.id.offerUserText)
         val titleTextVew: TextView = itemView.findViewById(R.id.titleText)
         val descTextView: TextView = itemView.findViewById(R.id.descriptionText)

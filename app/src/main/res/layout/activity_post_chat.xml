@@ -23,7 +23,7 @@
         android:id="@+id/chatRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="55dp"
         android:layout_marginTop="56dp"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,8 @@
             android:foreground="@drawable/ic_baseline_add_24"
             android:outlineSpotShadowColor="@color/transparent"
             app:cardBackgroundColor="@color/YabiGreen"
-            app:cardCornerRadius="30dp">
+            app:cardCornerRadius="30dp"
+            tools:ignore="UnusedAttribute">
 
             <Button
                 android:layout_width="match_parent"
@@ -70,9 +71,11 @@
             android:layout_toEndOf="@+id/createPost"
             android:outlineSpotShadowColor="@color/transparent"
             app:cardBackgroundColor="#EEE"
-            app:cardCornerRadius="30dp">
+            app:cardCornerRadius="30dp"
+            tools:ignore="UnusedAttribute">
 
             <EditText
+                android:id="@+id/userMessageInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -80,7 +83,7 @@
                 android:autofillHints="message"
                 android:background="@null"
                 android:hint="@string/message_here"
-                android:inputType="textAutoCorrect"
+                android:inputType="textCapSentences"
                 android:minHeight="40dp" />
 
         </androidx.cardview.widget.CardView>
