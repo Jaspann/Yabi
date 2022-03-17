@@ -36,6 +36,13 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         //TODO: load in the current values from the database
 
+        // Create an ArrayAdapter
+        val adapter = ArrayAdapter.createFromResource(this, R.array.tag_list, android.R.layout.simple_spinner_item)
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Apply the adapter to the spinner
+        spinner2.adapter = adapter
+
         spinnerState.onItemSelectedListener = this
 
         val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(

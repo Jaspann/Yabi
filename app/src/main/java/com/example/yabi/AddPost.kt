@@ -6,8 +6,20 @@ import android.os.Bundle
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
+
+//stuff used in tags
+import android.annotation.SuppressLint
+import androidx.annotation.NonNull
 import android.view.View
+import  android.view.ViewGroup
 import android.widget.Toast
+import  android.widget.Spinner
+import  android.widget.Adapter
+import android.widget.ArrayAdapter
+import android.widget.ListAdapter
+import android.widget.AdapterView
+import  android.widget.TextView
+//end of used in tags
 
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
@@ -28,8 +40,20 @@ class AddPost : AppCompatActivity() {
         setContentView(R.layout.activity_add_post)
         toolbar.setNavigationOnClickListener {
             finish()
+            finish()
+            // Create an ArrayAdapter
+            val adapter = ArrayAdapter.createFromResource(this, R.array.tag_list, android.R.layout.simple_spinner_item)
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
         }
 
+        fun getValues(view: View) {
+            Toast.makeText(
+                this, "Spinner 1 " + spinner.selectedItem.toString(), Toast.LENGTH_LONG
+            ).show()
+        }
         fillScreen()
     }
 
@@ -48,7 +72,7 @@ class AddPost : AppCompatActivity() {
             val shippingState = editTextState.text.toString()
             val shippingCountry = editTextCountry.text.toString()
             val postalCode = editTextPostal.text.toString().toInt()
-
+            val tag = spinner.selectedItem.toString()
             val db = Firebase.firestore
 
             val listingUserID = intent.getStringExtra("userID")
@@ -65,7 +89,8 @@ class AddPost : AppCompatActivity() {
                 "shippingState" to shippingState,
                 "shippingCountry" to shippingCountry,
                 "postalCode" to postalCode,
-                "creationTimestamp" to FieldValue.serverTimestamp()
+                "creationTimestamp" to FieldValue.serverTimestamp(),
+                "tag" to tag
             )
 
             db.collection("listings")

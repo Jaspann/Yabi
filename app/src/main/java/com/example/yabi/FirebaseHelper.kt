@@ -75,7 +75,7 @@ class FirebaseHelper(var db: FirebaseFirestore) {
                       shippingCity: String,
                       shippingState: String,
                       shippingCountry: String,
-                      postalCode: Int) {
+                      postalCode: Int,tag : String) {
 
         val listing = hashMapOf(
             "itemName" to itemName,
@@ -88,7 +88,8 @@ class FirebaseHelper(var db: FirebaseFirestore) {
             "shippingState" to shippingState,
             "shippingCountry" to shippingCountry,
             "postalCode" to postalCode,
-            "creationTimestamp" to serverTimestamp()
+            "creationTimestamp" to serverTimestamp(),
+            "tag" to tag
         )
 
         db.collection("listings")
