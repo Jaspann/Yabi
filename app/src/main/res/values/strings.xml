@@ -63,6 +63,7 @@
     <string name="D_00_00">$00.00</string>
     <string name="sometown_aa">Sometown, AA</string>
     <string name="submit_offer">Submit Offer</string>
+    <string name="your_offer">Submit Your Offer</string>
     <string name="shipping_buyer_in_full">Shipping: Buyer, In Full</string>
     <string name="save_changes">Save changes</string>
     <string name="settings">Settings</string>
@@ -79,6 +80,7 @@
     <string name="buyer_only_mode">Buyer Only Mode</string>
     <string name="zip_code_">Zip Code:</string>
     <string name="_12345">12345</string>
+
     <string-array name="tag_list">
         <item>Furniture</item>
         <item>Games</item>

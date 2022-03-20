@@ -3,10 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_add_post.xml" value="0.33" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_add_post.xml" value="0.25" />
         <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_main.xml" value="0.1762917933130699" />
-        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_settings.xml" value="0.1" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_messaging.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_post_chat.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_settings.xml" value="0.5" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_sign_up.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_view_offers.xml" value="0.5" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/activity_your_posts.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/layout/your_post_card.xml" value="0.5" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/menu/activity_main_drawer.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/menu/options_nav_bar.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi12/app/src/main/res/menu/search_nav_bar.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi3/app/src/main/res/layout/activity_log_in.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/flapo/AndroidStudioProjects/Yabi3/app/src/main/res/layout/activity_sign_up.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/wipar/AndroidStudioProjects/Yabi/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.22135416666666666" />

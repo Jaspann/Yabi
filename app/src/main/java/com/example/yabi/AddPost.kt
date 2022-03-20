@@ -40,13 +40,15 @@ class AddPost : AppCompatActivity() {
         setContentView(R.layout.activity_add_post)
         toolbar.setNavigationOnClickListener {
             finish()
-            finish()
             // Create an ArrayAdapter
             val adapter = ArrayAdapter.createFromResource(this, R.array.tag_list, android.R.layout.simple_spinner_item)
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinner.adapter = adapter
+
+
+
         }
 
         fun getValues(view: View) {
@@ -60,14 +62,18 @@ class AddPost : AppCompatActivity() {
 
     fun onPressPost(view: android.view.View) {
 
-        if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
-        {
+        if (!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter")) {
             val itemName = editTextItemName.text.toString()
             val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked
-            val coveredShipping = if(coverShippingFullButton.isChecked) {-1.0} else {editTextCoverShippingUntil.text.toString().toDouble()}
+            val coveredShipping = if (coverShippingFullButton.isChecked) {
+                -1.0
+            } else {
+                editTextCoverShippingUntil.text.toString().toDouble()
+            }
             val itemDescription = editTextTextMultiLine.text.toString()
-            val shippingStreet = editTextStreetNumber.text.toString() + " " + editTextStreet.text.toString()
+            val shippingStreet =
+                editTextStreetNumber.text.toString() + " " + editTextStreet.text.toString()
             val shippingCity = editTextCity.text.toString()
             val shippingState = editTextState.text.toString()
             val shippingCountry = editTextCountry.text.toString()
@@ -113,6 +119,46 @@ class AddPost : AppCompatActivity() {
                     ).show()
                 }
         }
+        if (intent.hasExtra("isCounter")) {
+
+            val TextItemName = editTextItemName.text.toString()
+            editTextItemName.setText(TextItemName)
+            val listingUserID = intent.getStringExtra("userID")
+            val offerID = intent.getStringExtra("userID")
+            val db = Firebase.firestore
+            val itemName = editTextItemName.text.toString()
+            val youroffer = editTextRequestingPrice.text.toString().toDouble()
+            val coverShipping = buyerCoverShippingButton.isChecked
+            val coveredShipping = if (coverShippingFullButton.isChecked) {
+                -1.0
+            } else {
+                editTextCoverShippingUntil.text.toString().toDouble()
+            }
+
+
+            val offer = hashMapOf(
+                "userId" to listingUserID,
+                "OfferUserID" to offerID,
+                "itemName" to itemName,
+                "your offer" to youroffer,
+
+                )
+
+            db.collection("offers")
+                .add(offer)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "Offer document added with ID:)${documentReference.id}")
+                    Toast.makeText(applicationContext, "Offer Submitted", Toast.LENGTH_LONG).show()
+                }
+                .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding offer document", e)
+                Toast.makeText(
+                    applicationContext,
+                    "Error: failed to create offer.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 
     fun fillScreen()
@@ -126,7 +172,33 @@ class AddPost : AppCompatActivity() {
         if(intent.hasExtra("isCounter"))
         {
             toolbar.title = "Create Offer"
+            spinner.visibility = View.GONE
+            tagView.visibility = View.GONE
+            buttonLocationLineOne.visibility = View.GONE
+            editTextStreetNumber.visibility = View.GONE
+            editTextStreet.visibility = View.GONE
+            editTextCity.visibility = View.GONE
+            editTextState.visibility = View.GONE
+            editTextCountry.visibility = View.GONE
+            editTextPostal.visibility = View.GONE
+            textView.visibility = View.GONE
+            textViewMessage.visibility = View.GONE
+            editTextTextMultiLine.visibility = View.GONE
+            textViewLocation.visibility = View.GONE
+            presetLocationLineOne.visibility = View.GONE
+            buttonLocationLineOne.visibility = View.GONE
+            radioGroupLocation.visibility = View.GONE
+            priceText.text = getString(R.string.your_offer)
             postButton.text = getString(R.string.submit_offer)
+            sellerCoverShippingButton.visibility = View.GONE
+            coverShippingFullButton.visibility = View.GONE
+            coverShippingPartButton.visibility = View.GONE
+            editTextCoverShippingUntil.visibility = View.GONE
+            radioGroupShippingCost.visibility = View.GONE
+            sellerCoverShippingButton.visibility = View.GONE
+            textViewDollarSignTwo.visibility = View.GONE
+            textViewShipping.visibility = View.GONE
+            buyerCoverShippingButton.visibility = View.GONE
         }
         if(intent.hasExtra("title"))
         {
