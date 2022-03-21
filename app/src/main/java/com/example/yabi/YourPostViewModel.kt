@@ -5,7 +5,7 @@ import android.content.Context
 data class YourPostViewModel(
     val title : String,
     val desc : String,
-    val img : Int,
+   // val img : Int,
     val offers : Int,
     val price : Double,
     val location : String,

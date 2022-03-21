@@ -139,14 +139,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                               locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
 
-        val data = ArrayList<WantAdViewModel>()
+        val data = ArrayList<YourPostViewModel>()
 
 
 
         for (i in itemNames.indices) {
-            data.add(WantAdViewModel("User", -1, itemNames[i],
-                itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], this))
+            data.add(YourPostViewModel(itemNames[i], itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i], coveredShipping[i], this))
         }
 
 
@@ -154,7 +152,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         recyclerview.layoutManager = LinearLayoutManager(this)
 
-        val adapter = WantAdAdapter(data)
+        val adapter = YourPostAdapter(data)
 
         recyclerview.adapter = adapter
 

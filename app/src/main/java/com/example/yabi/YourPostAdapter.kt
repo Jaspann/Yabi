@@ -31,7 +31,7 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
 
         holder.titleTextVew.text = itemsViewModel.title
         holder.descTextView.text = itemsViewModel.desc
-        holder.imageView.setImageResource(itemsViewModel.img)
+        //holder.imageView.setImageResource(itemsViewModel.img)
         val offerText = if(itemsViewModel.offers == 1) {
             itemsViewModel.offers.toString() + " Offer"
         } else{
