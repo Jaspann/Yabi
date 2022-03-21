@@ -50,7 +50,6 @@ class AddPost : AppCompatActivity() {
             spinner.adapter = adapter
 
 
-
         }
 
         fun getValues(view: View) {

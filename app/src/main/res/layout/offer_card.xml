@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="#EEE"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:outlineAmbientShadowColor="@color/white"
+        android:outlineSpotShadowColor="@color/white">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+
+                <TextView
+                    android:id="@+id/userText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:maxWidth="250dp"
+                    android:text="@string/account_name"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/titleText"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:maxHeight="50dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/ExampleTitle"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userText" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/priceCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/YabiGreen"
+                    android:layout_marginTop="4dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/titleText"
+                    app:layout_constraintTop_toBottomOf="@+id/titleText">
+
+                    <TextView
+                        android:id="@+id/priceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="@string/D_00_00"
+                        android:textColor="@color/white"/>
+
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/shippingCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/YabiGreen"
+                    android:layout_marginTop="4dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/priceCard"
+                    app:layout_constraintTop_toBottomOf="@+id/priceCard">
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/tagFlow"
+                    android:layout_width="wrap_content"
+                    android:maxWidth="250dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="40dp"
+                    app:flow_horizontalGap="4dp"
+                    app:flow_verticalGap="4dp"
+                    app:flow_wrapMode="chain"
+                    app:layout_constraintStart_toStartOf="@+id/titleText"
+                    app:layout_constraintTop_toBottomOf="@+id/titleText"
+                    android:layout_marginTop="8dp" />
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

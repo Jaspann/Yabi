@@ -2,6 +2,7 @@ package com.example.yabi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.content.Intent
 import kotlinx.android.synthetic.main.activity_main.*
 
 class CompletedOffers : AppCompatActivity() {

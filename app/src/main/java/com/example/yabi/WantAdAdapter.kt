@@ -19,7 +19,6 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         // that is used to hold list item
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.want_ad_card, parent, false)
-
         return ViewHolder(view)
     }
 
