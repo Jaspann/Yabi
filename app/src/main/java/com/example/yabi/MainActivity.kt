@@ -189,14 +189,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         if (document.get("userID") != userID) {
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong =
-                                document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong() as Long
+                            tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as Long
                             itemPrices.add(tempLong.toDouble())
-                            locations.add(
-                                document.get("shippingCity") as String + ", " + document.get(
-                                    "shippingState"
-                                ) as String
+                            locations.add(document.get("shippingCity") as String + ", " + document.get("shippingState") as String
                             )
                             coverShipping.add(document.get("coverShipping") as Boolean)
                             tempLongTwo =
@@ -357,6 +352,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+
 
         when (item.itemId) {
             R.id.search_button -> {

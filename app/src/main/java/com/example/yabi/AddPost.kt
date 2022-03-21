@@ -28,6 +28,8 @@ import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_log_in.*
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -81,8 +83,10 @@ class AddPost : AppCompatActivity() {
             val tag = spinner.selectedItem.toString()
             val db = Firebase.firestore
 
+
             val listingUserID = intent.getStringExtra("userID")
 
+            //TODO: add listing and buyer IDs as to seperate buyer and seller per listing
             val listing = hashMapOf(
                 "userID" to listingUserID,
                 "itemName" to itemName,
@@ -119,36 +123,31 @@ class AddPost : AppCompatActivity() {
                     ).show()
                 }
         }
-        if (intent.hasExtra("isCounter")) {
 
-            val TextItemName = editTextItemName.text.toString()
-            editTextItemName.setText(TextItemName)
-            val listingUserID = intent.getStringExtra("userID")
-            val offerID = intent.getStringExtra("userID")
+
+
+        //TODO: For Offers
+        if (intent.hasExtra("isCounter")) {
             val db = Firebase.firestore
+            var queryResult: MutableList<DocumentSnapshot>
+            val buyerID = intent.getStringExtra("userID")
+
             val itemName = editTextItemName.text.toString()
             val youroffer = editTextRequestingPrice.text.toString().toDouble()
-            val coverShipping = buyerCoverShippingButton.isChecked
-            val coveredShipping = if (coverShippingFullButton.isChecked) {
-                -1.0
-            } else {
-                editTextCoverShippingUntil.text.toString().toDouble()
-            }
-
 
             val offer = hashMapOf(
-                "userId" to listingUserID,
-                "OfferUserID" to offerID,
+                "BuyerID" to buyerID,
                 "itemName" to itemName,
                 "your offer" to youroffer,
-
-                )
-
+            )
             db.collection("offers")
                 .add(offer)
                 .addOnSuccessListener { documentReference ->
                     Log.d(TAG, "Offer document added with ID:)${documentReference.id}")
-                    Toast.makeText(applicationContext, "Offer Submitted", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "Offer Submitted",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    onOfferSubmit()
                 }
                 .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding offer document", e)
@@ -157,9 +156,15 @@ class AddPost : AppCompatActivity() {
                     "Error: failed to create offer.",
                     Toast.LENGTH_LONG
                 ).show()
+
             }
         }
     }
+private fun onOfferSubmit(){
+
+    val intent = Intent(this, Messaging::class.java)
+    startActivity(intent)
+}
 
     fun fillScreen()
     {
