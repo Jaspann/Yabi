@@ -26,6 +26,7 @@ import  android.widget.TextView
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import android.net.Uri
+import androidx.constraintlayout.widget.ConstraintSet
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_log_in.*
@@ -186,6 +187,14 @@ class AddPost : AppCompatActivity() {
             val picturePath = cursor.getString(columnIndex)
             cursor.close()
             userImage.setImageBitmap(BitmapFactory.decodeFile(picturePath))
+
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(scrollConstraint)
+
+            constraintSet.clear(R.id.button2, ConstraintSet.BOTTOM)
+
+            constraintSet.applyTo(scrollConstraint)
+
         }
         else
         {
