@@ -16,12 +16,15 @@ import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_log_in.*
 import pub.devrel.easypermissions.EasyPermissions
 
 class AddPost : AppCompatActivity() {
 
     private val TAG = "Add post actvity"
+    private var remoteImagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +70,10 @@ class AddPost : AppCompatActivity() {
                 "postalCode" to postalCode,
                 "creationTimestamp" to FieldValue.serverTimestamp()
             )
+
+            if (remoteImagePath != null) {
+                listing["imagePath"] = remoteImagePath
+            }
 
             db.collection("listings")
                 .add(listing)
@@ -165,6 +172,8 @@ class AddPost : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
+            val storage = Firebase.storage
+            var storageRef = storage.reference
             val selectedImage: Uri = data.data!!
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             userImage.visibility = View.VISIBLE
@@ -178,7 +187,23 @@ class AddPost : AppCompatActivity() {
             val columnIndex = cursor!!.getColumnIndex(filePathColumn[0])
             val picturePath = cursor.getString(columnIndex)
             cursor.close()
+            var imageRef: StorageReference? = storageRef.child("listingImages/${picturePath.replaceBeforeLast('/',"")}")
             userImage.setImageBitmap(BitmapFactory.decodeFile(picturePath))
+            var uploadTask = imageRef?.putFile(selectedImage)
+            uploadTask?.addOnSuccessListener { task ->
+                Toast.makeText(
+                    applicationContext,
+                    "Image uploaded.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                remoteImagePath = task.metadata?.path
+            }?.addOnFailureListener {
+                Toast.makeText(
+                    applicationContext,
+                    "Image upload failed.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
         else
         {
