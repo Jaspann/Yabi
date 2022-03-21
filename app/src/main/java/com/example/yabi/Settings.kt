@@ -53,6 +53,20 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         fillOptions()
     }
 
+    fun onPressLogOut(view: View) {
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove("emailAddress")
+        editor.remove("password")
+        editor.apply()
+
+
+        val intent = Intent(this, LogIn::class.java)
+        intent.putExtra("signedOut", true)
+        startActivity(intent)
+
+    }
+
     private fun fillOptions()
     {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)

@@ -42,6 +42,16 @@
                 app:layout_constraintStart_toStartOf="@+id/LocationLayout"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <Button
+                android:id="@+id/logOutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/log_out"
+                app:layout_constraintStart_toStartOf="@+id/LocationLayout"
+                app:layout_constraintTop_toBottomOf="@+id/buyerOnlySwitch"
+                android:onClick="onPressLogOut"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/LocationLayout"
                 android:layout_width="wrap_content"
@@ -49,15 +59,15 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buyerOnlySwitch">
+                app:layout_constraintTop_toBottomOf="@+id/logOutButton">
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/location_"
-                    android:textSize="16sp"
                     android:textColor="@android:color/holo_blue_dark"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

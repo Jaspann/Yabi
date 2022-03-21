@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_log_in.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONException
 import java.lang.RuntimeException
 
@@ -85,11 +87,18 @@ class LogIn : AppCompatActivity() {
         val editor = sharedPreferences.edit()
 
         editor.putBoolean("isGuest", false)
+        editor.putString("emailAddress", editTextTextEmailAddress.text.toString())
+        editor.putString("password", editTextTextPassword.text.toString())
         editor.apply()
 
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("userID", userID)
         startActivity(intent)
+    }
+
+    override fun onBackPressed() {
+        if(intent.getBooleanExtra("signedOut", false))
+            moveTaskToBack(true)
     }
 
     fun onPressSignUp(view: android.view.View) {
