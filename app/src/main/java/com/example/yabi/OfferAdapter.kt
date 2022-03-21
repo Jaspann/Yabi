@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+
 
 class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapter<OfferAdapter.ViewHolder>() {
 
@@ -22,9 +25,9 @@ class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapte
         val OfferViewModel = mList[position]
 
         holder.userTextView.text = OfferViewModel.buyer
-        holder.titleTextView.text = OfferViewModel.title
-        val price = "$" + String.format("%.2f", OfferViewModel.offer)
-        holder.offerTextView.text = price
+        holder.titleTextView.text = OfferViewModel.itemName
+        val offer = "$" + String.format("%.2f", OfferViewModel.youroffer)
+        holder.offerTextView.text = offer
     }
 
     // return the number of the items in the list

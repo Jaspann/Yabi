@@ -128,18 +128,17 @@ class AddPost : AppCompatActivity() {
         //TODO: For Offers
         if (intent.hasExtra("isCounter")) {
             val db = Firebase.firestore
-            var queryResult: MutableList<DocumentSnapshot>
-            val buyerID = intent.getStringExtra("userID")
 
+            val buyerID = intent.getStringExtra("userID")
             val itemName = editTextItemName.text.toString()
             val youroffer = editTextRequestingPrice.text.toString().toDouble()
 
             val offer = hashMapOf(
                 "BuyerID" to buyerID,
                 "itemName" to itemName,
-                "your offer" to youroffer,
+                "youroffer" to youroffer,
             )
-            db.collection("offers")
+            db.collection("offer")
                 .add(offer)
                 .addOnSuccessListener { documentReference ->
                     Log.d(TAG, "Offer document added with ID:)${documentReference.id}")

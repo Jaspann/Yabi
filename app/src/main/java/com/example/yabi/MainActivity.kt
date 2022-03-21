@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         getData()
         getYourPosts()
     }
-
 //TODO: fills your posts with your posts
     private fun getYourPosts(){
         val db = Firebase.firestore
@@ -158,8 +157,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val adapter = WantAdAdapter(data)
 
         recyclerview.adapter = adapter
-
-
 
     }
 
