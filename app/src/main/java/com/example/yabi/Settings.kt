@@ -35,15 +35,8 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
         setSupportActionBar(toolbar)
 
-        //TODO: load in the current values from the database
-
-        // Create an ArrayAdapter
-        val adapter = ArrayAdapter.createFromResource(this, R.array.tag_list, android.R.layout.simple_spinner_item)
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Apply the adapter to the spinner
-        spinner2.adapter = adapter
-
+        //TODO: load in the current location values from the database
+        //To compensate, we will load and save value to SavedPreferences
 
         spinnerState.onItemSelectedListener = this
 
@@ -56,6 +49,32 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             android.R.layout.simple_spinner_dropdown_item)
 
         spinnerState.adapter = ad
+
+        fillOptions()
+    }
+
+    private fun fillOptions()
+    {
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+
+        buyerOnlySwitch.isChecked = sharedPreferences.getBoolean("buyerOnly", false)
+        editTextStreet.setText(sharedPreferences.getString("street", ""))
+        editTextCity.setText(sharedPreferences.getString("city", ""))
+        spinnerState.setSelection(sharedPreferences.getInt("state", 0))
+        radioButtonFurniture.isChecked = sharedPreferences.getBoolean("Furniture", false)
+        radioButtonGames.isChecked = sharedPreferences.getBoolean("Games", false)
+        radioButtonCards.isChecked = sharedPreferences.getBoolean("Cards", false)
+        radioButtonPaintings.isChecked = sharedPreferences.getBoolean("Paintings", false)
+        radioButtonClothing.isChecked = sharedPreferences.getBoolean("Clothing", false)
+        radioButtonHomeImprovement.isChecked = sharedPreferences.getBoolean("HomeImprovement", false)
+        radioButtonAccessory.isChecked = sharedPreferences.getBoolean("Accessory", false)
+        radioButtonCollectable.isChecked = sharedPreferences.getBoolean("Collectable", false)
+
+        //sharedPreferences.edit().remove("zipCode").apply()
+
+        if(sharedPreferences.getInt("zipCode", 0) != 0)
+            editTextZip.setText(sharedPreferences.getInt("zipCode", 0).toString())
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -65,17 +84,11 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        if(buyerOnlySwitch.isChecked)
-            editor.putBoolean("buyerOnly", true)
-        else
-            editor.putBoolean("buyerOnly", false)
-        editor.apply()
-
         val state: String = spinnerState.selectedItem as String
         val city = editTextCity.text
         val zip = editTextZip.text
+
+        val userID = intent.getStringExtra("userID")
 
         when (item.itemId) {
             R.id.confirm -> {
@@ -103,16 +116,48 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     }
 
                     intent.getBooleanExtra("SignUp", false) -> {
+
                         updateUserLocation()
+                        storeSettings()
+
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra("userID", userID)
+                        startActivity(intent)
                     }
 
-                    !intent.getBooleanExtra("SignUp", false) -> {
+                    else -> {
+
                         updateUserLocation()
+                        storeSettings()
+                        finish()
                     }
                 }
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun storeSettings()
+    {
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        editor.putBoolean("buyerOnly", buyerOnlySwitch.isChecked)
+        editor.putString("street", editTextStreet.text.toString())
+        editor.putString("city", editTextCity.text.toString())
+        editor.putInt("state", spinnerState.selectedItemPosition)
+        editor.putInt("zipCode", editTextZip.text.toString().toInt())
+
+        editor.putBoolean("Furniture", radioButtonFurniture.isChecked)
+        editor.putBoolean("Games", radioButtonGames.isChecked)
+        editor.putBoolean("Cards", radioButtonCards.isChecked)
+        editor.putBoolean("Paintings", radioButtonPaintings.isChecked)
+        editor.putBoolean("Clothing", radioButtonClothing.isChecked)
+        editor.putBoolean("HomeImprovement", radioButtonHomeImprovement.isChecked)
+        editor.putBoolean("Accessory", radioButtonAccessory.isChecked)
+        editor.putBoolean("Collectable", radioButtonCollectable.isChecked)
+
+        editor.apply()
     }
 
     private fun updateUserLocation()
@@ -139,9 +184,6 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     Log.w(TAG, "Error adding user document", e)
                 }
         }
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("userID", userID)
-        startActivity(intent)
 
     }
 

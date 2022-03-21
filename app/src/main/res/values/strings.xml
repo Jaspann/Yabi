@@ -79,6 +79,18 @@
     <string name="buyer_only_mode">Buyer Only Mode</string>
     <string name="zip_code_">Zip Code:</string>
     <string name="_12345">12345</string>
+    <string name="street_">Street:</string>
+    <string name="_23_example_street">23 Example Street</string>
+    <string name="location_">Your Location:</string>
+    <string name="tags_">Your Tags:</string>
+    <string name="furniture">Furniture</string>
+    <string name="games">Games</string>
+    <string name="cards">Cards</string>
+    <string name="paintings">Paintings</string>
+    <string name="clothing">Clothing</string>
+    <string name="home_improvement">Home Improvement</string>
+    <string name="accessory">Accessory</string>
+    <string name="collectable">Collectable</string>
 
 
     <string-array name="tag_list">
