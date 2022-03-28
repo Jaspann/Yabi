@@ -138,7 +138,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun fillYourPosts(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
                               locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
-
         val data = ArrayList<YourPostViewModel>()
 
 

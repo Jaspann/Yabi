@@ -49,7 +49,6 @@ class AddPost : AppCompatActivity() {
             // Apply the adapter to the spinner
             spinner.adapter = adapter
 
-
         }
 
         fun getValues(view: View) {
@@ -132,7 +131,8 @@ class AddPost : AppCompatActivity() {
             val buyerID = intent.getStringExtra("userID")
             val itemName = editTextItemName.text.toString()
             val youroffer = editTextRequestingPrice.text.toString().toDouble()
-
+            val coverShipping = buyerCoverShippingButton.isChecked
+            val coveredShipping = if (coverShippingFullButton.isChecked) { -1.0 } else { editTextCoverShippingUntil.text.toString().toDouble() }
             val offer = hashMapOf(
                 "BuyerID" to buyerID,
                 "itemName" to itemName,
@@ -175,6 +175,7 @@ private fun onOfferSubmit(){
         if(intent.hasExtra("isCounter"))
         {
             toolbar.title = "Create Offer"
+           // editTextItemName.visibility = View.GONE
             spinner.visibility = View.GONE
             tagView.visibility = View.GONE
             buttonLocationLineOne.visibility = View.GONE
@@ -193,15 +194,6 @@ private fun onOfferSubmit(){
             radioGroupLocation.visibility = View.GONE
             priceText.text = getString(R.string.your_offer)
             postButton.text = getString(R.string.submit_offer)
-            sellerCoverShippingButton.visibility = View.GONE
-            coverShippingFullButton.visibility = View.GONE
-            coverShippingPartButton.visibility = View.GONE
-            editTextCoverShippingUntil.visibility = View.GONE
-            radioGroupShippingCost.visibility = View.GONE
-            sellerCoverShippingButton.visibility = View.GONE
-            textViewDollarSignTwo.visibility = View.GONE
-            textViewShipping.visibility = View.GONE
-            buyerCoverShippingButton.visibility = View.GONE
         }
         if(intent.hasExtra("title"))
         {
