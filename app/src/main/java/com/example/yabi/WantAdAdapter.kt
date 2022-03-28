@@ -3,11 +3,13 @@ package com.example.yabi
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_add_post.*
 
 class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Adapter<WantAdAdapter.ViewHolder>() {
 
@@ -38,7 +40,13 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         }
         holder.titleTextVew.text = ItemsViewModel.title
         holder.descTextView.text = ItemsViewModel.desc
-        holder.imageView.setImageResource(ItemsViewModel.img)
+
+        if(ItemsViewModel.image != "")
+            holder.imageView.setImageBitmap(BitmapFactory.decodeFile(ItemsViewModel.image))
+        else
+            holder.imageView.setImageResource(0)
+
+
         val price = "$" + String.format("%.2f", ItemsViewModel.price)
         holder.price.text = price
         holder.location.text = ItemsViewModel.location
