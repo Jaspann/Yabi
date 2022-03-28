@@ -17,6 +17,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_search.*
 import java.lang.NumberFormatException
@@ -97,6 +99,7 @@ class Search : AppCompatActivity() {
     {
         //TODO: call appropriate function, currently has temp data
         val db = Firebase.firestore
+        val storage = Firebase.storage
         var queryResult = mutableListOf<DocumentSnapshot>()
 
 
@@ -139,8 +142,9 @@ class Search : AppCompatActivity() {
                         coverShipping.add(document.get("coverShipping") as Boolean)
                         tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as Long
                         coveredShipping.add(tempLongTwo.toDouble())
-                        if(document.contains("imagePath"))
+                        if(document.contains("imagePath")) {
                             images.add(document.get("imagePath") as String)
+                        }
                         else
                             images.add("")
                     } catch(e: NullPointerException) {

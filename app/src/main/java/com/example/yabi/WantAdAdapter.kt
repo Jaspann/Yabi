@@ -1,15 +1,15 @@
 package com.example.yabi
 
-import android.content.ClipData
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_add_post.*
+
 
 class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Adapter<WantAdAdapter.ViewHolder>() {
 
@@ -41,10 +41,12 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         holder.titleTextVew.text = ItemsViewModel.title
         holder.descTextView.text = ItemsViewModel.desc
 
+        val mStorage = FirebaseStorage.getInstance().reference
+
         if(ItemsViewModel.image != "")
-            holder.imageView.setImageBitmap(BitmapFactory.decodeFile(ItemsViewModel.image))
-        else
-            holder.imageView.setImageResource(0)
+            mStorage.child(ItemsViewModel.image).downloadUrl.addOnSuccessListener { results ->
+                Picasso.get().load(results).into(holder.imageView);
+            }
 
 
         val price = "$" + String.format("%.2f", ItemsViewModel.price)
@@ -84,12 +86,6 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
 
 
     }
-/*
-    fun onPressWantAd()
-    {
-        val intent = Intent(context, Account::class.java)
-        context.startActivity(intent)
-    }*/
 
 
     // return the number of the items in the list

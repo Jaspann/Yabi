@@ -125,8 +125,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 document.get("coveredShipping").toString().substringBefore('.')
                                     .toLong()
                             coveredShipping.add(tempLongTwo.toDouble())
-                            if(document.contains("imagePath"))
+                            if(document.contains("imagePath")) {
                                 images.add(document.get("imagePath") as String)
+                            }
                             else
                                 images.add("")
                         }
