@@ -141,6 +141,29 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/tagCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="6dp"
+                    app:cardBackgroundColor="@color/YabiGreen"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintStart_toEndOf="@+id/shippingCard"
+                    app:layout_constraintTop_toBottomOf="@+id/priceCard">
+
+                    <TextView
+                        android:id="@+id/tagTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="@string/home_improvement"
+                        android:textColor="@color/white" />
+
+
+                </androidx.cardview.widget.CardView>
+
+
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="90dp"

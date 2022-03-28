@@ -3,10 +3,12 @@ package com.example.yabi
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
 class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Adapter<WantAdAdapter.ViewHolder>() {
@@ -74,6 +76,20 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
             }
         }
 
+        if(ItemsViewModel.tag != "" && ItemsViewModel.tag != "--")
+        {
+            holder.tag.text = ItemsViewModel.tag
+            when(ItemsViewModel.tag)
+            {
+                "Furniture" -> {holder.tagCard.setCardBackgroundColor(Color.BLUE)}
+            }
+        }
+        else
+        {
+            holder.tag.visibility = View.GONE
+            holder.tagCard.visibility = View.GONE
+        }
+
 
     }
 /*
@@ -100,6 +116,8 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         val price: TextView = itemView.findViewById(R.id.priceTextView)
         val location: TextView = itemView.findViewById(R.id.locTextView)
         val shipping: TextView = itemView.findViewById(R.id.shipTextView)
+        val tag: TextView = itemView.findViewById(R.id.tagTextView)
+        val tagCard: CardView = itemView.findViewById(R.id.tagCard)
     }
 
 }

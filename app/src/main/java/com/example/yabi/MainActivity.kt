@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], this))
+                coveredShipping[i], "Furniture", this))
         }
 
 
@@ -241,7 +241,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], this))
+                coveredShipping[i], "Furniture", this))
         }
 
 
