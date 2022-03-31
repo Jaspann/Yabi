@@ -99,11 +99,6 @@ class ViewOffers : AppCompatActivity() {
         val shippings = arrayOf(true, true, true)
         val coverings = arrayOf(14.00, 22.00, 55.98)
 
-        var i = 0
-        while (i < 30) {
-            data.add(WantAdViewModel(users[0], scores[0], titles[0], desc[0], photos[0], prices[0], locations[0], shippings[0], coverings[0], "Furniture", this))
-            i++
-        }
 
         val recyclerview = findViewById<RecyclerView>(R.id.offersRecycler)
 
