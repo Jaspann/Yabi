@@ -22,6 +22,8 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.activity_settings.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
@@ -139,7 +141,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillHome(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
+                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -154,7 +156,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val userID = intent.getStringExtra("userID")
 
         db.collection("listings")
-            .orderBy("tag", Query.Direction.DESCENDING)
+            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
@@ -200,7 +202,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
+
+                val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+
+                if(
+                    sharedPreferences.getBoolean("Furniture", false) ||
+                    sharedPreferences.getBoolean("Games", false) ||
+                    sharedPreferences.getBoolean("Cards", false) ||
+                    sharedPreferences.getBoolean("Paintings", false) ||
+                    sharedPreferences.getBoolean("Clothing", false) ||
+                    sharedPreferences.getBoolean("Home Improvement", false) ||
+                    sharedPreferences.getBoolean("Accessory", false) ||
+                    sharedPreferences.getBoolean("Collectable", false)
+                ) {
+                    var index = 0
+                    while (index < itemNames.size) {
+                        val hasTag = sharedPreferences.getBoolean(tags[index], false)
+                        if (!hasTag) {
+                            itemNames.removeAt(index)
+                            itemDescriptions.removeAt(index)
+                            itemPrices.removeAt(index)
+                            locations.removeAt(index)
+                            tags.removeAt(index)
+                            coverShipping.removeAt(index)
+                            coveredShipping.removeAt(index)
+                        } else
+                            index++
+                    }
+                }
+
+                fillHome(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -218,7 +249,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     }
-    private fun fillNewPosts(itemNames: List<String>, itemDescriptions: List<String>,
+    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>,
                              itemPrices: List<Double>, locations: List<String>, tags: List<String>,
                              coverShipping: List<Boolean>, coveredShipping: List<Double>){
         val data = ArrayList<WantAdViewModel>()
@@ -242,7 +273,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>,
+    private fun fillNewPosts(itemNames: List<String>, itemDescriptions: List<String>,
                          itemPrices: List<Double>, locations: List<String>, tags: List<String>,
                          coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {

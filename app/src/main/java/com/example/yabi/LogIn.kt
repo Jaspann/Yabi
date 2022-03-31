@@ -18,6 +18,13 @@ class LogIn : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
+
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        if(sharedPreferences.getString("emailAddress", "") != "" && sharedPreferences.getString("password", "") != "")
+        {
+            editTextTextEmailAddress.setText(sharedPreferences.getString("emailAddress", ""))
+            editTextTextPassword.setText(sharedPreferences.getString("password", ""))
+        }
     }
 
     fun onPressLogIn(view: android.view.View) {

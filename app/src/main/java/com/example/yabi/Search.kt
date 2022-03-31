@@ -126,6 +126,7 @@ class Search : AppCompatActivity() {
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
                 for (document in queryResult) {
@@ -135,6 +136,10 @@ class Search : AppCompatActivity() {
                         tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as Long
                         itemPrices.add(tempLong.toDouble())
                         locations.add(document.get("shippingCity") as String + ", " + document.get("shippingState") as String)
+                        if(document.contains("tag"))
+                            tags.add(document.get("tag") as String)
+                        else
+                            tags.add("")
                         coverShipping.add(document.get("coverShipping") as Boolean)
                         tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as Long
                         coveredShipping.add(tempLongTwo.toDouble())
@@ -144,7 +149,7 @@ class Search : AppCompatActivity() {
                         Log.e(TAG, "Error casting listing types", e)
                     }
                 }
-                fillSearch(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+                fillSearch(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
             }
             .addOnFailureListener{ e ->
                 Log.w(TAG, "Failed to retrieve listings.", e)
@@ -156,8 +161,9 @@ class Search : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun fillSearch(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                 locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
+    private fun fillSearch(itemNames: List<String>, itemDescriptions: List<String>,
+                           itemPrices: List<Double>, locations: List<String>,
+                           tags: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
         val data = ArrayList<WantAdViewModel>()
 
@@ -166,7 +172,7 @@ class Search : AppCompatActivity() {
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], "Furniture", this))
+                coveredShipping[i], tags[i], this))
         }
 
 

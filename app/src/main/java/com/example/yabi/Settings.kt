@@ -80,7 +80,7 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         radioButtonCards.isChecked = sharedPreferences.getBoolean("Cards", false)
         radioButtonPaintings.isChecked = sharedPreferences.getBoolean("Paintings", false)
         radioButtonClothing.isChecked = sharedPreferences.getBoolean("Clothing", false)
-        radioButtonHomeImprovement.isChecked = sharedPreferences.getBoolean("HomeImprovement", false)
+        radioButtonHomeImprovement.isChecked = sharedPreferences.getBoolean("Home Improvement", false)
         radioButtonAccessory.isChecked = sharedPreferences.getBoolean("Accessory", false)
         radioButtonCollectable.isChecked = sharedPreferences.getBoolean("Collectable", false)
 
@@ -167,7 +167,7 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         editor.putBoolean("Cards", radioButtonCards.isChecked)
         editor.putBoolean("Paintings", radioButtonPaintings.isChecked)
         editor.putBoolean("Clothing", radioButtonClothing.isChecked)
-        editor.putBoolean("HomeImprovement", radioButtonHomeImprovement.isChecked)
+        editor.putBoolean("Home Improvement", radioButtonHomeImprovement.isChecked)
         editor.putBoolean("Accessory", radioButtonAccessory.isChecked)
         editor.putBoolean("Collectable", radioButtonCollectable.isChecked)
 

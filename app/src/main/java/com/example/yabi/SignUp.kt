@@ -36,7 +36,7 @@ class SignUp : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         if(sharedPreferences.getString("emailAddress", "") != "" && sharedPreferences.getString("password", "") != "")
         {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, LogIn::class.java)
             startActivity(intent)
         }
 
