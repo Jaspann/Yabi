@@ -17,6 +17,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_search.*
 import java.lang.NumberFormatException
@@ -97,6 +99,7 @@ class Search : AppCompatActivity() {
     {
         //TODO: call appropriate function, currently has temp data
         val db = Firebase.firestore
+        val storage = Firebase.storage
         var queryResult = mutableListOf<DocumentSnapshot>()
 
 
@@ -128,6 +131,7 @@ class Search : AppCompatActivity() {
                 val locations = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
+                val images = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
                         itemNames.add(document.get("itemName") as String)
@@ -138,13 +142,18 @@ class Search : AppCompatActivity() {
                         coverShipping.add(document.get("coverShipping") as Boolean)
                         tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as Long
                         coveredShipping.add(tempLongTwo.toDouble())
+                        if(document.contains("imagePath")) {
+                            images.add(document.get("imagePath") as String)
+                        }
+                        else
+                            images.add("")
                     } catch(e: NullPointerException) {
                         Log.e(TAG, "Error processing listings", e)
                     } catch(e: ClassCastException) {
                         Log.e(TAG, "Error casting listing types", e)
                     }
                 }
-                fillSearch(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+                fillSearch(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w(TAG, "Failed to retrieve listings.", e)
@@ -157,7 +166,7 @@ class Search : AppCompatActivity() {
     }
 
     private fun fillSearch(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                 locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
+                 locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>)
     {
         val data = ArrayList<WantAdViewModel>()
 
@@ -166,7 +175,7 @@ class Search : AppCompatActivity() {
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], this))
+                coveredShipping[i], images[i], this))
         }
 
 

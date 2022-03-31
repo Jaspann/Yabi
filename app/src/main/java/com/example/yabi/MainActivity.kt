@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationBarView
@@ -20,7 +19,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 
 
@@ -107,6 +105,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val locations = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
+                val images = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
                         if (document.get("userID") != userID) {
@@ -114,7 +113,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             itemDescriptions.add(document.get("itemDescription") as String)
                             tempLong =
                                 document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             itemPrices.add(tempLong.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
@@ -124,8 +123,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             coverShipping.add(document.get("coverShipping") as Boolean)
                             tempLongTwo =
                                 document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             coveredShipping.add(tempLongTwo.toDouble())
+                            if(document.contains("imagePath")) {
+                                images.add(document.get("imagePath") as String)
+                            }
+                            else
+                                images.add("")
                         }
                     } catch(e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
@@ -134,7 +138,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillHome(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+                fillHome(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -168,17 +172,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                         locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
+    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>,
+                         itemPrices: List<Double>, locations: List<String>,
+                         coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>)
     {
         val data = ArrayList<WantAdViewModel>()
-
-        //val photos = arrayOf(0)
 
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], this))
+                coveredShipping[i], images[i], this))
         }
 
 

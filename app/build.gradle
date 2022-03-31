@@ -47,6 +47,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'com.squareup.picasso:picasso:2.8'
+
 
     //Added for Firebase & Firestore support
     implementation platform('com.google.firebase:firebase-bom:29.2.1')
