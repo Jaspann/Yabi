@@ -86,7 +86,6 @@ class LogIn : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        editor.putBoolean("isGuest", false)
         editor.putString("emailAddress", editTextTextEmailAddress.text.toString())
         editor.putString("password", editTextTextPassword.text.toString())
         editor.apply()
@@ -110,7 +109,6 @@ class LogIn : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        editor.putBoolean("isGuest", true)
         editor.apply()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

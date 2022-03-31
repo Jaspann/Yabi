@@ -81,7 +81,14 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
             holder.tag.text = ItemsViewModel.tag
             when(ItemsViewModel.tag)
             {
-                "Furniture" -> {holder.tagCard.setCardBackgroundColor(Color.BLUE)}
+                "Furniture" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(91, 128, 100))}
+                "Games" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(65, 49, 172))}
+                "Cards" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(157, 30, 30))}
+                "Paintings" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(103, 172, 77))}
+                "Clothing" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(25, 130, 168))}
+                "Home Improvement" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(79, 41, 9))}
+                "Accessory" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(146, 27, 204))}
+                "Collectable" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(203, 153, 27))}
             }
         }
         else

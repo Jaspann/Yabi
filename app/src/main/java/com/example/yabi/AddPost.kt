@@ -6,21 +6,9 @@ import android.os.Bundle
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
-
-
-//stuff used in tags
-import android.annotation.SuppressLint
-import androidx.annotation.NonNull
 import android.view.View
-import  android.view.ViewGroup
 import android.widget.Toast
-import  android.widget.Spinner
-import  android.widget.Adapter
 import android.widget.ArrayAdapter
-import android.widget.ListAdapter
-import android.widget.AdapterView
-import  android.widget.TextView
-//end of used in tags
 
 
 import kotlinx.android.synthetic.main.activity_add_post.*
@@ -33,12 +21,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_log_in.*
 import pub.devrel.easypermissions.EasyPermissions
 
 class AddPost : AppCompatActivity() {
 
-    private val TAG = "Add post actvity"
+    private val TAG = "Add post activity"
     private var remoteImagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,12 +40,6 @@ class AddPost : AppCompatActivity() {
             // Apply the adapter to the spinner
             spinner.adapter = adapter
             fillScreen()
-        }
-
-        fun getValues(view: View) {
-            Toast.makeText(
-                this, "Spinner 1 " + spinner.selectedItem.toString(), Toast.LENGTH_LONG
-            ).show()
         }
     }
 
@@ -99,6 +80,7 @@ class AddPost : AppCompatActivity() {
                 "shippingState" to shippingState,
                 "shippingCountry" to shippingCountry,
                 "postalCode" to postalCode,
+                "tag" to tag,
                 "creationTimestamp" to FieldValue.serverTimestamp()
             )
 
@@ -128,7 +110,7 @@ class AddPost : AppCompatActivity() {
         }
     }
 
-    fun fillScreen()
+    private fun fillScreen()
     {
         // If Statement chain to autofill counter offers
         if(intent.hasExtra("isEdit"))
@@ -212,9 +194,7 @@ class AddPost : AppCompatActivity() {
                 selectedImage,
                 filePathColumn, null, null, null
             )
-            if (cursor != null) {
-                cursor.moveToFirst()
-            }
+            cursor?.moveToFirst()
             val columnIndex = cursor!!.getColumnIndex(filePathColumn[0])
             val picturePath = cursor.getString(columnIndex)
             cursor.close()

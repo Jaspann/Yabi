@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
                 for (document in queryResult) {
@@ -114,17 +115,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             itemDescriptions.add(document.get("itemDescription") as String)
                             tempLong =
                                 document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             itemPrices.add(tempLong.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
                                 ) as String
                             )
+                            if(document.contains("tag"))
+                                tags.add(document.get("tag") as String)
+                            else
+                                tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
                             tempLongTwo =
                                 document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             coveredShipping.add(tempLongTwo.toDouble())
                         }
                     } catch(e: NullPointerException) {
@@ -134,7 +139,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillHome(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+                fillHome(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -161,6 +166,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
                 for (document in queryResult) {
@@ -170,17 +176,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             itemDescriptions.add(document.get("itemDescription") as String)
                             tempLong =
                                 document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             itemPrices.add(tempLong.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
                                 ) as String
                             )
+                            if(document.contains("tag"))
+                                tags.add(document.get("tag") as String)
+                            else
+                                tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
                             tempLongTwo =
                                 document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             coveredShipping.add(tempLongTwo.toDouble())
                         }
                     } catch(e: NullPointerException) {
@@ -190,7 +200,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -208,8 +218,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     }
-    private fun fillNewPosts(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                             locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>){
+    private fun fillNewPosts(itemNames: List<String>, itemDescriptions: List<String>,
+                             itemPrices: List<Double>, locations: List<String>, tags: List<String>,
+                             coverShipping: List<Boolean>, coveredShipping: List<Double>){
         val data = ArrayList<WantAdViewModel>()
 
         //val photos = arrayOf(0)
@@ -217,7 +228,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], "Furniture", this))
+                coveredShipping[i], tags[i], this))
         }
 
 
@@ -231,8 +242,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                         locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
+    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>,
+                         itemPrices: List<Double>, locations: List<String>, tags: List<String>,
+                         coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
         val data = ArrayList<WantAdViewModel>()
 
@@ -241,7 +253,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], "Furniture", this))
+                coveredShipping[i], tags[i], this))
         }
 
 
@@ -293,7 +305,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.add_post_button -> {
-                if(sharedPreferences.getBoolean("isGuest", false))
+                if(sharedPreferences.getString("emailAddress", "") == "")
                 {
                     Toast.makeText(
                         applicationContext,
@@ -328,9 +340,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             hideScreens(item.itemId)
         }
         //change boolean expression to test things as guest
-        else if(!sharedPreferences.getBoolean("isGuest", false))
+        else if(sharedPreferences.getString("emailAddress", "") != "")
         {
             when (item.itemId) {
+                /*
                 R.id.nav_account -> {
                     val intent = Intent(this, Account::class.java)
                     startActivity(intent)
@@ -347,6 +360,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val intent = Intent(this, CompletedOffers::class.java)
                     startActivity(intent)
                 }
+                 */
                 R.id.nav_settings -> {
                     val intent = Intent(this, Settings::class.java)
                     val userID = this.intent.getStringExtra("userID")
@@ -400,6 +414,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 refreshYourPosts.visibility = View.VISIBLE
             }
         }
-
     }
 }
+
+/*
+From activity_main_drawer.xml.
+We might not get to these options and did not want to leave blank at this time.
+
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_baseline_account_circle_24"
+            android:title="@string/account" />
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_baseline_message_24"
+            android:title="@string/chats" />
+        <item
+            android:id="@+id/nav_posts"
+            android:icon="@drawable/ic_baseline_trip_origin_24"
+            android:title="@string/your_posts" />
+        <item
+            android:id="@+id/nav_complete"
+            android:icon="@drawable/ic_baseline_repeat_24"
+            android:title="@string/completed_offers"/>
+ */
