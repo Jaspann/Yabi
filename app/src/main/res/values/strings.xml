@@ -79,6 +79,32 @@
     <string name="buyer_only_mode">Buyer Only Mode</string>
     <string name="zip_code_">Zip Code:</string>
     <string name="_12345">12345</string>
+    <string name="street_">Street:</string>
+    <string name="_23_example_street">23 Example Street</string>
+    <string name="location_">Your Location:</string>
+    <string name="tags_">Your Tags:</string>
+    <string name="furniture">Furniture</string>
+    <string name="games">Games</string>
+    <string name="cards">Cards</string>
+    <string name="paintings">Paintings</string>
+    <string name="clothing">Clothing</string>
+    <string name="home_improvement">Home Improvement</string>
+    <string name="accessory">Accessory</string>
+    <string name="collectable">Collectable</string>
+    <string name="select_tag">Select Tag:</string>
+    <string name="log_out">Log Out</string>
+
+
+    <string-array name="tag_list">
+        <item>Furniture</item>
+        <item>Games</item>
+        <item>Cards</item>
+        <item>Paintings</item>
+        <item>Clothing</item>
+        <item>Home Improvement</item>
+        <item>Accessory</item>
+        <item>Collectable</item>
+    </string-array>
     <string name="message_here">message here</string>
     <string name="post_info">Post Info</string>
     <string name="original_post">Original Post</string>

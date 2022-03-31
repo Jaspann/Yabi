@@ -12,5 +12,6 @@ data class WantAdViewModel(
     val location: String,
     val shippingSeller: Boolean,
     val shipCover: Double,
+    val tag: String,
     val image: String,
     val context: Context){}

@@ -8,22 +8,24 @@ import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
+import android.widget.ArrayAdapter
+
 
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import android.net.Uri
+import androidx.constraintlayout.widget.ConstraintSet
 import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_log_in.*
 import pub.devrel.easypermissions.EasyPermissions
 
 class AddPost : AppCompatActivity() {
 
-    private val TAG = "Add post actvity"
+    private val TAG = "Add post activity"
     private var remoteImagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,9 +33,14 @@ class AddPost : AppCompatActivity() {
         setContentView(R.layout.activity_add_post)
         toolbar.setNavigationOnClickListener {
             finish()
+            // Create an ArrayAdapter
+            val adapter = ArrayAdapter.createFromResource(this, R.array.tag_list, android.R.layout.simple_spinner_item)
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+            fillScreen()
         }
-
-        fillScreen()
     }
 
 
@@ -44,14 +51,19 @@ class AddPost : AppCompatActivity() {
             val itemName = editTextItemName.text.toString()
             val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked
-            val coveredShipping = if(coverShippingFullButton.isChecked) {-1.0} else {editTextCoverShippingUntil.text.toString().toDouble()}
+            val coveredShipping = if (coverShippingFullButton.isChecked) {
+                -1.0
+            } else {
+                editTextCoverShippingUntil.text.toString().toDouble()
+            }
             val itemDescription = editTextTextMultiLine.text.toString()
-            val shippingStreet = editTextStreetNumber.text.toString() + " " + editTextStreet.text.toString()
+            val shippingStreet =
+                editTextStreetNumber.text.toString() + " " + editTextStreet.text.toString()
             val shippingCity = editTextCity.text.toString()
             val shippingState = editTextState.text.toString()
             val shippingCountry = editTextCountry.text.toString()
             val postalCode = editTextPostal.text.toString().toInt()
-
+            val tag = spinner.selectedItem.toString()
             val db = Firebase.firestore
 
             val listingUserID = intent.getStringExtra("userID")
@@ -68,6 +80,7 @@ class AddPost : AppCompatActivity() {
                 "shippingState" to shippingState,
                 "shippingCountry" to shippingCountry,
                 "postalCode" to postalCode,
+                "tag" to tag,
                 "creationTimestamp" to FieldValue.serverTimestamp()
             )
 
@@ -97,7 +110,7 @@ class AddPost : AppCompatActivity() {
         }
     }
 
-    fun fillScreen()
+    private fun fillScreen()
     {
         // If Statement chain to autofill counter offers
         if(intent.hasExtra("isEdit"))
@@ -181,14 +194,20 @@ class AddPost : AppCompatActivity() {
                 selectedImage,
                 filePathColumn, null, null, null
             )
-            if (cursor != null) {
-                cursor.moveToFirst()
-            }
+            cursor?.moveToFirst()
             val columnIndex = cursor!!.getColumnIndex(filePathColumn[0])
             val picturePath = cursor.getString(columnIndex)
             cursor.close()
             var imageRef: StorageReference? = storageRef.child("listingImages/${picturePath.replaceBeforeLast('/',"")}")
             userImage.setImageBitmap(BitmapFactory.decodeFile(picturePath))
+
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(scrollConstraint)
+
+            constraintSet.clear(R.id.button2, ConstraintSet.BOTTOM)
+
+            constraintSet.applyTo(scrollConstraint)
+
             var uploadTask = imageRef?.putFile(selectedImage)
             uploadTask?.addOnSuccessListener { task ->
                 Toast.makeText(

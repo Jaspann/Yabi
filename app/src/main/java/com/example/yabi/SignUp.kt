@@ -32,6 +32,14 @@ class SignUp : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
+
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        if(sharedPreferences.getString("emailAddress", "") != "" && sharedPreferences.getString("password", "") != "")
+        {
+            val intent = Intent(this, LogIn::class.java)
+            startActivity(intent)
+        }
+
     }
 
     fun onPressSignUp(view: android.view.View) {
@@ -106,7 +114,6 @@ class SignUp : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        editor.putBoolean("isGuest", false)
         editor.apply()
 
         val intent = Intent(this, Settings::class.java)
@@ -125,7 +132,6 @@ class SignUp : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        editor.putBoolean("isGuest", true)
         editor.apply()
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("userID", "guest")

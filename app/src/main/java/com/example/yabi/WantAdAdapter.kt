@@ -1,10 +1,12 @@
 package com.example.yabi
 
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -84,6 +86,27 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
             }
         }
 
+        if(ItemsViewModel.tag != "" && ItemsViewModel.tag != "--")
+        {
+            holder.tag.text = ItemsViewModel.tag
+            when(ItemsViewModel.tag)
+            {
+                "Furniture" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(91, 128, 100))}
+                "Games" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(65, 49, 172))}
+                "Cards" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(157, 30, 30))}
+                "Paintings" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(103, 172, 77))}
+                "Clothing" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(25, 130, 168))}
+                "Home Improvement" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(79, 41, 9))}
+                "Accessory" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(146, 27, 204))}
+                "Collectable" -> {holder.tagCard.setCardBackgroundColor(Color.rgb(203, 153, 27))}
+            }
+        }
+        else
+        {
+            holder.tag.visibility = View.GONE
+            holder.tagCard.visibility = View.GONE
+        }
+
 
     }
 
@@ -104,6 +127,8 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         val price: TextView = itemView.findViewById(R.id.priceTextView)
         val location: TextView = itemView.findViewById(R.id.locTextView)
         val shipping: TextView = itemView.findViewById(R.id.shipTextView)
+        val tag: TextView = itemView.findViewById(R.id.tagTextView)
+        val tagCard: CardView = itemView.findViewById(R.id.tagCard)
     }
 
 }
