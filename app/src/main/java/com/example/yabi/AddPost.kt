@@ -27,13 +27,19 @@ import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import android.net.Uri
 import androidx.constraintlayout.widget.ConstraintSet
+import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_log_in.*
 import pub.devrel.easypermissions.EasyPermissions
 
 class AddPost : AppCompatActivity() {
 
+    private val TAG = "Add post actvity"
+    private var remoteImagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +65,8 @@ class AddPost : AppCompatActivity() {
 
     fun onPressPost(view: android.view.View) {
 
-        if (!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter")) {
+        if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
+        {
             val itemName = editTextItemName.text.toString()
             val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked
@@ -77,25 +84,48 @@ class AddPost : AppCompatActivity() {
             val postalCode = editTextPostal.text.toString().toInt()
             val tag = spinner.selectedItem.toString()
             val db = Firebase.firestore
-            val helper = FirebaseHelper(db)
-            helper.createListing(
-                itemName,
-                requestedPrice,
-                coverShipping,
-                coveredShipping,
-                itemDescription,
-                shippingStreet,
-                shippingCity,
-                shippingState,
-                shippingCountry,
-                postalCode,
-                tag
+
+            val listingUserID = intent.getStringExtra("userID")
+
+            val listing = hashMapOf(
+                "userID" to listingUserID,
+                "itemName" to itemName,
+                "requestedPrice" to requestedPrice,
+                "coverShipping" to coverShipping,
+                "coveredShipping" to coveredShipping,
+                "itemDescription" to itemDescription,
+                "shippingStreet" to shippingStreet,
+                "shippingCity" to shippingCity,
+                "shippingState" to shippingState,
+                "shippingCountry" to shippingCountry,
+                "postalCode" to postalCode,
+                "creationTimestamp" to FieldValue.serverTimestamp()
             )
 
+            if (remoteImagePath != null) {
+                listing["imagePath"] = remoteImagePath
+            }
 
+            db.collection("listings")
+                .add(listing)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "Listing document added with ID: ${documentReference.id}")
+                    Toast.makeText(
+                        applicationContext,
+                        "Listing created successfully.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding listing document", e)
+                    Toast.makeText(
+                        applicationContext,
+                        "Error: failed to create listing.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
         }
-
-        finish()
     }
 
     fun fillScreen()
@@ -173,6 +203,8 @@ class AddPost : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
+            val storage = Firebase.storage
+            var storageRef = storage.reference
             val selectedImage: Uri = data.data!!
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             userImage.visibility = View.VISIBLE
@@ -186,6 +218,7 @@ class AddPost : AppCompatActivity() {
             val columnIndex = cursor!!.getColumnIndex(filePathColumn[0])
             val picturePath = cursor.getString(columnIndex)
             cursor.close()
+            var imageRef: StorageReference? = storageRef.child("listingImages/${picturePath.replaceBeforeLast('/',"")}")
             userImage.setImageBitmap(BitmapFactory.decodeFile(picturePath))
 
             val constraintSet = ConstraintSet()
@@ -195,6 +228,21 @@ class AddPost : AppCompatActivity() {
 
             constraintSet.applyTo(scrollConstraint)
 
+            var uploadTask = imageRef?.putFile(selectedImage)
+            uploadTask?.addOnSuccessListener { task ->
+                Toast.makeText(
+                    applicationContext,
+                    "Image uploaded.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                remoteImagePath = task.metadata?.path
+            }?.addOnFailureListener {
+                Toast.makeText(
+                    applicationContext,
+                    "Image upload failed.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
         else
         {

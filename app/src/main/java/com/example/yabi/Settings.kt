@@ -30,10 +30,10 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        setSupportActionBar(toolbar)
         toolbar.setNavigationOnClickListener {
             finish()
         }
-        setSupportActionBar(toolbar)
 
         //TODO: load in the current location values from the database
         //To compensate, we will load and save value to SavedPreferences

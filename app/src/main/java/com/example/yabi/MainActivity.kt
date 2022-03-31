@@ -327,6 +327,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         {
             hideScreens(item.itemId)
         }
+        //change boolean expression to test things as guest
         else if(!sharedPreferences.getBoolean("isGuest", false))
         {
             when (item.itemId) {
