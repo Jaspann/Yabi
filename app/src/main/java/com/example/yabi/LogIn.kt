@@ -24,10 +24,15 @@ class LogIn : AppCompatActivity() {
         {
             editTextTextEmailAddress.setText(sharedPreferences.getString("emailAddress", ""))
             editTextTextPassword.setText(sharedPreferences.getString("password", ""))
+            tryLogIn()
         }
     }
 
     fun onPressLogIn(view: android.view.View) {
+        tryLogIn()
+    }
+    private fun tryLogIn()
+    {
 
         //Why are these called *TextText*?
         val email: String = editTextTextEmailAddress.text.toString()
