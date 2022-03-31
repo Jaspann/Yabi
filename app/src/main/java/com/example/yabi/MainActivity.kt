@@ -106,6 +106,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
                 val tags = arrayListOf<String>()
+                val images = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
                 for (document in queryResult) {
@@ -131,6 +132,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 document.get("coveredShipping").toString().substringBefore('.')
                                     .toLong()
                             coveredShipping.add(tempLongTwo.toDouble())
+                            if(document.contains("imagePath"))
+                                images.add(document.get("imagePath") as String)
+                            else
+                                images.add("")
                         }
                     } catch(e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
@@ -139,7 +144,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
+                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -193,9 +198,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 document.get("coveredShipping").toString().substringBefore('.')
                                     .toLong()
                             coveredShipping.add(tempLongTwo.toDouble())
-                            if(document.contains("imagePath")) {
+                            if(document.contains("imagePath"))
                                 images.add(document.get("imagePath") as String)
-                            }
                             else
                                 images.add("")
                         }
@@ -230,12 +234,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             tags.removeAt(index)
                             coverShipping.removeAt(index)
                             coveredShipping.removeAt(index)
+                            images.removeAt(index)
                         } else
                             index++
                     }
                 }
 
-                fillHome(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping)
+                fillHome(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -255,7 +260,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>,
                              itemPrices: List<Double>, locations: List<String>, tags: List<String>,
-                             coverShipping: List<Boolean>, coveredShipping: List<Double>){
+                             coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>){
         val data = ArrayList<WantAdViewModel>()
 
         //val photos = arrayOf(0)
@@ -263,7 +268,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], tags[i], this))
+                coveredShipping[i], tags[i], images[i], this))
         }
 
 
@@ -279,14 +284,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fillNewPosts(itemNames: List<String>, itemDescriptions: List<String>,
                          itemPrices: List<Double>, locations: List<String>, tags: List<String>,
-                         coverShipping: List<Boolean>, coveredShipping: List<Double>)
+                         coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>)
     {
         val data = ArrayList<WantAdViewModel>()
 
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], tags[i], this))
+                coveredShipping[i], tags[i], images[i], this))
         }
 
 
