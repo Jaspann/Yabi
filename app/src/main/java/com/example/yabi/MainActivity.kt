@@ -90,7 +90,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun getNewPosts(){
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
-        val userID = intent.getStringExtra("userID")
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
 
         db.collection("listings")
             .orderBy("creationTimestamp", Query.Direction.DESCENDING)
@@ -156,7 +157,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
-        val userID = intent.getStringExtra("userID")
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
 
         db.collection("listings")
             .orderBy("creationTimestamp", Query.Direction.DESCENDING)
@@ -258,6 +260,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     }
+
     private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>,
                              itemPrices: List<Double>, locations: List<String>, tags: List<String>,
                              coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>){
@@ -343,7 +346,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.add_post_button -> {
-                if(sharedPreferences.getString("emailAddress", "") == "")
+                if(sharedPreferences.getString("userID", "guest") == "guest")
                 {
                     Toast.makeText(
                         applicationContext,
@@ -353,8 +356,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 else {
                     val intent = Intent(this, AddPost::class.java)
-                    val userID = this.intent.getStringExtra("userID")
-                    intent.putExtra("userID", userID)
                     startActivity(intent)
                 }
             }
@@ -378,7 +379,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             hideScreens(item.itemId)
         }
         //change boolean expression to test things as guest
-        else if(sharedPreferences.getString("emailAddress", "") != "")
+        else if(sharedPreferences.getString("userID", "guest") != "guest")
         {
             when (item.itemId) {
                 /*
@@ -402,7 +403,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.nav_settings -> {
                     val intent = Intent(this, Settings::class.java)
                     val userID = this.intent.getStringExtra("userID")
-                    intent.putExtra("userID", userID)
                     intent.putExtra("SignUp", false)
                     startActivity(intent)
                 }
