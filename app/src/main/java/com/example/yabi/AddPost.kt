@@ -66,47 +66,56 @@ class AddPost : AppCompatActivity() {
             val tag = spinner.selectedItem.toString()
             val db = Firebase.firestore
 
-            val listingUserID = intent.getStringExtra("userID")
+            val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+            val listingUserID = sharedPreferences.getString("userID", "guest")
 
-            val listing = hashMapOf(
-                "userID" to listingUserID,
-                "itemName" to itemName,
-                "requestedPrice" to requestedPrice,
-                "coverShipping" to coverShipping,
-                "coveredShipping" to coveredShipping,
-                "itemDescription" to itemDescription,
-                "shippingStreet" to shippingStreet,
-                "shippingCity" to shippingCity,
-                "shippingState" to shippingState,
-                "shippingCountry" to shippingCountry,
-                "postalCode" to postalCode,
-                "tag" to tag,
-                "creationTimestamp" to FieldValue.serverTimestamp()
-            )
+            if(listingUserID != "guest") {
+                val listing = hashMapOf(
+                    "userID" to listingUserID,
+                    "itemName" to itemName,
+                    "requestedPrice" to requestedPrice,
+                    "coverShipping" to coverShipping,
+                    "coveredShipping" to coveredShipping,
+                    "itemDescription" to itemDescription,
+                    "shippingStreet" to shippingStreet,
+                    "shippingCity" to shippingCity,
+                    "shippingState" to shippingState,
+                    "shippingCountry" to shippingCountry,
+                    "postalCode" to postalCode,
+                    "tag" to tag,
+                    "creationTimestamp" to FieldValue.serverTimestamp()
+                )
 
-            if (remoteImagePath != null) {
-                listing["imagePath"] = remoteImagePath
+                if (remoteImagePath != null) {
+                    listing["imagePath"] = remoteImagePath
+                }
+
+                db.collection("listings")
+                    .add(listing)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "Listing document added with ID: ${documentReference.id}")
+                        Toast.makeText(
+                            applicationContext,
+                            "Listing created successfully.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        finish()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error adding listing document", e)
+                        Toast.makeText(
+                            applicationContext,
+                            "Error: failed to create listing.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+            } else {
+                Toast.makeText(
+                    applicationContext,
+                    "Must be signed in to create listings.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-
-            db.collection("listings")
-                .add(listing)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "Listing document added with ID: ${documentReference.id}")
-                    Toast.makeText(
-                        applicationContext,
-                        "Listing created successfully.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding listing document", e)
-                    Toast.makeText(
-                        applicationContext,
-                        "Error: failed to create listing.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
         }
     }
 

@@ -97,13 +97,10 @@ class LogIn : AppCompatActivity() {
     private fun onLogInSuccess(userID: String) {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-
-        editor.putString("emailAddress", editTextTextEmailAddress.text.toString())
-        editor.putString("password", editTextTextPassword.text.toString())
+        editor.putString("userID", userID)
         editor.apply()
 
         val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("userID", userID)
         startActivity(intent)
     }
 
@@ -120,7 +117,7 @@ class LogIn : AppCompatActivity() {
     fun onPressBrowseAsGuest(view: android.view.View) {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-
+        editor.putString("userID", "guest")
         editor.apply()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

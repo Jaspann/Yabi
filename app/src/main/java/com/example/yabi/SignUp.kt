@@ -34,7 +34,7 @@ class SignUp : AppCompatActivity() {
         setContentView(R.layout.activity_sign_up)
 
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-        if(sharedPreferences.getString("emailAddress", "") != "" && sharedPreferences.getString("password", "") != "")
+        if(sharedPreferences.getString("userID", "guest") != "guest")
         {
             val intent = Intent(this, LogIn::class.java)
             startActivity(intent)
@@ -113,12 +113,11 @@ class SignUp : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-
+        editor.putString("userID", userID)
         editor.apply()
 
         val intent = Intent(this, Settings::class.java)
         intent.putExtra("SignUp", true)
-        intent.putExtra("userID", userID)
         startActivity(intent)
     }
 
@@ -131,10 +130,9 @@ class SignUp : AppCompatActivity() {
     {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-
+        editor.putString("userID", "guest")
         editor.apply()
         val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("userID", "guest")
         startActivity(intent)
     }
 

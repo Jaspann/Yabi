@@ -56,10 +56,8 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     fun onPressLogOut(view: View) {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.remove("emailAddress")
-        editor.remove("password")
+        editor.putString("userID", "guest")
         editor.apply()
-
 
         val intent = Intent(this, LogIn::class.java)
         intent.putExtra("signedOut", true)
@@ -102,8 +100,6 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val city = editTextCity.text
         val zip = editTextZip.text
 
-        val userID = intent.getStringExtra("userID")
-
         when (item.itemId) {
             R.id.confirm -> {
                 when {
@@ -135,7 +131,6 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         storeSettings()
 
                         val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra("userID", userID)
                         startActivity(intent)
                     }
 
@@ -181,22 +176,25 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val state: String = spinnerState.selectedItem as String
         val cityVal = editTextCity.text.toString()
         val zipVal = editTextZip.text.toString().toInt()
-        val userID = intent.getStringExtra("userID")
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
 
-        val location = hashMapOf(
-            "city" to cityVal,
-            "state" to state,
-            "zip" to zipVal
-        )
-        if (userID != null) {
-            db.collection("users").document(userID)
-                .set(location, SetOptions.merge())
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "User location added to user ID: $userID")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding user document", e)
-                }
+        if (userID != "guest") {
+            val location = hashMapOf(
+                "city" to cityVal,
+                "state" to state,
+                "zip" to zipVal
+            )
+            if (userID != null) {
+                db.collection("users").document(userID)
+                    .set(location, SetOptions.merge())
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "User location added to user ID: $userID")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error adding user document", e)
+                    }
+            }
         }
 
     }
