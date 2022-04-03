@@ -102,9 +102,8 @@ class ViewOffers : AppCompatActivity() {
     private fun fillOffers(itemNames: List<String>, offerPrices: List<Double>)
     {
         val data = ArrayList<OfferViewModel>()
-
         for (i in itemNames.indices) {
-            data.add(OfferViewModel("User", itemNames[i], offerPrices[i], this))
+            data.add(OfferViewModel("user", itemNames[i], offerPrices[i], this))
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.offersRecycler)

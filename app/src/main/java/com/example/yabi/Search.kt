@@ -17,6 +17,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_search.*
 import java.lang.NumberFormatException
@@ -97,6 +99,7 @@ class Search : AppCompatActivity() {
     {
         //TODO: call appropriate function, currently has temp data
         val db = Firebase.firestore
+        val storage = Firebase.storage
         var queryResult = mutableListOf<DocumentSnapshot>()
 
 
@@ -126,8 +129,10 @@ class Search : AppCompatActivity() {
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
+                val images = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
                         itemNames.add(document.get("itemName") as String)
@@ -135,16 +140,25 @@ class Search : AppCompatActivity() {
                         tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as Long
                         itemPrices.add(tempLong.toDouble())
                         locations.add(document.get("shippingCity") as String + ", " + document.get("shippingState") as String)
+                        if(document.contains("tag"))
+                            tags.add(document.get("tag") as String)
+                        else
+                            tags.add("")
                         coverShipping.add(document.get("coverShipping") as Boolean)
                         tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as Long
                         coveredShipping.add(tempLongTwo.toDouble())
+                        if(document.contains("imagePath")) {
+                            images.add(document.get("imagePath") as String)
+                        }
+                        else
+                            images.add("")
                     } catch(e: NullPointerException) {
                         Log.e(TAG, "Error processing listings", e)
                     } catch(e: ClassCastException) {
                         Log.e(TAG, "Error casting listing types", e)
                     }
                 }
-                fillSearch(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+                fillSearch(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w(TAG, "Failed to retrieve listings.", e)
@@ -156,8 +170,9 @@ class Search : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun fillSearch(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                 locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
+    private fun fillSearch(itemNames: List<String>, itemDescriptions: List<String>,
+                           itemPrices: List<Double>, locations: List<String>,
+                           tags: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>)
     {
         val data = ArrayList<WantAdViewModel>()
 
@@ -166,7 +181,7 @@ class Search : AppCompatActivity() {
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], this))
+                coveredShipping[i], tags[i], images[i], this))
         }
 
 
@@ -234,29 +249,29 @@ class Search : AppCompatActivity() {
         var newItem = -1
 
         val alertDialog: AlertDialog.Builder = AlertDialog.Builder(this)
-        .setTitle("Filter by Location")
+            .setTitle("Filter by Location")
 
-        .setSingleChoiceItems(
-            locationItems, checkedLocationItem
-        ) { dialog, which ->
-            when (which) {
-                0 -> newItem = 0
-                1 -> newItem = 1
-                2 -> newItem = 2
+            .setSingleChoiceItems(
+                locationItems, checkedLocationItem
+            ) { dialog, which ->
+                when (which) {
+                    0 -> newItem = 0
+                    1 -> newItem = 1
+                    2 -> newItem = 2
+                }
             }
-        }
 
-        .setPositiveButton("Apply"
-        ) { dialog, _ ->
-            if(newItem >= 0)
-                checkedLocationItem = newItem
-            //TODO: Save filter here (Not sure if this solution is valid)
-            dialog.cancel()
-        }
-        .setNegativeButton("Cancel"
-                ) { dialog, _ ->
-            dialog.cancel()
-        }
+            .setPositiveButton("Apply"
+            ) { dialog, _ ->
+                if(newItem >= 0)
+                    checkedLocationItem = newItem
+                //TODO: Save filter here (Not sure if this solution is valid)
+                dialog.cancel()
+            }
+            .setNegativeButton("Cancel"
+            ) { dialog, _ ->
+                dialog.cancel()
+            }
 
         val alert: AlertDialog = alertDialog.create()
         alert.setCanceledOnTouchOutside(true)

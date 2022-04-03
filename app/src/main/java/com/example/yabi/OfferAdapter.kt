@@ -3,7 +3,7 @@ package com.example.yabi
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
-
+import android.widget.Button
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-
+import kotlinx.android.synthetic.main.offer_card.view.*
 
 class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapter<OfferAdapter.ViewHolder>() {
 
@@ -28,6 +28,7 @@ class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapte
         holder.titleTextView.text = OfferViewModel.itemName
         val offer = "$" + String.format("%.2f", OfferViewModel.youroffer)
         holder.offerTextView.text = offer
+
     }
 
     // return the number of the items in the list

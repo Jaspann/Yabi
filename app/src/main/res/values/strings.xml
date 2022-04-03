@@ -80,6 +80,20 @@
     <string name="buyer_only_mode">Buyer Only Mode</string>
     <string name="zip_code_">Zip Code:</string>
     <string name="_12345">12345</string>
+    <string name="street_">Street:</string>
+    <string name="_23_example_street">23 Example Street</string>
+    <string name="location_">Your Location:</string>
+    <string name="tags_">Your Tags:</string>
+    <string name="furniture">Furniture</string>
+    <string name="games">Games</string>
+    <string name="cards">Cards</string>
+    <string name="paintings">Paintings</string>
+    <string name="clothing">Clothing</string>
+    <string name="home_improvement">Home Improvement</string>
+    <string name="accessory">Accessory</string>
+    <string name="collectable">Collectable</string>
+    <string name="select_tag">Select Tag:</string>
+    <string name="log_out">Log Out</string>
     <string name="original_post">Original Post</string>
     <string name="current_offer">Current Offer</string>
     <string name="original_offer">Original Offer</string>
@@ -93,5 +107,8 @@
         <item>Accessory</item>
         <item>Collectable</item>
     </string-array>
-
+    <string name="lorem_ipsum">Eum quod qui enim. Temporibus magnam eveniet commodi inventore odio rerum. Optio veniam vel nihil quisquam error. Velit quam facilis quibusdam explicabo iusto quia. Consectetur molestiae nam quis exercitationem magni. Adipisci pariatur iusto laudantium sit numquam. Vel sequi sapiente ut animi. Modi officiis et praesentium quia nam cum. Tenetur molestiae quis aut tenetur placeat quia. Impedit id qui consequatur voluptatum. Repellat est dolor quam rem ipsum. Molestiae est sapiente et illo sunt reprehenderit sit. Enim officiis rerum eveniet nobis aspernatur impedit saepe fuga. Quae dolores delectus veniam sit eligendi modi. Unde aut aliquam voluptate. Eaque aliquam eligendi ipsum non error dolorem quasi sunt. Vel quas nihil et autem. Illum nam harum est laudantium quia. Optio deserunt error deleniti est sit non. Maxime dolores ut non sed.</string>
+    <string name="user_s_offer">User\'s Offer</string>
+    <string name="from_sometown_aa">From: SomeTown, AA</string>
+    <string name="to_sometown_aa">To: SomeTown, AA</string>
 </resources>

@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
-
+import androidx.constraintlayout.widget.ConstraintSet
 //stuff used in tags
 import android.annotation.SuppressLint
 import androidx.annotation.NonNull
@@ -20,7 +20,6 @@ import android.widget.ListAdapter
 import android.widget.AdapterView
 import  android.widget.TextView
 //end of used in tags
-
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import android.net.Uri
@@ -28,6 +27,8 @@ import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_log_in.*
@@ -36,6 +37,7 @@ import pub.devrel.easypermissions.EasyPermissions
 class AddPost : AppCompatActivity() {
 
     private val TAG = "Add post actvity"
+    private var remoteImagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,13 +50,6 @@ class AddPost : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinner.adapter = adapter
-
-        }
-
-        fun getValues(view: View) {
-            Toast.makeText(
-                this, "Spinner 1 " + spinner.selectedItem.toString(), Toast.LENGTH_LONG
-            ).show()
         }
         fillScreen()
     }
@@ -100,6 +95,10 @@ class AddPost : AppCompatActivity() {
                 "creationTimestamp" to FieldValue.serverTimestamp(),
                 "tag" to tag
             )
+
+            if (remoteImagePath != null) {
+                listing["imagePath"] = remoteImagePath
+            }
 
             db.collection("listings")
                 .add(listing)
@@ -160,7 +159,7 @@ class AddPost : AppCompatActivity() {
     }
 private fun onOfferSubmit(){
 
-    val intent = Intent(this, Messaging::class.java)
+    val intent = Intent(this, PostChat::class.java)
     startActivity(intent)
 }
 
@@ -185,7 +184,6 @@ private fun onOfferSubmit(){
             editTextState.visibility = View.GONE
             editTextCountry.visibility = View.GONE
             editTextPostal.visibility = View.GONE
-            textView.visibility = View.GONE
             textViewMessage.visibility = View.GONE
             editTextTextMultiLine.visibility = View.GONE
             textViewLocation.visibility = View.GONE
@@ -203,9 +201,9 @@ private fun onOfferSubmit(){
         {
             editTextRequestingPrice.setText(String.format("%.2f",intent.getDoubleExtra("price", 0.00)))
         }
-        if(intent.hasExtra("location"))
+        if(intent.hasExtra("location2"))
         {
-            presetLocationLineOne.text = intent.getStringExtra("location")
+            presetLocationLineOne.text = intent.getStringExtra("location2").toString()
             presetLocationLineTwo.visibility = View.GONE
         }
         else
@@ -257,6 +255,8 @@ private fun onOfferSubmit(){
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
+            val storage = Firebase.storage
+            var storageRef = storage.reference
             val selectedImage: Uri = data.data!!
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             userImage.visibility = View.VISIBLE
@@ -264,13 +264,35 @@ private fun onOfferSubmit(){
                 selectedImage,
                 filePathColumn, null, null, null
             )
-            if (cursor != null) {
-                cursor.moveToFirst()
-            }
+            cursor?.moveToFirst()
             val columnIndex = cursor!!.getColumnIndex(filePathColumn[0])
             val picturePath = cursor.getString(columnIndex)
             cursor.close()
+            var imageRef: StorageReference? = storageRef.child("listingImages/${picturePath.replaceBeforeLast('/',"")}")
             userImage.setImageBitmap(BitmapFactory.decodeFile(picturePath))
+
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(scrollConstraint)
+
+            constraintSet.clear(R.id.button2, ConstraintSet.BOTTOM)
+
+            constraintSet.applyTo(scrollConstraint)
+
+            var uploadTask = imageRef?.putFile(selectedImage)
+            uploadTask?.addOnSuccessListener { task ->
+                Toast.makeText(
+                    applicationContext,
+                    "Image uploaded.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                remoteImagePath = task.metadata?.path
+            }?.addOnFailureListener {
+                Toast.makeText(
+                    applicationContext,
+                    "Image upload failed.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
         else
         {

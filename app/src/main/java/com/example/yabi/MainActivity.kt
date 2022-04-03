@@ -22,7 +22,8 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.activity_settings.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,19 +106,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
+                val images = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
                 for (document in queryResult) {
                     try {
                         if (document.get("userID") == userID) {
-                            itemNames.add(document.get("itemName") as String)
-                            itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as Long
+                            itemNames.add(document.get("itemName") as kotlin.String)
+                            itemDescriptions.add(document.get("itemDescription") as kotlin.String)
+                            tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as kotlin.Long
                             itemPrices.add(tempLong.toDouble())
-                            locations.add(document.get("shippingCity") as String + ", " + document.get("shippingState") as String)
-                            coverShipping.add(document.get("coverShipping") as Boolean)
-                            tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as Long
+                            locations.add(document.get("shippingCity") as kotlin.String + ", " + document.get("shippingState") as kotlin.String)
+                            if(document.contains("tag")) tags.add(document.get("tag") as String) else tags.add("")
+                            coverShipping.add(document.get("coverShipping") as kotlin.Boolean)
+                            tempLongTwo = document.get("coveredShipping").toString().substringBefore('.').toLong() as kotlin.Long
                             coveredShipping.add(tempLongTwo.toDouble())
+                            if(document.contains("imagePath")) images.add(document.get("imagePath") as String) else images.add("")
                         }
                     } catch(e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
@@ -157,7 +162,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    //TODO: gets posts on the NewPosts Tab
     private fun getNewPosts(){
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
@@ -176,6 +180,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
+                val images = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
                 for (document in queryResult) {
@@ -183,15 +189,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         if (document.get("userID") != userID) {
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as Long
+                            tempLong =
+                                document.get("requestedPrice").toString().substringBefore('.')
+                                    .toLong()
                             itemPrices.add(tempLong.toDouble())
-                            locations.add(document.get("shippingCity") as String + ", " + document.get("shippingState") as String
+                            locations.add(
+                                document.get("shippingCity") as String + ", " + document.get(
+                                    "shippingState"
+                                ) as String
                             )
+                            if(document.contains("tag"))
+                                tags.add(document.get("tag") as String)
+                            else
+                                tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
                             tempLongTwo =
                                 document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             coveredShipping.add(tempLongTwo.toDouble())
+                            if(document.contains("imagePath"))
+                                images.add(document.get("imagePath") as String)
+                            else
+                                images.add("")
                         }
                     } catch(e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
@@ -200,7 +219,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -208,16 +227,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
     //todo: fills new posts tab
-    private fun fillNewPosts(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                             locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>){
+    private fun fillNewPosts(itemNames: List<String>, itemDescriptions: List<String>,
+                             itemPrices: List<Double>, locations: List<String>, tags: List<String>,
+                             coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>)
+    {
         val data = ArrayList<WantAdViewModel>()
-
-        //val photos = arrayOf(0)
 
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], this))
+                coveredShipping[i], tags[i], images[i], this))
         }
 
 
@@ -232,7 +251,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     //TODO: sets home while sorting by tags
-    //TODO: remake sorting with tag spinner in activity_settings.xml
     private fun getData(){
 
         val db = Firebase.firestore
@@ -240,7 +258,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val userID = intent.getStringExtra("userID")
 
         db.collection("listings")
-            .orderBy("tag", Query.Direction.DESCENDING)
+            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
@@ -252,8 +270,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
+                val images = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
                         if (document.get("userID") != userID) {
@@ -261,18 +281,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             itemDescriptions.add(document.get("itemDescription") as String)
                             tempLong =
                                 document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             itemPrices.add(tempLong.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
                                 ) as String
                             )
+                            if(document.contains("tag")) tags.add(document.get("tag") as String) else tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
                             tempLongTwo =
                                 document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong() as Long
+                                    .toLong()
                             coveredShipping.add(tempLongTwo.toDouble())
+                            if(document.contains("imagePath")) images.add(document.get("imagePath") as String) else images.add("")
                         }
                     } catch(e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
@@ -281,19 +303,50 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillHome(itemNames, itemDescriptions, itemPrices, locations, coverShipping, coveredShipping)
+
+                val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+
+                if(
+                    sharedPreferences.getBoolean("Furniture", false) ||
+                    sharedPreferences.getBoolean("Games", false) ||
+                    sharedPreferences.getBoolean("Cards", false) ||
+                    sharedPreferences.getBoolean("Paintings", false) ||
+                    sharedPreferences.getBoolean("Clothing", false) ||
+                    sharedPreferences.getBoolean("Home Improvement", false) ||
+                    sharedPreferences.getBoolean("Accessory", false) ||
+                    sharedPreferences.getBoolean("Collectable", false)
+                ) {
+                    var index = 0
+                    while (index < itemNames.size) {
+                        val hasTag = sharedPreferences.getBoolean(tags[index], false)
+                        if (!hasTag) {
+                            itemNames.removeAt(index)
+                            itemDescriptions.removeAt(index)
+                            itemPrices.removeAt(index)
+                            locations.removeAt(index)
+                            tags.removeAt(index)
+                            coverShipping.removeAt(index)
+                            coveredShipping.removeAt(index)
+                            images.removeAt(index)
+                        } else
+                            index++
+                    }
+                }
+
+                fillHome(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
             }
 
+
     }
 
 
     //TODO: fills for you tab
-    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                         locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
-    {
+    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>,
+                         itemPrices: List<Double>, locations: List<String>, tags: List<String>,
+                         coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>){
         val data = ArrayList<WantAdViewModel>()
 
         //val photos = arrayOf(0)
@@ -301,7 +354,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], this))
+                coveredShipping[i], tags[i], images[i], this))
         }
 
 
@@ -361,6 +414,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         "Please sign in first",
                         Toast.LENGTH_LONG
                     ).show()
+                }
+                if(intent.hasExtra("location")){
+
+
+                    //For address line 1
+                    val loc3 = intent.getStringExtra("location")
+                    val intent = Intent(this, AddPost::class.java)
+                    intent.putExtra("location2",loc3)
+
+                    //go to add post
+                    val userID = this.intent.getStringExtra("userID")
+                    intent.putExtra("userID", userID)
+                    startActivity(intent)
                 }
                 else {
                     val intent = Intent(this, AddPost::class.java)

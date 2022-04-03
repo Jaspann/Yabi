@@ -16,7 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:outlineAmbientShadowColor="@color/white"
-        android:outlineSpotShadowColor="@color/white">
+        android:outlineSpotShadowColor="@color/white"
+        tools:targetApi="p">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -141,6 +142,29 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/tagCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="6dp"
+                    app:cardBackgroundColor="@color/YabiGreen"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintStart_toEndOf="@+id/shippingCard"
+                    app:layout_constraintTop_toBottomOf="@+id/priceCard">
+
+                    <TextView
+                        android:id="@+id/tagTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="@string/home_improvement"
+                        android:textColor="@color/white" />
+
+
+                </androidx.cardview.widget.CardView>
+
+
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="90dp"
@@ -156,7 +180,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:maxHeight="200dp"
+                    android:maxHeight="100dp"
                     android:paddingHorizontal="8dp"
                     android:paddingBottom="8dp"
                     android:text="@string/exampleDescription"
