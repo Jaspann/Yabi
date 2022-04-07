@@ -21,7 +21,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import kotlinx.android.synthetic.main.activity_main.toolbar
-import kotlinx.android.synthetic.main.activity_settings.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
@@ -63,11 +62,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     {
         refreshForYou.setOnRefreshListener(OnRefreshListener {
             refreshForYou.isRefreshing = false
-            getData()
+            getForYouPosts()
         })
         refreshLocal.setOnRefreshListener(OnRefreshListener {
             refreshLocal.isRefreshing = false
-            getData()
+            //getForYouPosts()
         })
         refreshNewPosts.setOnRefreshListener(OnRefreshListener {
             refreshNewPosts.isRefreshing = false
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
         refreshYourPosts.setOnRefreshListener(OnRefreshListener {
             refreshYourPosts.isRefreshing = false
-            //fillYourPosts()
+            getYourPosts()
         })
     }
 
@@ -84,7 +83,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onPostCreate(savedInstanceState)
 
         getNewPosts()
-        getData()
+        getForYouPosts()
+        getYourPosts()
     }
 
     private fun getNewPosts(){
@@ -153,7 +153,77 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    private fun getData(){
+    private fun getYourPosts(){
+        val db = Firebase.firestore
+        var queryResult: MutableList<DocumentSnapshot>
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
+
+        Toast.makeText(
+            applicationContext,
+            "Your userID is $userID.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        db.collection("listings")
+            .whereEqualTo("userID", userID)
+            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d("TAG", "Listings retrieved.")
+                queryResult = results.documents
+                //TODO: Find permanent solution to workaround in assignment of longs
+                var tempLong: Long
+                var tempLongTwo: Long
+                val itemNames = arrayListOf<String>()
+                val itemDescriptions = arrayListOf<String>()
+                val itemPrices = arrayListOf<Double>()
+                val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
+                val images = arrayListOf<String>()
+                val coverShipping = arrayListOf<Boolean>()
+                val coveredShipping = arrayListOf<Double>()
+                for (document in queryResult) {
+                    try {
+                        itemNames.add(document.get("itemName") as String)
+                        itemDescriptions.add(document.get("itemDescription") as String)
+                        tempLong =
+                            document.get("requestedPrice").toString().substringBefore('.')
+                                .toLong()
+                        itemPrices.add(tempLong.toDouble())
+                        locations.add(
+                            document.get("shippingCity") as String + ", " + document.get(
+                                "shippingState"
+                            ) as String
+                        )
+                        if(document.contains("tag"))
+                            tags.add(document.get("tag") as String)
+                        else
+                            tags.add("")
+                        coverShipping.add(document.get("coverShipping") as Boolean)
+                        tempLongTwo =
+                            document.get("coveredShipping").toString().substringBefore('.')
+                                .toLong()
+                        coveredShipping.add(tempLongTwo.toDouble())
+                        if(document.contains("imagePath"))
+                            images.add(document.get("imagePath") as String)
+                        else
+                            images.add("")
+                    } catch(e: NullPointerException) {
+                        Log.e("MainActivity", "Error processing listings", e)
+                    } catch(e: ClassCastException) {
+                        Log.e("MainActivity", "Error casting listing types", e)
+                    }
+                }
+
+                fillYourPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
+            }
+            .addOnFailureListener{ e ->
+                Log.w("TAG", "Failed to retrieve listings.", e)
+            }
+    }
+
+    private fun getForYouPosts(){
 
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
@@ -242,31 +312,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillHome(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
+                fillForYouPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
             }
-
-
-        fillYourPosts()
     }
 
     //TODO Make listing class and pass array of listings
-    private fun fillYourPosts()
-    {
+    private fun fillYourPosts(itemNames: List<String>, itemDescriptions: List<String>,
+                              itemPrices: List<Double>, locations: List<String>, tags: List<String>,
+                              coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>){
 
-
-
-
-    }
-
-    private fun fillHome(itemNames: List<String>, itemDescriptions: List<String>,
-                             itemPrices: List<Double>, locations: List<String>, tags: List<String>,
-                             coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>){
         val data = ArrayList<WantAdViewModel>()
 
-        //val photos = arrayOf(0)
+        for (i in itemNames.indices) {
+            data.add(WantAdViewModel("User", -1, itemNames[i],
+                itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
+                coveredShipping[i], tags[i], images[i], this))
+        }
+
+
+        val recyclerview = findViewById<RecyclerView>(R.id.YourPostsRecycler)
+
+        recyclerview.layoutManager = LinearLayoutManager(this)
+
+        val adapter = WantAdAdapter(data)
+
+        recyclerview.adapter = adapter
+    }
+
+    private fun fillForYouPosts(itemNames: List<String>, itemDescriptions: List<String>,
+                                itemPrices: List<Double>, locations: List<String>, tags: List<String>,
+                                coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>){
+
+        val data = ArrayList<WantAdViewModel>()
+
 
         for (i in itemNames.indices) {
             data.add(WantAdViewModel("User", -1, itemNames[i],
