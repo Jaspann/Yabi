@@ -27,6 +27,7 @@ import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.google.firebase.firestore.DocumentSnapshot
@@ -155,6 +156,68 @@ class AddPost : AppCompatActivity() {
                 ).show()
 
             }
+        }
+
+
+
+
+        if(intent.hasExtra("isEdit")){
+            val db = Firebase.firestore
+
+            // TODO: edit posts
+            val listingUserID = intent.getStringExtra("userID")
+            val itemName = editTextItemName.text.toString()
+            val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
+            val coverShipping = buyerCoverShippingButton.isChecked
+            val coveredShipping = if (coverShippingFullButton.isChecked) {
+                -1.0
+            } else {
+                editTextCoverShippingUntil.text.toString().toDouble()
+            }
+            val itemDescription = editTextTextMultiLine.text.toString()
+            val shippingStreet =
+                editTextStreetNumber.text.toString() + " " + editTextStreet.text.toString()
+            val shippingCity = editTextCity.text.toString()
+            val shippingState = editTextState.text.toString()
+            val shippingCountry = editTextCountry.text.toString()
+            val postalCode = editTextPostal.text.toString().toInt()
+            val tag = spinner.selectedItem.toString()
+
+
+            val editlisting = hashMapOf(
+                "userID" to listingUserID,
+                "itemName" to itemName,
+                "requestedPrice" to requestedPrice,
+                "coverShipping" to coverShipping,
+                "coveredShipping" to coveredShipping,
+                "itemDescription" to itemDescription,
+                "shippingStreet" to shippingStreet,
+                "shippingCity" to shippingCity,
+                "shippingState" to shippingState,
+                "shippingCountry" to shippingCountry,
+                "postalCode" to postalCode,
+                "creationTimestamp" to FieldValue.serverTimestamp(),
+                "tag" to tag
+            )
+
+            if (remoteImagePath != null) {
+                editlisting["imagePath"] = remoteImagePath
+            }
+            //TODO:: fix edit Listings
+            /*
+            if (listingUserID != null) {
+                db.collection("listings").document(listingUserID)
+                    .set(editlisting, SetOptions.merge())
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "Item Updated : $itemName")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error updating listing", e)
+                    }
+
+            }
+
+             */
         }
     }
 private fun onOfferSubmit(){
