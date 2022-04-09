@@ -117,8 +117,46 @@ class AddPost : AppCompatActivity() {
                 ).show()
             }
         }
-    }
+        //TODO: For Offers
+        if (intent.hasExtra("isCounter")) {
+            val db = Firebase.firestore
 
+            val buyerID = intent.getStringExtra("userID")
+            val itemName = editTextItemName.text.toString()
+            val youroffer = editTextRequestingPrice.text.toString().toDouble()
+            val coverShipping = buyerCoverShippingButton.isChecked
+            val coveredShipping = if (coverShippingFullButton.isChecked) { -1.0 } else { editTextCoverShippingUntil.text.toString().toDouble() }
+            val offer = hashMapOf(
+                "BuyerID" to buyerID,
+                "itemName" to itemName,
+                "youroffer" to youroffer,
+            )
+            db.collection("offer")
+                .add(offer)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "Offer document added with ID:)${documentReference.id}")
+                    Toast.makeText(applicationContext, "Offer Submitted",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    onOfferSubmit()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding offer document", e)
+                    Toast.makeText(
+                        applicationContext,
+                        "Error: failed to create offer.",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                }
+        }
+
+    }
+    private fun onOfferSubmit(){
+
+        val intent = Intent(this, PostChat::class.java)
+        startActivity(intent)
+    }
     private fun fillScreen()
     {
         // If Statement chain to autofill counter offers
@@ -130,6 +168,23 @@ class AddPost : AppCompatActivity() {
         if(intent.hasExtra("isCounter"))
         {
             toolbar.title = "Create Offer"
+            postButton.text = getString(R.string.submit_offer)
+            spinner.visibility = View.GONE
+            tagView.visibility = View.GONE
+            buttonLocationLineOne.visibility = View.GONE
+            editTextStreetNumber.visibility = View.GONE
+            editTextStreet.visibility = View.GONE
+            editTextCity.visibility = View.GONE
+            editTextState.visibility = View.GONE
+            editTextCountry.visibility = View.GONE
+            editTextPostal.visibility = View.GONE
+            textViewMessage.visibility = View.GONE
+            editTextTextMultiLine.visibility = View.GONE
+            textViewLocation.visibility = View.GONE
+            presetLocationLineOne.visibility = View.GONE
+            buttonLocationLineOne.visibility = View.GONE
+            radioGroupLocation.visibility = View.GONE
+            priceText.text = getString(R.string.your_offer)
             postButton.text = getString(R.string.submit_offer)
         }
         if(intent.hasExtra("title"))

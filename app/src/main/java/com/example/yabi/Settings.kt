@@ -179,6 +179,12 @@ class Settings : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val userID = sharedPreferences.getString("userID", "guest")
 
+        //for address line 1
+        val location2 = editTextStreet.text.toString() + " " + cityVal + "," + state + " " + zipVal
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("location", location2)
+        startActivity(intent)
+
         if (userID != "guest") {
             val location = hashMapOf(
                 "city" to cityVal,
