@@ -93,7 +93,7 @@
     <string name="collectable">Collectable</string>
     <string name="select_tag">Select Tag:</string>
     <string name="log_out">Log Out</string>
-
+    <string name="your_offer">Submit Your Offer</string>
 
     <string-array name="tag_list">
         <item>Furniture</item>

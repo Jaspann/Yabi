@@ -153,21 +153,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    private fun getYourPosts(){
+    //TODO: fills your posts with your posts
+    private fun getYourPosts() {
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val userID = sharedPreferences.getString("userID", "guest")
 
-        Toast.makeText(
-            applicationContext,
-            "Your userID is $userID.",
-            Toast.LENGTH_LONG
-        ).show()
-
         db.collection("listings")
-            .whereEqualTo("userID", userID)
-            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
+            .orderBy("creationTimestamp", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
@@ -180,45 +174,84 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val itemPrices = arrayListOf<Double>()
                 val locations = arrayListOf<String>()
                 val tags = arrayListOf<String>()
-                val images = arrayListOf<String>()
                 val coverShipping = arrayListOf<Boolean>()
                 val coveredShipping = arrayListOf<Double>()
+                val images = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
-                        itemNames.add(document.get("itemName") as String)
-                        itemDescriptions.add(document.get("itemDescription") as String)
-                        tempLong =
-                            document.get("requestedPrice").toString().substringBefore('.')
-                                .toLong()
-                        itemPrices.add(tempLong.toDouble())
-                        locations.add(
-                            document.get("shippingCity") as String + ", " + document.get(
-                                "shippingState"
-                            ) as String
-                        )
-                        if(document.contains("tag"))
-                            tags.add(document.get("tag") as String)
-                        else
-                            tags.add("")
-                        coverShipping.add(document.get("coverShipping") as Boolean)
-                        tempLongTwo =
-                            document.get("coveredShipping").toString().substringBefore('.')
-                                .toLong()
-                        coveredShipping.add(tempLongTwo.toDouble())
-                        if(document.contains("imagePath"))
-                            images.add(document.get("imagePath") as String)
-                        else
-                            images.add("")
-                    } catch(e: NullPointerException) {
+                        if (document.get("userID") == userID) {
+                            itemNames.add(document.get("itemName") as String)
+                            itemDescriptions.add(document.get("itemDescription") as String)
+                            tempLong =
+                                document.get("requestedPrice").toString().substringBefore('.')
+                                    .toLong()
+                            itemPrices.add(tempLong.toDouble())
+                            locations.add(
+                                document.get("shippingCity") as String + ", " + document.get(
+                                    "shippingState"
+                                ) as String
+                            )
+                            if (document.contains("tag"))
+                                tags.add(document.get("tag") as String)
+                            else
+                                tags.add("")
+                            coverShipping.add(document.get("coverShipping") as Boolean)
+                            tempLongTwo =
+                                document.get("coveredShipping").toString().substringBefore('.')
+                                    .toLong()
+                            coveredShipping.add(tempLongTwo.toDouble())
+                            if (document.contains("imagePath"))
+                                images.add(document.get("imagePath") as String)
+                            else
+                                images.add("")
+                        }
+                    } catch (e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
-                    } catch(e: ClassCastException) {
+                    } catch (e: ClassCastException) {
                         Log.e("MainActivity", "Error casting listing types", e)
                     }
                 }
 
-                fillYourPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
+
+                val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+
+                if (
+                    sharedPreferences.getBoolean("Furniture", false) ||
+                    sharedPreferences.getBoolean("Games", false) ||
+                    sharedPreferences.getBoolean("Cards", false) ||
+                    sharedPreferences.getBoolean("Paintings", false) ||
+                    sharedPreferences.getBoolean("Clothing", false) ||
+                    sharedPreferences.getBoolean("Home Improvement", false) ||
+                    sharedPreferences.getBoolean("Accessory", false) ||
+                    sharedPreferences.getBoolean("Collectable", false)
+                ) {
+                    var index = 0
+                    while (index < itemNames.size) {
+                        val hasTag = sharedPreferences.getBoolean(tags[index], false)
+                        if (!hasTag) {
+                            itemNames.removeAt(index)
+                            itemDescriptions.removeAt(index)
+                            itemPrices.removeAt(index)
+                            locations.removeAt(index)
+                            tags.removeAt(index)
+                            coverShipping.removeAt(index)
+                            coveredShipping.removeAt(index)
+                            images.removeAt(index)
+                        } else
+                            index++
+                    }
+                }
+
+                fillYourPosts(
+                    itemNames,
+                    itemDescriptions,
+                    itemPrices,
+                    locations,
+                    coverShipping,
+                    coveredShipping,
+                )
             }
-            .addOnFailureListener{ e ->
+            .addOnFailureListener { e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
             }
     }
@@ -319,17 +352,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
-    //TODO Make listing class and pass array of listings
-    private fun fillYourPosts(itemNames: List<String>, itemDescriptions: List<String>,
-                              itemPrices: List<Double>, locations: List<String>, tags: List<String>,
-                              coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>){
+    ///TODO Fills your posts
+    private fun fillYourPosts(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
+                              locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
+    {
+        val data = ArrayList<YourPostViewModel>()
 
-        val data = ArrayList<WantAdViewModel>()
+
 
         for (i in itemNames.indices) {
-            data.add(WantAdViewModel("User", -1, itemNames[i],
-                itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
-                coveredShipping[i], tags[i], images[i], this))
+            data.add(YourPostViewModel(itemNames[i], itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i], coveredShipping[i], this))
         }
 
 
@@ -337,9 +369,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         recyclerview.layoutManager = LinearLayoutManager(this)
 
-        val adapter = WantAdAdapter(data)
+        val adapter = YourPostAdapter(data)
 
         recyclerview.adapter = adapter
+
     }
 
     private fun fillForYouPosts(itemNames: List<String>, itemDescriptions: List<String>,
