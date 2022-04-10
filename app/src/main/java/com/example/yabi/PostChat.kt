@@ -69,24 +69,25 @@ class PostChat : AppCompatActivity() {
             "Will this work for you?",
             "sounds good to me."
         )
+        val offers = arrayOf(false, false, false, false, false, false, false, true)
 
-        fillChatMsg(account, messages)
+        fillChatMsg(account, messages, offers)
 
 
     }
 
-    private fun fillChatMsg(accounts: Array<String>, messages: Array<String>)
+    private fun fillChatMsg(accounts: Array<String>, messages: Array<String>, offers: Array<Boolean>)
     {
         val data = ArrayList<ChatViewModel>()
 
         for (i in messages.indices) {
-            data.add(ChatViewModel(accounts[i], messages[i],this))
+            data.add(ChatViewModel(accounts[i], messages[i], offers[i],this))
         }
         val recyclerview = findViewById<RecyclerView>(R.id.chatRecycler)
 
         recyclerview.layoutManager = LinearLayoutManager(this)
 
-        val adapter = ChatAdapter(this, accounts, messages)
+        val adapter = ChatAdapter(this, accounts, messages, offers)
 
         recyclerview.adapter = adapter
     }
@@ -191,6 +192,11 @@ class PostChat : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+
+    }
+
+    fun onPressAcceptOffer(view: View)
+    {
 
     }
 }

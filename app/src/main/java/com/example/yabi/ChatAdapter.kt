@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintSet
@@ -19,6 +20,7 @@ class ChatAdapter(
     var context: Context,
     var accounts: Array<String>,
     var messages: Array<String>,
+    var isOffer: Array<Boolean>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -80,13 +82,15 @@ class ChatAdapter(
             val mStorage = FirebaseStorage.getInstance().reference
 
             mStorage.child(messages[position]).downloadUrl.addOnSuccessListener { results ->
-                Picasso.get().load(results).into(holder.userImage);
+                Picasso.get().load(results).into(holder.userImage)
             }
         }
-
         constraintSet.applyTo(holder.constraint)
 
-
+        if(isOffer[position])
+        {
+            holder.offerButton.visibility = View.VISIBLE
+        }
 
     }
 
@@ -100,5 +104,6 @@ class ChatAdapter(
         val cardBox: androidx.cardview.widget.CardView = itemView.findViewById(R.id.cardBox)
         val userText: TextView = itemView.findViewById(R.id.userText)
         val userImage: ImageView = itemView.findViewById(R.id.imageView)
+        val offerButton: Button = itemView.findViewById(R.id.offerButton)
     }
 }
