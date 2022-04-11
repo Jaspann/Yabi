@@ -46,7 +46,28 @@ class AddPost : AppCompatActivity() {
 
     fun onPressPost(view: android.view.View) {
 
-        if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
+        if(intent.hasExtra("fromChat"))
+        {
+            val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            var text = "New offer: price of " + editTextRequestingPrice.text.toString().toDouble() + "$ with shipping being covered by "
+            if(buyerCoverShippingButton.isChecked)
+                text += "buyer "
+            else
+                text += "seller "
+            if(coverShippingFullButton.isChecked)
+                text += "in full."
+            else
+                text+= "up to " + editTextCoverShippingUntil.text.toString().toDouble() + "$."
+
+            editor.putString("chatOffer", text)
+            editor.putString("offerPrice", editTextRequestingPrice.text.toString())
+
+            editor.apply()
+            finish()
+        }
+
+        else if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
         {
             val itemName = editTextItemName.text.toString()
             val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
@@ -168,7 +189,7 @@ class AddPost : AppCompatActivity() {
             toolbar.title = "Edit Posting"
             postButton.text = getString(R.string.save_changes)
         }
-        if(intent.hasExtra("isCounter"))
+        if(intent.hasExtra("isCounter") || intent.hasExtra("fromChat"))
         {
             toolbar.title = "Create Offer"
             postButton.text = getString(R.string.submit_offer)
@@ -189,6 +210,10 @@ class AddPost : AppCompatActivity() {
             radioGroupLocation.visibility = View.GONE
             priceText.text = getString(R.string.your_offer)
             postButton.text = getString(R.string.submit_offer)
+        }
+        if(intent.hasExtra("fromChat"))
+        {
+            button2.visibility = View.GONE
         }
         if(intent.hasExtra("title"))
         {
