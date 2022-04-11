@@ -145,7 +145,7 @@ class AddPost : AppCompatActivity() {
                 "itemName" to itemName,
                 "youroffer" to youroffer,
             )
-            db.collection("offer")
+            db.collection("offers")
                 .add(offer)
                 .addOnSuccessListener { documentReference ->
                     Log.d(TAG, "Offer document added with ID:)${documentReference.id}")

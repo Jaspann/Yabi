@@ -57,23 +57,21 @@ class Messaging : AppCompatActivity() {
         var queryResult: MutableList<DocumentSnapshot>
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val userID = sharedPreferences.getString("userID", "guest")
-        db.collection("offer")
+        db.collection("offers")
             .orderBy("itemName", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { results ->
                 Log.d("TAG", "offers retrieved.")
                 queryResult = results.documents
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
                 val itemNames = arrayListOf<String>()
                 val offerPrices = arrayListOf<Double>()
                 for (document in queryResult) {
                     try {
                         if (document.get("BuyerID") == userID) {
                             itemNames.add(document.get("itemName") as String)
-                            tempLong = (document.get("youroffer").toString().substringBefore('.')
-                                .toLong() as Long)
-                            offerPrices.add(tempLong.toDouble())
+                            tempString = document.get("yourOffer").toString()
+                            offerPrices.add(tempString.toDouble())
 
                         }
                     } catch (e: NullPointerException) {

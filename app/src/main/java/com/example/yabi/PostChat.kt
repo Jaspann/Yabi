@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
@@ -14,6 +15,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -51,31 +54,44 @@ class PostChat : AppCompatActivity() {
     //price == -1.0 if not an offer
     private fun sendMessage(message: String?, price: Double?)
     {
-        //TODO: send message to database
-    }
-
-    private fun getDatabaseMessages()
-    {
-        //TODO Connect to real database, dummy value for now
-
-        val account = arrayOf("them", "us", "us", "them", "them", "us", "us", "them")
-        val messages = arrayOf("I have a obj you want in good quality, and I can pay for shipping. I can ship it from Vermont.",
-            "That sounds good, but 34 is too much, my original asking price was 10. But it is good quality, so can you do 24?",
-            "obj in good quality, seller paying for shipping.",
-            "24 is not worth it after shipping",
-            "unless you take shipping instead?",
-            "obj in good quality, buyer paying for shipping.",
-            "Will this work for you?",
-            "sounds good to me."
+        val db = Firebase.firestore
+        val message = hashMapOf(
+            "message" to message,
+            "price" to price
         )
-        val offers = arrayOf(-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 20.00)
 
-        fillChatMsg(account, messages, offers)
-
-
+        db.collection("chats")
+            .add(message)
     }
 
-    private fun fillChatMsg(accounts: Array<String>, messages: Array<String>, offers: Array<Double>)
+    private fun getDatabaseMessages() {
+        val db = Firebase.firestore
+        var queryResult: MutableList<DocumentSnapshot>
+        val account = arrayListOf<String>()
+        val messages = arrayListOf<String>()
+        val offers = arrayListOf<Double>()
+        var tempString: String
+
+        db.collection("chats")
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d("Chat", "Chats retrieved.")
+                queryResult = results.documents
+                for (document in queryResult) {
+                    account.add("us")
+                    messages.add(document.get("message").toString())
+                    tempString = document.get("price").toString()
+                    offers.add(tempString.toDouble())
+                }
+
+                fillChatMsg(account, messages, offers)
+            }
+            .addOnFailureListener {
+                Log.w("Chat", "Failed to retrieve listings.", it)
+            }
+    }
+
+    private fun fillChatMsg(accounts: ArrayList<String>, messages: ArrayList<String>, offers: ArrayList<Double>)
     {
         val data = ArrayList<ChatViewModel>()
 
@@ -214,8 +230,7 @@ class PostChat : AppCompatActivity() {
 
     }
 
-    fun onPressAcceptOffer(view: View)
-    {
+    fun onPressAcceptOffer(view: View) {
 
     }
 }
