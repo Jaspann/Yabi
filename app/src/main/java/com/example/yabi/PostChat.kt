@@ -62,6 +62,9 @@ class PostChat : AppCompatActivity() {
 
         db.collection("chats")
             .add(message)
+            .addOnSuccessListener {
+                getDatabaseMessages()
+            }
     }
 
     private fun getDatabaseMessages() {
