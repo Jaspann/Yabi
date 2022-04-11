@@ -1,6 +1,7 @@
 package com.example.yabi
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
@@ -9,12 +10,14 @@ import android.provider.MediaStore
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_post_chat.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -118,20 +121,28 @@ class PostChat : AppCompatActivity() {
     {
         val intent = Intent(this, AddPost::class.java)
         intent.putExtra("fromChat", true)
-        startActivity(intent)
+        getResult.launch(intent)
+    }
 
+    private val getResult =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == Activity.RESULT_OK){
 
-        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-        if(sharedPreferences.getString("chatOffer", "") != "")
-        {
-            sendMessage(sharedPreferences.getString("chatOffer", ""), (sharedPreferences.getString("offerPrice", "")?.toDouble()))
+                var text = "New offer: price of " + it.data?.getStringExtra("price") + "$ with shipping being covered by "
+                if(it.data?.getBooleanExtra("buyerShipping", false) == true)
+                    text += "buyer "
+                else
+                    text += "seller "
+                if(it.data?.getBooleanExtra("coverInFull", false) == true)
+                    text += "in full."
+                else
+                    text+= "up to " + it.data?.getStringExtra("coveredInPart") + "$."
+
+                sendMessage(text, it.data?.getStringExtra("price")?.toDouble())
+            }
         }
 
-        val editor = sharedPreferences.edit()
-        editor.remove("chatOffer")
-        editor.remove("offerPrice")
-        editor.apply()
-    }
 
     private fun addImage()
     {
