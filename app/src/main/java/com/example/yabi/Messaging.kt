@@ -63,15 +63,17 @@ class Messaging : AppCompatActivity() {
             .addOnSuccessListener { results ->
                 Log.d("TAG", "offers retrieved.")
                 queryResult = results.documents
-                var tempString: String
+                var tempLong: Long
+                var tempLongTwo: Long
                 val itemNames = arrayListOf<String>()
                 val offerPrices = arrayListOf<Double>()
                 for (document in queryResult) {
                     try {
                         if (document.get("BuyerID") == userID) {
                             itemNames.add(document.get("itemName") as String)
-                            tempString = document.get("yourOffer").toString()
-                            offerPrices.add(tempString.toDouble())
+                            tempLong = (document.get("youroffer").toString().substringBefore('.')
+                                .toLong() as Long)
+                            offerPrices.add(tempLong.toDouble())
 
                         }
                     } catch (e: NullPointerException) {
@@ -87,5 +89,4 @@ class Messaging : AppCompatActivity() {
                 Log.w("TAG", "Failed to retrieve listings.", e)
             }
     }
-
 }
