@@ -29,6 +29,12 @@ class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapte
         val offer = "$" + String.format("%.2f", OfferViewModel.youroffer)
         holder.offerTextView.text = offer
 
+        holder.offerbutton.setOnClickListener {
+            val intent = Intent(OfferViewModel.context, PostChat::class.java)
+            intent.putExtra("user", OfferViewModel.buyer)
+            OfferViewModel.context.startActivity(intent)
+        }
+
     }
 
     // return the number of the items in the list
@@ -38,9 +44,10 @@ class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapte
 
     class ViewHolder(ItemView: View):RecyclerView.ViewHolder(ItemView){
 
-            val userTextView: TextView = itemView.findViewById(R.id.userText)
-            val titleTextView:TextView = itemView.findViewById(R.id.titleText)
-            val offerTextView: TextView = itemView.findViewById(R.id.priceTextView)
+        val userTextView: TextView = itemView.findViewById(R.id.userText)
+        val titleTextView:TextView = itemView.findViewById(R.id.titleText)
+        val offerTextView: TextView = itemView.findViewById(R.id.priceTextView)
+        val offerbutton: Button = itemView.findViewById(R.id.offerbutton)
 
 
     }
