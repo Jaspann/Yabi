@@ -123,28 +123,27 @@ class ViewOffers : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val userID = sharedPreferences.getString("userID", "guest")
         val itemName = originalPost.titleText.text
-        db.collection("offer")
+        db.collection("offers")
             .orderBy("itemName", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { results ->
                 Log.d("TAG", "offers retrieved.")
                 queryResult = results.documents
-
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
                 val itemNames = arrayListOf<String>()
                 val offerPrices = arrayListOf<Double>()
                 for (document in queryResult) {
                     try {
                         if (document.get("userID") != userID && document.get("itemName") == itemName) {
                             itemNames.add(document.get("itemName") as String)
-                            tempLong = (document.get("youroffer").toString().substringBefore('.')
-                                .toLong() as Long)
-                            offerPrices.add(tempLong.toDouble())
+                            tempString = document.get("youroffer").toString()
+                            try {
+                                offerPrices.add(tempString.toDouble())
+                            } catch (e: NullPointerException) {
+                            Log.e("MainActivity", "Error processing listings", e)
+                            }
 
                         }
-                    } catch (e: NullPointerException) {
-                        Log.e("MainActivity", "Error processing listings", e)
                     } catch (e: ClassCastException) {
                         Log.e("MainActivity", "Error casting listing types", e)
                     }

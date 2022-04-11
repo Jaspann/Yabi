@@ -18,9 +18,9 @@ import org.json.JSONException
 
 class ChatAdapter(
     var context: Context,
-    var accounts: Array<String>,
-    var messages: Array<String>,
-    var isOffer: Array<Double>
+    var accounts: ArrayList<String>,
+    var messages: ArrayList<String>,
+    var isOffer: ArrayList<Double>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -74,17 +74,18 @@ class ChatAdapter(
                 5
             )
         }
-        if(messages[position].substring(0, "listingImages/".length + 1) == "listingImages/")
-        {
-            holder.userImage.visibility = View.VISIBLE
-            holder.userText.visibility = View.GONE
-
-            val mStorage = FirebaseStorage.getInstance().reference
-
-            mStorage.child(messages[position]).downloadUrl.addOnSuccessListener { results ->
-                Picasso.get().load(results).into(holder.userImage)
-            }
-        }
+        //TODO fix index out of bounds error
+//        if(messages[position].substring(0, "listingImages/".length + 1) == "listingImages/")
+//        {
+//            holder.userImage.visibility = View.VISIBLE
+//            holder.userText.visibility = View.GONE
+//
+//            val mStorage = FirebaseStorage.getInstance().reference
+//
+//            mStorage.child(messages[position]).downloadUrl.addOnSuccessListener { results ->
+//                Picasso.get().load(results).into(holder.userImage)
+//            }
+//        }
         constraintSet.applyTo(holder.constraint)
 
         if(isOffer[position] != -1.0)
