@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 //TODO: Find permanent solution to workaround in assignment of longs
                 var tempLong: Long
                 var tempLongTwo: Long
+                val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
@@ -113,6 +114,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 for (document in queryResult) {
                     try {
                         if (document.get("userID") != userID) {
+                            emails.add(document.get("acctEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
                             tempLong =
@@ -145,7 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillNewPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
+                fillNewPosts(emails, itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -272,6 +274,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 //TODO: Find permanent solution to workaround in assignment of longs
                 var tempLong: Long
                 var tempLongTwo: Long
+                val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
@@ -283,6 +286,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 for (document in queryResult) {
                     try {
                         if (document.get("userID") != userID) {
+                            emails.add(document.get("acctEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
                             tempLong =
@@ -345,7 +349,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-                fillForYouPosts(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
+                fillForYouPosts(emails, itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
@@ -375,7 +379,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    private fun fillForYouPosts(itemNames: List<String>, itemDescriptions: List<String>,
+    private fun fillForYouPosts(emails: List<String>, itemNames: List<String>, itemDescriptions: List<String>,
                                 itemPrices: List<Double>, locations: List<String>, tags: List<String>,
                                 coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>){
 
@@ -383,7 +387,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         for (i in itemNames.indices) {
-            data.add(WantAdViewModel("User", -1, itemNames[i],
+            data.add(WantAdViewModel(emails[i], -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
                 coveredShipping[i], tags[i], images[i], this))
         }
@@ -399,14 +403,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    private fun fillNewPosts(itemNames: List<String>, itemDescriptions: List<String>,
+    private fun fillNewPosts(emails: List<String>, itemNames: List<String>, itemDescriptions: List<String>,
                          itemPrices: List<Double>, locations: List<String>, tags: List<String>,
                          coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>)
     {
         val data = ArrayList<WantAdViewModel>()
 
         for (i in itemNames.indices) {
-            data.add(WantAdViewModel("User", -1, itemNames[i],
+            data.add(WantAdViewModel(emails[i], -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
                 coveredShipping[i], tags[i], images[i], this))
         }
