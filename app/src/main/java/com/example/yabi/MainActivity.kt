@@ -99,9 +99,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
                 queryResult = results.documents
-                //TODO: Find permanent solution to workaround in assignment of longs
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
                 val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
@@ -117,10 +115,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             emails.add(document.get("acctEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong =
-                                document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong()
-                            itemPrices.add(tempLong.toDouble())
+                            tempString = document.get("requestedPrice").toString()
+                            itemPrices.add(tempString.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
@@ -131,10 +127,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             else
                                 tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
-                            tempLongTwo =
-                                document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong()
-                            coveredShipping.add(tempLongTwo.toDouble())
+                            tempString = document.get("coveredShipping").toString()
+                            coveredShipping.add(tempString.toDouble())
                             if(document.contains("imagePath"))
                                 images.add(document.get("imagePath") as String)
                             else
@@ -155,7 +149,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    //TODO: fills your posts with your posts
     private fun getYourPosts() {
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
@@ -168,9 +161,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
                 queryResult = results.documents
-                //TODO: Find permanent solution to workaround in assignment of longs
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
@@ -184,10 +175,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         if (document.get("userID") == userID) {
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong =
-                                document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong()
-                            itemPrices.add(tempLong.toDouble())
+                            tempString = document.get("requestedPrice").toString()
+                            itemPrices.add(tempString.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
@@ -198,10 +187,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             else
                                 tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
-                            tempLongTwo =
-                                document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong()
-                            coveredShipping.add(tempLongTwo.toDouble())
+                            tempString = document.get("coveredShipping").toString()
+                            coveredShipping.add(tempString.toDouble())
                             if (document.contains("imagePath"))
                                 images.add(document.get("imagePath") as String)
                             else
@@ -241,9 +228,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
                 queryResult = results.documents
-                //TODO: Find permanent solution to workaround in assignment of longs
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
                 val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
@@ -259,10 +244,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             emails.add(document.get("acctEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong =
-                                document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong()
-                            itemPrices.add(tempLong.toDouble())
+                            tempString = document.get("requestedPrice").toString()
+                            itemPrices.add(tempString.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
@@ -273,10 +256,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             else
                                 tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
-                            tempLongTwo =
-                                document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong()
-                            coveredShipping.add(tempLongTwo.toDouble())
+                            tempString = document.get("coveredShipping").toString()
+                            coveredShipping.add(tempString.toDouble())
                             if(document.contains("imagePath"))
                                 images.add(document.get("imagePath") as String)
                             else
@@ -326,7 +307,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
-    ///TODO Fills your posts
     private fun fillYourPosts(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
                               locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
