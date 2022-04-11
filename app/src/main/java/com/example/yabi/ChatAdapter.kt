@@ -6,28 +6,27 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import org.json.JSONException
 
 
 class ChatAdapter(
     var context: Context,
-    var offers: Array<Boolean>,
     var accounts: Array<String>,
-    var titles: Array<String>,
-    var descriptions: Array<String>,
-    var prices: Array<Double>,
-    var locationTo: Array<String>,
-    var locationFrom: Array<String>,
-    var shippingSeller: Array<Boolean>,
-    var covering: Array<Double>
+    var messages: Array<String>,
+    var isOffer: Array<Double>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     override fun getItemViewType(position: Int): Int {
+        return 1
+        /*
         try {
             return if (offers[position]) {
                 1
@@ -38,118 +37,65 @@ class ChatAdapter(
             e.printStackTrace()
         }
         return -1
+
+         */
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         val inflater = LayoutInflater.from(context)
         val view: View
-        if (viewType == 0) {
-            view = inflater.inflate(R.layout.message, parent, false)
-            return MessageViewHolder(view)
-        }
-        else {
-            view = inflater.inflate(R.layout.offer_card, parent, false)
-            return OfferViewHolder(view)
-        }
+        view = inflater.inflate(R.layout.message, parent, false)
+        return MessageViewHolder(view)
     }
 
-    @SuppressLint("SetTextI18n")
+    //@SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        if(offers[position])
-        {
-
-            (holder as OfferViewHolder).titleTextVew.text = titles[position]
-            if(accounts[position] == "us")
-                holder.userTextVew.text = "Your Offer"
-            else
-                holder.userTextVew.text = accounts[position] + "'s Offer"
-
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(holder.constraint)
-            if(accounts[position] == "them") {
-                constraintSet.connect(
-                    R.id.offerUserText,
-                    ConstraintSet.LEFT,
-                    R.id.parentConstraint,
-                    ConstraintSet.LEFT,
-                )
-            }
-            if(accounts[position] == "us") {
-                constraintSet.connect(
-                    R.id.offerUserText,
-                    ConstraintSet.RIGHT,
-                    R.id.parentConstraint,
-                    ConstraintSet.RIGHT,
-                )
-            }
-            constraintSet.applyTo(holder.constraint)
-
-            holder.descTextView.text = descriptions[position]
-            holder.priceTextView.text = String.format("$%.2f", prices[position])
-            val fromText = "From: " + locationFrom[position]
-            holder.locationFromTextView.text = fromText
-            val toText = "To: " + locationTo[position]
-            holder.locationToTextView.text = toText
-
-            var shipText = "Shipping: "
-            shipText += if(shippingSeller[position])
-                "Seller, "
-            else
-                "Buyer, "
-
-            shipText += if(covering[position] == -1.0)
-                "In Full"
-            else
-                "Up To $" + String.format("%.2f", covering[position])
-            holder.shippingTextView.text = shipText
+        (holder as MessageViewHolder).userText.text = messages[position]
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(holder.constraint)
+        if(accounts[position] == "them") {
+            constraintSet.connect(
+                R.id.cardBox,
+                ConstraintSet.LEFT,
+                R.id.messageConstraint,
+                ConstraintSet.LEFT,
+                5
+            )
+            holder.cardBox.setCardBackgroundColor(Color.DKGRAY)
         }
-        else
-        {
-            (holder as MessageViewHolder).userText.text = descriptions[position]
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(holder.constraint)
-            if(accounts[position] == "them") {
-                constraintSet.connect(
-                    R.id.cardBox,
-                    ConstraintSet.LEFT,
-                    R.id.messageConstraint,
-                    ConstraintSet.LEFT,
-                    5
-                )
-                holder.cardBox.setCardBackgroundColor(Color.DKGRAY)
-            }
-            if(accounts[position] == "us") {
-                constraintSet.connect(
-                    R.id.cardBox,
-                    ConstraintSet.RIGHT,
-                    R.id.messageConstraint,
-                    ConstraintSet.RIGHT,
-                    5
-                )
-            }
-            constraintSet.applyTo(holder.constraint)
-
+        if(accounts[position] == "us") {
+            constraintSet.connect(
+                R.id.cardBox,
+                ConstraintSet.RIGHT,
+                R.id.messageConstraint,
+                ConstraintSet.RIGHT,
+                5
+            )
         }
+        if(messages[position].substring(0, "listingImages/".length + 1) == "listingImages/")
+        {
+            holder.userImage.visibility = View.VISIBLE
+            holder.userText.visibility = View.GONE
+
+            val mStorage = FirebaseStorage.getInstance().reference
+
+            mStorage.child(messages[position]).downloadUrl.addOnSuccessListener { results ->
+                Picasso.get().load(results).into(holder.userImage)
+            }
+        }
+        constraintSet.applyTo(holder.constraint)
+
+        if(isOffer[position] != -1.0)
+        {
+            holder.offerButton.visibility = View.VISIBLE
+        }
+
     }
 
     override fun getItemCount(): Int {
-        return offers.size
-    }
-
-    internal class OfferViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
-        val constraint: androidx.constraintlayout.widget.ConstraintLayout = itemView.findViewById(R.id.parentConstraint)
-        val userTextVew: TextView = itemView.findViewById(R.id.offerUserText)
-        val titleTextVew: TextView = itemView.findViewById(R.id.titleText)
-        val descTextView: TextView = itemView.findViewById(R.id.descriptionText)
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val priceTextView: TextView = itemView.findViewById(R.id.priceTextView)
-        val locationFromTextView: TextView = itemView.findViewById(R.id.locTextView)
-        val locationToTextView: TextView = itemView.findViewById(R.id.fromTextView)
-        val shippingTextView: TextView = itemView.findViewById(R.id.shipTextView)
-
+        return messages.size
     }
 
     internal class MessageViewHolder(itemView: View) :
@@ -157,5 +103,7 @@ class ChatAdapter(
         val constraint: androidx.constraintlayout.widget.ConstraintLayout = itemView.findViewById(R.id.messageConstraint)
         val cardBox: androidx.cardview.widget.CardView = itemView.findViewById(R.id.cardBox)
         val userText: TextView = itemView.findViewById(R.id.userText)
+        val userImage: ImageView = itemView.findViewById(R.id.imageView)
+        val offerButton: Button = itemView.findViewById(R.id.offerButton)
     }
 }

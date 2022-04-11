@@ -1,27 +1,27 @@
 package com.example.yabi
 
+
 import android.Manifest
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.provider.MediaStore
-import android.view.View
-import android.widget.Toast
-import android.widget.ArrayAdapter
-
-
-import kotlinx.android.synthetic.main.activity_add_post.*
-import kotlinx.android.synthetic.main.activity_main.toolbar
 import android.net.Uri
-import androidx.constraintlayout.widget.ConstraintSet
+import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintSet
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.activity_add_post.*
+import kotlinx.android.synthetic.main.activity_main.toolbar
 import pub.devrel.easypermissions.EasyPermissions
+
 
 class AddPost : AppCompatActivity() {
 
@@ -46,7 +46,18 @@ class AddPost : AppCompatActivity() {
 
     fun onPressPost(view: android.view.View) {
 
-        if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
+        if(intent.hasExtra("fromChat"))
+        {
+            val returnIntent = Intent()
+            returnIntent.putExtra("price", editTextRequestingPrice.text.toString())
+            returnIntent.putExtra("buyerShipping", buyerCoverShippingButton.isChecked)
+            returnIntent.putExtra("coverInFull", coverShippingFullButton.isChecked)
+            returnIntent.putExtra("coveredInPart", editTextCoverShippingUntil.text.toString())
+            setResult(RESULT_OK, returnIntent)
+            finish()
+        }
+
+        else if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
         {
             val itemName = editTextItemName.text.toString()
             val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
@@ -168,7 +179,7 @@ class AddPost : AppCompatActivity() {
             toolbar.title = "Edit Posting"
             postButton.text = getString(R.string.save_changes)
         }
-        if(intent.hasExtra("isCounter"))
+        if(intent.hasExtra("isCounter") || intent.hasExtra("fromChat"))
         {
             toolbar.title = "Create Offer"
             postButton.text = getString(R.string.submit_offer)
@@ -189,6 +200,10 @@ class AddPost : AppCompatActivity() {
             radioGroupLocation.visibility = View.GONE
             priceText.text = getString(R.string.your_offer)
             postButton.text = getString(R.string.submit_offer)
+        }
+        if(intent.hasExtra("fromChat"))
+        {
+            button2.visibility = View.GONE
         }
         if(intent.hasExtra("title"))
         {
