@@ -114,4 +114,5 @@
     <string name="user_s_offer">User\'s Offer</string>
     <string name="from_sometown_aa">From: SomeTown, AA</string>
     <string name="to_sometown_aa">To: SomeTown, AA</string>
+    <string name="accept_offer">Accept Offer</string>
 </resources>
