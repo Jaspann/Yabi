@@ -94,7 +94,7 @@ class SignUp : AppCompatActivity() {
                             "Registration successful",
                             Toast.LENGTH_SHORT
                         ).show()
-                        onSignUpSuccess(userID)
+                        onSignUpSuccess(userID, emailText)
                     }
                     .addOnFailureListener { e ->
                         Log.w(TAG, "Error adding user document", e)
@@ -108,12 +108,13 @@ class SignUp : AppCompatActivity() {
         }
     }
 
-    private fun onSignUpSuccess(userID: String)
+    private fun onSignUpSuccess(userID: String, acctEmail: String)
     {
 
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("userID", userID)
+        editor.putString("acctEmail", acctEmail)
         editor.apply()
 
         val intent = Intent(this, Settings::class.java)
@@ -131,6 +132,7 @@ class SignUp : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("userID", "guest")
+        editor.putString("acctEmail", "guest")
         editor.apply()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

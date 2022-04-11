@@ -91,8 +91,11 @@ class AddPost : AppCompatActivity() {
             val listingUserID = sharedPreferences.getString("userID", "guest")
 
             if(listingUserID != "guest") {
+                val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+                val acctEmail = sharedPreferences.getString("acctEmail", "guest")
                 val listing = hashMapOf(
                     "userID" to listingUserID,
+                    "acctEmail" to acctEmail,
                     "itemName" to itemName,
                     "requestedPrice" to requestedPrice,
                     "coverShipping" to coverShipping,
