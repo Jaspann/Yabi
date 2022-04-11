@@ -20,7 +20,7 @@ class ChatAdapter(
     var context: Context,
     var accounts: Array<String>,
     var messages: Array<String>,
-    var isOffer: Array<Boolean>
+    var isOffer: Array<Double>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -87,7 +87,7 @@ class ChatAdapter(
         }
         constraintSet.applyTo(holder.constraint)
 
-        if(isOffer[position])
+        if(isOffer[position] != -1.0)
         {
             holder.offerButton.visibility = View.VISIBLE
         }

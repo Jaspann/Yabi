@@ -68,14 +68,14 @@ class PostChat : AppCompatActivity() {
             "Will this work for you?",
             "sounds good to me."
         )
-        val offers = arrayOf(false, false, false, false, false, false, false, true)
+        val offers = arrayOf(-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 20.00)
 
         fillChatMsg(account, messages, offers)
 
 
     }
 
-    private fun fillChatMsg(accounts: Array<String>, messages: Array<String>, offers: Array<Boolean>)
+    private fun fillChatMsg(accounts: Array<String>, messages: Array<String>, offers: Array<Double>)
     {
         val data = ArrayList<ChatViewModel>()
 
