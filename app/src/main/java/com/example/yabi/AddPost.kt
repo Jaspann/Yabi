@@ -120,8 +120,8 @@ class AddPost : AppCompatActivity() {
         //TODO: For Offers
         if (intent.hasExtra("isCounter")) {
             val db = Firebase.firestore
-
-            val buyerID = intent.getStringExtra("userID")
+            val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+            val buyerID = sharedPreferences.getString("userID", "guest")
             val itemName = editTextItemName.text.toString()
             val youroffer = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked

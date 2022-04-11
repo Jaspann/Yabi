@@ -501,10 +501,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val intent = Intent(this, Account::class.java)
                     startActivity(intent)
                 }
+                */
                 R.id.nav_chat -> {
                     val intent = Intent(this, Messaging::class.java)
                     startActivity(intent)
                 }
+                /*
                 R.id.nav_posts -> {
                     val intent = Intent(this, YourPosts::class.java)
                     startActivity(intent)

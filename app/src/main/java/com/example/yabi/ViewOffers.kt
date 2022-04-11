@@ -120,7 +120,8 @@ class ViewOffers : AppCompatActivity() {
     private fun getOffers() {
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
-        val userID = intent.getStringExtra("userID")
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
         val itemName = originalPost.titleText.text
         db.collection("offer")
             .orderBy("itemName", Query.Direction.DESCENDING)
@@ -135,7 +136,7 @@ class ViewOffers : AppCompatActivity() {
                 val offerPrices = arrayListOf<Double>()
                 for (document in queryResult) {
                     try {
-                        if (document.get("userID") == userID && document.get("itemName") == itemName) {
+                        if (document.get("userID") != userID && document.get("itemName") == itemName) {
                             itemNames.add(document.get("itemName") as String)
                             tempLong = (document.get("youroffer").toString().substringBefore('.')
                                 .toLong() as Long)
