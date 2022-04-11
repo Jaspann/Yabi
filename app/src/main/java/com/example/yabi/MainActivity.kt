@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
         refreshLocal.setOnRefreshListener(OnRefreshListener {
             refreshLocal.isRefreshing = false
-            //getForYouPosts()
+            //getLocalPosts()
         })
         refreshNewPosts.setOnRefreshListener(OnRefreshListener {
             refreshNewPosts.isRefreshing = false
@@ -211,36 +211,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         Log.e("MainActivity", "Error processing listings", e)
                     } catch (e: ClassCastException) {
                         Log.e("MainActivity", "Error casting listing types", e)
-                    }
-                }
-
-
-                val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-
-                if (
-                    sharedPreferences.getBoolean("Furniture", false) ||
-                    sharedPreferences.getBoolean("Games", false) ||
-                    sharedPreferences.getBoolean("Cards", false) ||
-                    sharedPreferences.getBoolean("Paintings", false) ||
-                    sharedPreferences.getBoolean("Clothing", false) ||
-                    sharedPreferences.getBoolean("Home Improvement", false) ||
-                    sharedPreferences.getBoolean("Accessory", false) ||
-                    sharedPreferences.getBoolean("Collectable", false)
-                ) {
-                    var index = 0
-                    while (index < itemNames.size) {
-                        val hasTag = sharedPreferences.getBoolean(tags[index], false)
-                        if (!hasTag) {
-                            itemNames.removeAt(index)
-                            itemDescriptions.removeAt(index)
-                            itemPrices.removeAt(index)
-                            locations.removeAt(index)
-                            tags.removeAt(index)
-                            coverShipping.removeAt(index)
-                            coveredShipping.removeAt(index)
-                            images.removeAt(index)
-                        } else
-                            index++
                     }
                 }
 
