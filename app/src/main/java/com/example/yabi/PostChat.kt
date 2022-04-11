@@ -3,23 +3,18 @@ package com.example.yabi
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_post_chat.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -41,7 +36,7 @@ class PostChat : AppCompatActivity() {
                 keyCode == KeyEvent.KEYCODE_ENTER
             ) {
 
-                sendMessage(userMessageInput.text.toString())
+                sendMessage(userMessageInput.text.toString(), -1.0)
 
                 userMessageInput.text = null
                 return@OnKeyListener true
@@ -50,7 +45,8 @@ class PostChat : AppCompatActivity() {
         })
     }
 
-    private fun sendMessage(message: String)
+    //price == -1.0 if not an offer
+    private fun sendMessage(message: String?, price: Double?)
     {
         //TODO: send message to database
     }
@@ -92,7 +88,7 @@ class PostChat : AppCompatActivity() {
         recyclerview.adapter = adapter
     }
 
-    private val options = arrayOf("Add Image", "Submit Offer")
+    private val options = arrayOf("Add Image", "Make Offer")
 
     fun onPressCreateOffer(view: View)
     {
@@ -102,8 +98,8 @@ class PostChat : AppCompatActivity() {
                 options,
             ) { dialog, which ->
                 when (which) {
-                    0 -> makeCounter()
-                    1 -> addImage()
+                    0 -> addImage()
+                    1 -> makeCounter()
                 }
             }
             .setNegativeButton("Cancel"
@@ -121,8 +117,20 @@ class PostChat : AppCompatActivity() {
     private fun makeCounter()
     {
         val intent = Intent(this, AddPost::class.java)
-        intent.putExtra("isCounter", true)
+        intent.putExtra("fromChat", true)
         startActivity(intent)
+
+
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        if(sharedPreferences.getString("chatOffer", "") != "")
+        {
+            sendMessage(sharedPreferences.getString("chatOffer", ""), (sharedPreferences.getString("offerPrice", "")?.toDouble()))
+        }
+
+        val editor = sharedPreferences.edit()
+        editor.remove("chatOffer")
+        editor.remove("offerPrice")
+        editor.apply()
     }
 
     private fun addImage()
@@ -182,7 +190,7 @@ class PostChat : AppCompatActivity() {
                 ).show()
             }
 
-            sendMessage(path)
+            sendMessage(path, -1.0)
         }
         else
         {
