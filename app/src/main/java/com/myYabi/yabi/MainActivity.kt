@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(toolbar)
         setSupportActionBar(toolbar)
         nav_view.setNavigationItemSelectedListener(this)
@@ -67,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
         refreshLocal.setOnRefreshListener(OnRefreshListener {
             refreshLocal.isRefreshing = false
-            //getForYouPosts()
+            //getLocalPosts()
         })
         refreshNewPosts.setOnRefreshListener(OnRefreshListener {
             refreshNewPosts.isRefreshing = false
@@ -100,9 +99,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
                 queryResult = results.documents
-                //TODO: Find permanent solution to workaround in assignment of longs
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
                 val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
@@ -118,10 +115,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             emails.add(document.get("acctEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong =
-                                document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong()
-                            itemPrices.add(tempLong.toDouble())
+                            tempString = document.get("requestedPrice").toString()
+                            itemPrices.add(tempString.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
@@ -132,10 +127,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             else
                                 tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
-                            tempLongTwo =
-                                document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong()
-                            coveredShipping.add(tempLongTwo.toDouble())
+                            tempString = document.get("coveredShipping").toString()
+                            coveredShipping.add(tempString.toDouble())
                             if(document.contains("imagePath"))
                                 images.add(document.get("imagePath") as String)
                             else
@@ -156,7 +149,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    //TODO: fills your posts with your posts
     private fun getYourPosts() {
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
@@ -169,9 +161,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
                 queryResult = results.documents
-                //TODO: Find permanent solution to workaround in assignment of longs
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
@@ -185,10 +175,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         if (document.get("userID") == userID) {
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong =
-                                document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong()
-                            itemPrices.add(tempLong.toDouble())
+                            tempString = document.get("requestedPrice").toString()
+                            itemPrices.add(tempString.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
@@ -199,10 +187,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             else
                                 tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
-                            tempLongTwo =
-                                document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong()
-                            coveredShipping.add(tempLongTwo.toDouble())
+                            tempString = document.get("coveredShipping").toString()
+                            coveredShipping.add(tempString.toDouble())
                             if (document.contains("imagePath"))
                                 images.add(document.get("imagePath") as String)
                             else
@@ -212,36 +198,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         Log.e("MainActivity", "Error processing listings", e)
                     } catch (e: ClassCastException) {
                         Log.e("MainActivity", "Error casting listing types", e)
-                    }
-                }
-
-
-                val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-
-                if (
-                    sharedPreferences.getBoolean("Furniture", false) ||
-                    sharedPreferences.getBoolean("Games", false) ||
-                    sharedPreferences.getBoolean("Cards", false) ||
-                    sharedPreferences.getBoolean("Paintings", false) ||
-                    sharedPreferences.getBoolean("Clothing", false) ||
-                    sharedPreferences.getBoolean("Home Improvement", false) ||
-                    sharedPreferences.getBoolean("Accessory", false) ||
-                    sharedPreferences.getBoolean("Collectable", false)
-                ) {
-                    var index = 0
-                    while (index < itemNames.size) {
-                        val hasTag = sharedPreferences.getBoolean(tags[index], false)
-                        if (!hasTag) {
-                            itemNames.removeAt(index)
-                            itemDescriptions.removeAt(index)
-                            itemPrices.removeAt(index)
-                            locations.removeAt(index)
-                            tags.removeAt(index)
-                            coverShipping.removeAt(index)
-                            coveredShipping.removeAt(index)
-                            images.removeAt(index)
-                        } else
-                            index++
                     }
                 }
 
@@ -272,9 +228,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addOnSuccessListener { results ->
                 Log.d("TAG", "Listings retrieved.")
                 queryResult = results.documents
-                //TODO: Find permanent solution to workaround in assignment of longs
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
                 val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
@@ -290,10 +244,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             emails.add(document.get("acctEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             itemDescriptions.add(document.get("itemDescription") as String)
-                            tempLong =
-                                document.get("requestedPrice").toString().substringBefore('.')
-                                    .toLong()
-                            itemPrices.add(tempLong.toDouble())
+                            tempString = document.get("requestedPrice").toString()
+                            itemPrices.add(tempString.toDouble())
                             locations.add(
                                 document.get("shippingCity") as String + ", " + document.get(
                                     "shippingState"
@@ -304,10 +256,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             else
                                 tags.add("")
                             coverShipping.add(document.get("coverShipping") as Boolean)
-                            tempLongTwo =
-                                document.get("coveredShipping").toString().substringBefore('.')
-                                    .toLong()
-                            coveredShipping.add(tempLongTwo.toDouble())
+                            tempString = document.get("coveredShipping").toString()
+                            coveredShipping.add(tempString.toDouble())
                             if(document.contains("imagePath"))
                                 images.add(document.get("imagePath") as String)
                             else
@@ -357,18 +307,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
-    ///TODO Fills your posts
     private fun fillYourPosts(itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
                               locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>)
     {
         val data = ArrayList<YourPostViewModel>()
 
-
-
         for (i in itemNames.indices) {
             data.add(YourPostViewModel(itemNames[i], itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i], coveredShipping[i], this))
         }
-
 
         val recyclerview = findViewById<RecyclerView>(R.id.YourPostsRecycler)
 
@@ -506,10 +452,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val intent = Intent(this, Account::class.java)
                     startActivity(intent)
                 }
+                */
                 R.id.nav_chat -> {
                     val intent = Intent(this, Messaging::class.java)
                     startActivity(intent)
                 }
+                /*
                 R.id.nav_posts -> {
                     val intent = Intent(this, YourPosts::class.java)
                     startActivity(intent)

@@ -98,11 +98,11 @@ class ViewOffers : AppCompatActivity() {
 
     }
 
-    private fun fillOffers(itemNames: List<String>, offerPrices: List<Double>)
+    private fun fillOffers(emails : List<String>,itemNames: List<String>, offerPrices: List<Double>)
     {
         val data = ArrayList<OfferViewModel>()
         for (i in itemNames.indices) {
-            data.add(OfferViewModel("user", itemNames[i], offerPrices[i], this))
+            data.add(OfferViewModel(emails[i], itemNames[i], offerPrices[i], this))
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.offersRecycler)
@@ -118,36 +118,38 @@ class ViewOffers : AppCompatActivity() {
     private fun getOffers() {
         val db = Firebase.firestore
         var queryResult: MutableList<DocumentSnapshot>
-        val userID = intent.getStringExtra("userID")
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
         val itemName = originalPost.titleText.text
-        db.collection("offer")
+        db.collection("offers")
             .orderBy("itemName", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { results ->
                 Log.d("TAG", "offers retrieved.")
                 queryResult = results.documents
-
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString: String
+                val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val offerPrices = arrayListOf<Double>()
                 for (document in queryResult) {
                     try {
-                        if (document.get("userID") == userID && document.get("itemName") == itemName) {
+                        if (document.get("userID") != userID && document.get("itemName") == itemName) {
+                            emails.add(document.get("BuyerEmail") as String)
                             itemNames.add(document.get("itemName") as String)
-                            tempLong = (document.get("youroffer").toString().substringBefore('.')
-                                .toLong() as Long)
-                            offerPrices.add(tempLong.toDouble())
+                            tempString = document.get("youroffer").toString()
+                            try {
+                                offerPrices.add(tempString.toDouble())
+                            } catch (e: NullPointerException) {
+                            Log.e("MainActivity", "Error processing listings", e)
+                            }
 
                         }
-                    } catch (e: NullPointerException) {
-                        Log.e("MainActivity", "Error processing listings", e)
                     } catch (e: ClassCastException) {
                         Log.e("MainActivity", "Error casting listing types", e)
                     }
                 }
 
-                fillOffers(itemNames, offerPrices)
+                fillOffers(emails,itemNames, offerPrices)
             }
             .addOnFailureListener { e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
