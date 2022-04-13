@@ -1,27 +1,16 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.google.firebase.firestore.FieldValue
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import org.json.JSONException
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
-import java.lang.RuntimeException
-
+import myYabi.yabi.R
 
 
 class SignUp : AppCompatActivity() {

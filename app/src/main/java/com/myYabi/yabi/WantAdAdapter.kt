@@ -1,4 +1,4 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import android.content.Intent
 import android.graphics.Color
@@ -10,7 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_add_post.*
+import myYabi.yabi.R
 
 
 class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Adapter<WantAdAdapter.ViewHolder>() {
@@ -68,7 +68,7 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
         holder.shipping.text = shipText
 
         holder.wantAdButton.setOnClickListener {
-            if(ItemsViewModel.context.toString().substringBefore('@') == "com.example.yabi.ViewOffers")
+            if(ItemsViewModel.context.toString().substringBefore('@') == "com.myYabi.yabi.ViewOffers")
             {
                 val intent = Intent(ItemsViewModel.context, PostChat::class.java)
                 intent.putExtra("username", ItemsViewModel.username)

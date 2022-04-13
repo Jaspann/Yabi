@@ -1,4 +1,4 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import org.junit.Test
 

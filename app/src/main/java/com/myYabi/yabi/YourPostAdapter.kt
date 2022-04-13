@@ -1,4 +1,4 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.your_post_card.view.*
-import org.w3c.dom.Text
+import myYabi.yabi.R
 
 class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView.Adapter<YourPostAdapter.ViewHolder>() {
 

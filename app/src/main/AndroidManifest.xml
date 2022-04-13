@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.yabi">
+    package="myYabi.yabi">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,40 +14,40 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Yabi">
         <activity
-            android:name=".PostChat"
+            android:name="com.myYabi.yabi.PostChat"
             android:exported="false" />
         <activity
-            android:name=".Settings"
+            android:name="com.myYabi.yabi.Settings"
             android:exported="false" />
         <activity
-            android:name=".ViewOffers"
+            android:name="com.myYabi.yabi.ViewOffers"
             android:exported="false" />
         <activity
-            android:name=".AddPost"
+            android:name="com.myYabi.yabi.AddPost"
             android:exported="false" />
         <activity
-            android:name=".Search"
+            android:name="com.myYabi.yabi.Search"
             android:exported="false" />
         <activity
-            android:name=".CompletedOffers"
+            android:name="com.myYabi.yabi.CompletedOffers"
             android:exported="false" />
         <activity
-            android:name=".YourPosts"
+            android:name="com.myYabi.yabi.YourPosts"
             android:exported="false" />
         <activity
-            android:name=".Messaging"
+            android:name="com.myYabi.yabi.Messaging"
             android:exported="false" />
         <activity
-            android:name=".Account"
+            android:name="com.myYabi.yabi.Account"
             android:exported="false" />
         <activity
-            android:name=".LogIn"
+            android:name="com.myYabi.yabi.LogIn"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.myYabi.yabi.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUp"
+            android:name="com.myYabi.yabi.SignUp"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,17 +1,14 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.core.view.GravityCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_log_in.*
-import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONException
-import java.lang.RuntimeException
+import myYabi.yabi.R
 
 
 class LogIn : AppCompatActivity() {

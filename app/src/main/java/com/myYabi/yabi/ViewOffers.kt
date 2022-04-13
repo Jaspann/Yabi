@@ -1,4 +1,4 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,15 +10,13 @@ import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_view_offers.*
 import kotlinx.android.synthetic.main.want_ad_card.view.titleText
 import kotlinx.android.synthetic.main.your_post_card.view.*
-import com.google.android.material.navigation.NavigationBarView
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import myYabi.yabi.R
 
 class ViewOffers : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

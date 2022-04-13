@@ -1,4 +1,4 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import android.Manifest
 import android.app.Activity
@@ -10,6 +10,8 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -17,12 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
+import com.android.billingclient.api.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_post_chat.*
+import myYabi.yabi.R
 import pub.devrel.easypermissions.EasyPermissions
 
 
@@ -105,7 +108,7 @@ class PostChat : AppCompatActivity() {
 
         recyclerview.layoutManager = LinearLayoutManager(this)
 
-        val adapter = ChatAdapter(this, accounts, messages, offers)
+        val adapter = ChatAdapter(this, this, accounts, messages, offers)
 
         recyclerview.adapter = adapter
     }
@@ -148,7 +151,7 @@ class PostChat : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == Activity.RESULT_OK){
 
-                var text = "New offer: price of " + it.data?.getStringExtra("price") + "$ with shipping being covered by "
+                var text = "New offer: price of $" + it.data?.getStringExtra("price") + "0 with shipping being covered by "
                 if(it.data?.getBooleanExtra("buyerShipping", false) == true)
                     text += "buyer "
                 else
@@ -230,10 +233,6 @@ class PostChat : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-
-    }
-
-    fun onPressAcceptOffer(view: View) {
 
     }
 }

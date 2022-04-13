@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="10dp">
+    android:paddingVertical="5dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardBox"
@@ -53,9 +53,9 @@
                 android:backgroundTint="@color/purple_500"
                 android:text="@string/accept_offer"
                 android:textSize="12sp"
+                android:layout_marginStart="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userText"
-                android:onClick="onPressAcceptOffer"/>
+                app:layout_constraintTop_toBottomOf="@+id/userText"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

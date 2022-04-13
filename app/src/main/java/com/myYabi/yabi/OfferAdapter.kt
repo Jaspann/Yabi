@@ -1,7 +1,5 @@
-package com.example.yabi
+package com.myYabi.yabi
 
-import android.content.ClipData
-import android.content.Context
 import android.content.Intent
 import android.widget.Button
 import android.view.LayoutInflater
@@ -9,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-import kotlinx.android.synthetic.main.offer_card.view.*
+import myYabi.yabi.R
 
 class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapter<OfferAdapter.ViewHolder>() {
 

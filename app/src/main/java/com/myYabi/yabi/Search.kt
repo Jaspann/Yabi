@@ -1,4 +1,4 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -17,10 +17,10 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_search.*
+import myYabi.yabi.R
 import java.lang.NumberFormatException
 
 class Search : AppCompatActivity() {

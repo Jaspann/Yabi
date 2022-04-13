@@ -1,4 +1,4 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import android.util.Log
 import com.google.firebase.firestore.*
