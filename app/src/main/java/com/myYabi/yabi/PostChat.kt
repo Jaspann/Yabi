@@ -132,7 +132,7 @@ class PostChat : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == Activity.RESULT_OK){
 
-                var text = "New offer: price of " + it.data?.getStringExtra("price") + "$ with shipping being covered by "
+                var text = "New offer: price of $" + it.data?.getStringExtra("price") + "0 with shipping being covered by "
                 if(it.data?.getBooleanExtra("buyerShipping", false) == true)
                     text += "buyer "
                 else

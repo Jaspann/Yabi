@@ -187,29 +187,29 @@ class ChatAdapter(
                 ) {
                     val itemInfo :SkuDetails
                     if(price <= 1.5)
-                        itemInfo = list[productIds.indexOf("1_dollars")]
-                    else if (price > 1.5 && price <= 2.5)
-                        itemInfo = list[1]
-                    else if (price > 2.5 && price <= 3.5)
-                        itemInfo = list[2]
-                    else if (price > 3.5 && price <= 4.5)
                         itemInfo = list[3]
-                    else if (price > 4.5 && price <= 7.0)
-                        itemInfo = list[4]
-                    else if (price > 7.0 && price <= 12.5)
-                        itemInfo = list[5]
-                    else if (price > 12.5 && price <= 17.5)
+                    else if (price > 1.5 && price <= 2.5)
                         itemInfo = list[6]
-                    else if (price > 17.5 && price <= 22.5)
+                    else if (price > 2.5 && price <= 3.5)
                         itemInfo = list[7]
-                    else if (price > 22.5 && price <= 35.0)
+                    else if (price > 3.5 && price <= 4.5)
                         itemInfo = list[8]
+                    else if (price > 4.5 && price <= 7.0)
+                        itemInfo = list[10]
+                    else if (price > 7.0 && price <= 12.5)
+                        itemInfo = list[1]
+                    else if (price > 12.5 && price <= 17.5)
+                        itemInfo = list[2]
+                    else if (price > 17.5 && price <= 22.5)
+                        itemInfo = list[4]
+                    else if (price > 22.5 && price <= 35.0)
+                        itemInfo = list[5]
                     else if (price > 35.0 && price <= 65.0)
                         itemInfo = list[9]
                     else if (price > 65.0 && price <= 85.0)
-                        itemInfo = list[10]
-                    else if (price > 85.0)
                         itemInfo = list[11]
+                    else if (price > 85.0)
+                        itemInfo = list[0]
                     else
                         itemInfo = list[5]
                     button.setOnClickListener {
