@@ -9,11 +9,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.KeyEvent
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.billingclient.api.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -86,7 +89,7 @@ class PostChat : AppCompatActivity() {
 
         recyclerview.layoutManager = LinearLayoutManager(this)
 
-        val adapter = ChatAdapter(this, accounts, messages, offers)
+        val adapter = ChatAdapter(this, this, accounts, messages, offers)
 
         recyclerview.adapter = adapter
     }
@@ -211,11 +214,6 @@ class PostChat : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-
-    }
-
-    fun onPressAcceptOffer(view: View)
-    {
 
     }
 }
