@@ -3,6 +3,7 @@ package com.myYabi.yabi
 import android.content.Context
 
 data class YourPostViewModel(
+    val listingID: String,
     val title : String,
     val desc : String,
     // val img : Int,

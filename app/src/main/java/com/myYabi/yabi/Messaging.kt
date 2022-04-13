@@ -76,7 +76,7 @@ class Messaging : AppCompatActivity() {
                         if (document.get("BuyerID") == userID) {
                             emails.add(document.get("BuyerEmail") as String)
                             itemNames.add(document.get("itemName") as String)
-                            tempLong = (document.get("youroffer").toString().substringBefore('.')
+                            tempLong = (document.get("yourOffer").toString().substringBefore('.')
                                 .toLong() as Long)
                             offerPrices.add(tempLong.toDouble())
 

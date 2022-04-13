@@ -136,7 +136,7 @@ class ViewOffers : AppCompatActivity() {
                         if (document.get("userID") != userID && document.get("itemName") == itemName) {
                             emails.add(document.get("BuyerEmail") as String)
                             itemNames.add(document.get("itemName") as String)
-                            tempString = document.get("youroffer").toString()
+                            tempString = document.get("yourOffer").toString()
                             try {
                                 offerPrices.add(tempString.toDouble())
                             } catch (e: NullPointerException) {

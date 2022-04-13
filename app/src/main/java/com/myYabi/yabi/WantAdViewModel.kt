@@ -3,6 +3,7 @@ package com.myYabi.yabi
 import android.content.Context
 
 data class WantAdViewModel(
+    val listingID: String,
     val username: String,
     val rating: Int,
     val title: String,

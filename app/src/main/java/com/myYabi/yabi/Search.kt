@@ -125,6 +125,8 @@ class Search : AppCompatActivity() {
                 //TODO: Find permanent solution to workaround in assignment of longs
                 var tempLong: Long
                 var tempLongTwo: Long
+                val listingIDs = arrayListOf<String>()
+                val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val itemDescriptions = arrayListOf<String>()
                 val itemPrices = arrayListOf<Double>()
@@ -135,6 +137,8 @@ class Search : AppCompatActivity() {
                 val images = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
+                        listingIDs.add(document.id)
+                        emails.add(document.get("acctEmail") as String)
                         itemNames.add(document.get("itemName") as String)
                         itemDescriptions.add(document.get("itemDescription") as String)
                         tempLong = document.get("requestedPrice").toString().substringBefore('.').toLong() as Long
@@ -158,7 +162,7 @@ class Search : AppCompatActivity() {
                         Log.e(TAG, "Error casting listing types", e)
                     }
                 }
-                fillSearch(itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
+                fillSearch(listingIDs, emails, itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
             }
             .addOnFailureListener{ e ->
                 Log.w(TAG, "Failed to retrieve listings.", e)
@@ -170,7 +174,7 @@ class Search : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun fillSearch(itemNames: List<String>, itemDescriptions: List<String>,
+    private fun fillSearch(listingIDs: List<String>, emails: List<String>, itemNames: List<String>, itemDescriptions: List<String>,
                            itemPrices: List<Double>, locations: List<String>,
                            tags: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>)
     {
@@ -179,7 +183,7 @@ class Search : AppCompatActivity() {
         //val photos = arrayOf(0)
 
         for (i in itemNames.indices) {
-            data.add(WantAdViewModel("User", -1, itemNames[i],
+            data.add(WantAdViewModel(listingIDs[i], emails[i], -1, itemNames[i],
                 itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
                 coveredShipping[i], tags[i], images[i], this))
         }

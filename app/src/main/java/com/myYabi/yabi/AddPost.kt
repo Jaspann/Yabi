@@ -221,16 +221,18 @@ class AddPost : AppCompatActivity() {
             val db = Firebase.firestore
             val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
             val buyerID = sharedPreferences.getString("userID", "guest")
+            val listingID = intent.getStringExtra("listingID")
             val itemName = editTextItemName.text.toString()
-            val youroffer = editTextRequestingPrice.text.toString().toDouble()
+            val yourOffer = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked
             val coveredShipping = if (coverShippingFullButton.isChecked) { -1.0 } else { editTextCoverShippingUntil.text.toString().toDouble() }
             val acctEmail = sharedPreferences.getString("acctEmail", "guest")
             val offer = hashMapOf(
-                "BuyerID" to buyerID,
-                "BuyerEmail" to acctEmail,
+                "buyerID" to buyerID,
+                "buyerEmail" to acctEmail,
+                "listingID" to listingID,
                 "itemName" to itemName,
-                "youroffer" to youroffer,
+                "yourOffer" to yourOffer,
             )
             db.collection("offers")
                 .add(offer)
