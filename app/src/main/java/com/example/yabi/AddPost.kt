@@ -140,8 +140,10 @@ class AddPost : AppCompatActivity() {
             val youroffer = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked
             val coveredShipping = if (coverShippingFullButton.isChecked) { -1.0 } else { editTextCoverShippingUntil.text.toString().toDouble() }
+            val acctEmail = sharedPreferences.getString("acctEmail", "guest")
             val offer = hashMapOf(
                 "BuyerID" to buyerID,
+                "BuyerEmail" to acctEmail,
                 "itemName" to itemName,
                 "youroffer" to youroffer,
             )

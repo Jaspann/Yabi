@@ -100,11 +100,11 @@ class ViewOffers : AppCompatActivity() {
 
     }
 
-    private fun fillOffers(itemNames: List<String>, offerPrices: List<Double>)
+    private fun fillOffers(emails : List<String>,itemNames: List<String>, offerPrices: List<Double>)
     {
         val data = ArrayList<OfferViewModel>()
         for (i in itemNames.indices) {
-            data.add(OfferViewModel("user", itemNames[i], offerPrices[i], this))
+            data.add(OfferViewModel(emails[i], itemNames[i], offerPrices[i], this))
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.offersRecycler)
@@ -130,11 +130,13 @@ class ViewOffers : AppCompatActivity() {
                 Log.d("TAG", "offers retrieved.")
                 queryResult = results.documents
                 var tempString: String
+                val emails = arrayListOf<String>()
                 val itemNames = arrayListOf<String>()
                 val offerPrices = arrayListOf<Double>()
                 for (document in queryResult) {
                     try {
                         if (document.get("userID") != userID && document.get("itemName") == itemName) {
+                            emails.add(document.get("BuyerEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             tempString = document.get("youroffer").toString()
                             try {
@@ -149,7 +151,7 @@ class ViewOffers : AppCompatActivity() {
                     }
                 }
 
-                fillOffers(itemNames, offerPrices)
+                fillOffers(emails,itemNames, offerPrices)
             }
             .addOnFailureListener { e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)

@@ -35,11 +35,11 @@ class Messaging : AppCompatActivity() {
         })
     }
 
-    private fun fillOffers(itemNames: List<String>, offerPrices: List<Double>)
+    private fun fillOffers(emails : List<String>, itemNames: List<String>, offerPrices: List<Double>)
     {
         val data = ArrayList<OfferViewModel>()
         for (i in itemNames.indices) {
-            data.add(OfferViewModel("user", itemNames[i], offerPrices[i], this))
+            data.add(OfferViewModel(emails[i], itemNames[i], offerPrices[i], this))
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.ChatListRecycler)
@@ -67,9 +67,11 @@ class Messaging : AppCompatActivity() {
                 var tempLongTwo: Long
                 val itemNames = arrayListOf<String>()
                 val offerPrices = arrayListOf<Double>()
+                val emails = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
                         if (document.get("BuyerID") == userID) {
+                            emails.add(document.get("BuyerEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             tempLong = (document.get("youroffer").toString().substringBefore('.')
                                 .toLong() as Long)
@@ -83,7 +85,7 @@ class Messaging : AppCompatActivity() {
                     }
                 }
 
-                fillOffers(itemNames, offerPrices)
+                fillOffers(emails,itemNames, offerPrices)
             }
             .addOnFailureListener { e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)
