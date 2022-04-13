@@ -1,6 +1,5 @@
-package com.example.yabi
+package com.myYabi.yabi
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -13,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
-import org.json.JSONException
+import myYabi.yabi.R
 
 
 class ChatAdapter(

@@ -1,8 +1,7 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.ktx.firestore
-import org.junit.Assert.*
 import org.junit.Test
 
 class FirebaseHelperTest {
@@ -36,7 +35,7 @@ class FirebaseHelperTest {
         assert(testFirebaseHelper.previousTaskSuccess)
         testFirebaseHelper.resetStatusFlags()
     }
-
+/*
     @Test
     fun createListing() {
         val db = Firebase.firestore
@@ -49,7 +48,7 @@ class FirebaseHelperTest {
         assert(testFirebaseHelper.previousTaskSuccess)
         testFirebaseHelper.resetStatusFlags()
     }
-
+*/
     @Test
     fun createOffer() {
         val db = Firebase.firestore

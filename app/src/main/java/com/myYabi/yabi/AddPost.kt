@@ -1,4 +1,4 @@
-package com.example.yabi
+package com.myYabi.yabi
 
 
 import android.Manifest
@@ -20,6 +20,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_add_post.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
+import myYabi.yabi.R
 import pub.devrel.easypermissions.EasyPermissions
 
 
