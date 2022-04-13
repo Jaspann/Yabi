@@ -59,6 +59,91 @@ class AddPost : AppCompatActivity() {
 
         else if(!intent.hasExtra("isEdit") && !intent.hasExtra("isCounter"))
         {
+            //TODO:: For Preset Location Listing Creation
+            if(buttonLocationLineOne.isChecked == true){
+                val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+                val listingUserID = sharedPreferences.getString("userID", "guest")
+                val shippingStreet = sharedPreferences.getString("street", "")
+                val shippingCity = sharedPreferences.getString("city","")
+                val stateUSList = arrayOf(
+                    "--", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN",
+                    "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
+                    "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT",
+                    "VT", "VA", "WA", "WV","WI","WY")
+                val i : Int = sharedPreferences.getInt("state",0)
+                val shippingState = stateUSList[i]
+                val shippingCountry = "US"
+                val postalCode = sharedPreferences.getInt("zipCode",0)
+                val itemName = editTextItemName.text.toString()
+                val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
+                val coverShipping = buyerCoverShippingButton.isChecked
+                val coveredShipping = if (coverShippingFullButton.isChecked) { -1.0 } else {editTextCoverShippingUntil.text.toString().toDouble() }
+                val itemDescription = editTextTextMultiLine.text.toString()
+                val tag = spinner.selectedItem.toString()
+                val db = Firebase.firestore
+
+                if(listingUserID != "guest") {
+                    val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+                    val acctEmail = sharedPreferences.getString("acctEmail", "guest")
+                    val listing = hashMapOf(
+                        "userID" to listingUserID,
+                        "acctEmail" to acctEmail,
+                        "itemName" to itemName,
+                        "requestedPrice" to requestedPrice,
+                        "coverShipping" to coverShipping,
+                        "coveredShipping" to coveredShipping,
+                        "itemDescription" to itemDescription,
+                        "shippingStreet" to shippingStreet,
+                        "shippingCity" to shippingCity,
+                        "shippingState" to shippingState,
+                        "shippingCountry" to shippingCountry,
+                        "postalCode" to postalCode,
+                        "tag" to tag,
+                        "creationTimestamp" to FieldValue.serverTimestamp()
+                    )
+
+                    if (remoteImagePath != null) {
+                        listing["imagePath"] = remoteImagePath
+                    }
+
+                    db.collection("listings")
+                        .add(listing)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(TAG, "Listing document added with ID: ${documentReference.id}")
+                            Toast.makeText(
+                                applicationContext,
+                                "Listing created successfully.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error adding listing document", e)
+                            Toast.makeText(
+                                applicationContext,
+                                "Error: failed to create listing.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "Must be signed in to create listings.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            else if (buttonLocationCustom.isChecked == false && buttonLocationLineOne.isChecked == false){
+                Toast.makeText(
+                    applicationContext,
+                    "Error:Please select Custom or Preset Shipping",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+
+            //TODO:: For Custom Location creation
+            else if(buttonLocationCustom.isChecked == true){
             val itemName = editTextItemName.text.toString()
             val requestedPrice = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked
@@ -99,11 +184,9 @@ class AddPost : AppCompatActivity() {
                     "tag" to tag,
                     "creationTimestamp" to FieldValue.serverTimestamp()
                 )
-
                 if (remoteImagePath != null) {
                     listing["imagePath"] = remoteImagePath
                 }
-
                 db.collection("listings")
                     .add(listing)
                     .addOnSuccessListener { documentReference ->
@@ -130,6 +213,7 @@ class AddPost : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+        }
         }
         //TODO: For Offers
         if (intent.hasExtra("isCounter")) {
@@ -220,11 +304,18 @@ class AddPost : AppCompatActivity() {
             presetLocationLineOne.text = intent.getStringExtra("location")
             presetLocationLineTwo.visibility = View.GONE
         }
-        else
-        {
-            buttonLocationLineOne.isEnabled = false
-            presetLocationLineOne.visibility = View.GONE
-            presetLocationLineTwo.visibility = View.GONE
+        else {
+            val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+            val stateUSList = arrayOf(
+                "--", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN",
+                "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
+                "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT",
+                "VT", "VA", "WA", "WV","WI","WY")
+            val i : Int = sharedPreferences.getInt("state",0)
+            val State : String = stateUSList[i]
+            presetLocationLineOne.text = sharedPreferences.getString("street", "")
+            presetLocationLineTwo.text = sharedPreferences.getString("city","") + ", " + State + ", " + sharedPreferences.getInt("zipCode",0).toString()
+
         }
         if(intent.hasExtra("shippingSeller"))
         {
