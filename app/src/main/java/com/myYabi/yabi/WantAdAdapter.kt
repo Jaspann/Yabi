@@ -73,12 +73,14 @@ class WantAdAdapter(private val mList: List<WantAdViewModel>) : RecyclerView.Ada
                 val intent = Intent(ItemsViewModel.context, PostChat::class.java)
                 intent.putExtra("username", ItemsViewModel.username)
                 intent.putExtra("listingID", ItemsViewModel.listingID)
+                intent.putExtra("sellerID", ItemsViewModel.sellerID)
                 ItemsViewModel.context.startActivity(intent)
             }
             else {
                 val intent = Intent(ItemsViewModel.context, AddPost::class.java)
                 intent.putExtra("isCounter", true)
                 intent.putExtra("listingID", ItemsViewModel.listingID)
+                intent.putExtra("sellerID", ItemsViewModel.sellerID)
                 intent.putExtra("title", ItemsViewModel.title)
                 intent.putExtra("price", ItemsViewModel.price)
                 intent.putExtra("location", ItemsViewModel.location)

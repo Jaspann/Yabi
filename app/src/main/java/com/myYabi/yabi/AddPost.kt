@@ -222,6 +222,7 @@ class AddPost : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
             val buyerID = sharedPreferences.getString("userID", "guest")
             val listingID = intent.getStringExtra("listingID")
+            val sellerID = intent.getStringExtra("sellerID")
             val itemName = editTextItemName.text.toString()
             val yourOffer = editTextRequestingPrice.text.toString().toDouble()
             val coverShipping = buyerCoverShippingButton.isChecked
@@ -229,6 +230,7 @@ class AddPost : AppCompatActivity() {
             val acctEmail = sharedPreferences.getString("acctEmail", "guest")
             val offer = hashMapOf(
                 "buyerID" to buyerID,
+                "sellerID" to sellerID,
                 "buyerEmail" to acctEmail,
                 "listingID" to listingID,
                 "itemName" to itemName,

@@ -4,6 +4,7 @@ import android.content.Context
 
 data class WantAdViewModel(
     val listingID: String,
+    val sellerID: String,
     val username: String,
     val rating: Int,
     val title: String,
