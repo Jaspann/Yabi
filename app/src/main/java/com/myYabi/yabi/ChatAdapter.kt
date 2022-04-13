@@ -25,9 +25,9 @@ import org.json.JSONObject
 class ChatAdapter(
     var context: Context,
     var activity: Activity,
-    var accounts: Array<String>,
-    var messages: Array<String>,
-    var isOffer: Array<Double>
+    var accounts: ArrayList<String>,
+    var messages: ArrayList<String>,
+    var isOffer: ArrayList<Double>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var billingClient: BillingClient? = null
@@ -81,6 +81,7 @@ class ChatAdapter(
                 5
             )
         }
+        /*TODO fix index out of bounds error
         if(messages[position].substring(0, "listingImages/".length + 1) == "listingImages/")
         {
             holder.userImage.visibility = View.VISIBLE
@@ -92,6 +93,7 @@ class ChatAdapter(
                 Picasso.get().load(results).into(holder.userImage)
             }
         }
+         */
         constraintSet.applyTo(holder.constraint)
 
         if(isOffer[position] != -1.0)
