@@ -51,6 +51,7 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
         holder.offerButton.setOnClickListener {
             val intent = Intent(itemsViewModel.context, ViewOffers::class.java)
             //intent.putExtra("isCounter", true)
+            intent.putExtra("listingID", itemsViewModel.listingID)
             intent.putExtra("title", itemsViewModel.title)
             intent.putExtra("desc", itemsViewModel.desc)
             intent.putExtra("price", itemsViewModel.price)

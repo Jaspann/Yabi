@@ -38,11 +38,11 @@ class Messaging : AppCompatActivity() {
         })
     }
 
-    private fun fillOffers(emails : List<String>, itemNames: List<String>, offerPrices: List<Double>)
+    private fun fillOffers(listingIDs: List<String>, emails : List<String>, itemNames: List<String>, offerPrices: List<Double>)
     {
         val data = ArrayList<OfferViewModel>()
         for (i in itemNames.indices) {
-            data.add(OfferViewModel(emails[i], itemNames[i], offerPrices[i], this))
+            data.add(OfferViewModel(listingIDs[i], emails[i], itemNames[i], offerPrices[i], this))
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.ChatListRecycler)
@@ -66,20 +66,19 @@ class Messaging : AppCompatActivity() {
             .addOnSuccessListener { results ->
                 Log.d("TAG", "offers retrieved.")
                 queryResult = results.documents
-                var tempLong: Long
-                var tempLongTwo: Long
+                var tempString = ""
                 val itemNames = arrayListOf<String>()
                 val offerPrices = arrayListOf<Double>()
                 val emails = arrayListOf<String>()
+                val listingIDs = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
                         if (document.get("BuyerID") == userID) {
-                            emails.add(document.get("BuyerEmail") as String)
-                            itemNames.add(document.get("itemName") as String)
-                            tempLong = (document.get("youroffer").toString().substringBefore('.')
-                                .toLong() as Long)
-                            offerPrices.add(tempLong.toDouble())
-
+                            emails.add(document.get("BuyerEmail").toString())
+                            itemNames.add(document.get("itemName").toString())
+                            tempString = (document.get("yourOffer").toString())
+                            offerPrices.add(tempString.toDouble())
+                            listingIDs.add(document.get("listingID").toString())
                         }
                     } catch (e: NullPointerException) {
                         Log.e("MainActivity", "Error processing listings", e)
@@ -88,7 +87,7 @@ class Messaging : AppCompatActivity() {
                     }
                 }
 
-                fillOffers(emails,itemNames, offerPrices)
+                fillOffers(listingIDs, emails ,itemNames, offerPrices)
             }
             .addOnFailureListener { e ->
                 Log.w("TAG", "Failed to retrieve listings.", e)

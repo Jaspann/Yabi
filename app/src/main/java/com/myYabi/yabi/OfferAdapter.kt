@@ -22,12 +22,13 @@ class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapte
 
         holder.userTextView.text = OfferViewModel.buyer
         holder.titleTextView.text = OfferViewModel.itemName
-        val offer = "$" + String.format("%.2f", OfferViewModel.youroffer)
+        val offer = "$" + String.format("%.2f", OfferViewModel.yourOffer)
         holder.offerTextView.text = offer
 
         holder.offerbutton.setOnClickListener {
             val intent = Intent(OfferViewModel.context, PostChat::class.java)
             intent.putExtra("user", OfferViewModel.buyer)
+            intent.putExtra("listingID", OfferViewModel.listingID)
             OfferViewModel.context.startActivity(intent)
         }
 
