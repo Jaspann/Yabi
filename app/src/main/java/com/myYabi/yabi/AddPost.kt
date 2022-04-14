@@ -243,7 +243,7 @@ class AddPost : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Offer Submitted",
                         Toast.LENGTH_LONG
                     ).show()
-                    onOfferSubmit(listingID.toString())
+                    onOfferSubmit(listingID.toString(), itemName, yourOffer)
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding offer document", e)
@@ -257,10 +257,27 @@ class AddPost : AppCompatActivity() {
         }
 
     }
-    private fun onOfferSubmit(listingID: String){
-        val intent = Intent(this, PostChat::class.java)
-        intent.putExtra("listingID", listingID)
-        startActivity(intent)
+    private fun onOfferSubmit(listingID: String, itemName: String, yourOffer: Double){
+        val db = Firebase.firestore
+        val listingID = intent.getStringExtra("listingID")
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
+        val userMessage = "I would like to sell you $itemName for $$yourOffer."
+        val message = hashMapOf(
+            "listingID" to listingID,
+            "userID" to userID,
+            "message" to userMessage,
+            "price" to yourOffer,
+            "creationTimestamp" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("chats")
+            .add(message)
+            .addOnSuccessListener {
+                val intent = Intent(this, PostChat::class.java)
+                intent.putExtra("listingID", listingID)
+                startActivity(intent)
+            }
     }
     private fun fillScreen()
     {

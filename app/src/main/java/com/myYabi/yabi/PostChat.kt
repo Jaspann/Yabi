@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.android.billingclient.api.*
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -65,7 +67,8 @@ class PostChat : AppCompatActivity() {
             "listingID" to listingID,
             "userID" to userID,
             "message" to message,
-            "price" to price
+            "price" to price,
+            "creationTimestamp" to FieldValue.serverTimestamp()
         )
 
         db.collection("chats")
@@ -88,6 +91,7 @@ class PostChat : AppCompatActivity() {
 
         db.collection("chats")
             .whereEqualTo("listingID", listingID)
+            .orderBy("creationTimestamp", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { results ->
                 Log.d("Chat", "Chats retrieved.")
