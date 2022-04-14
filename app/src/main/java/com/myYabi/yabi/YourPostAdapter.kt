@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import myYabi.yabi.R
 
 class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView.Adapter<YourPostAdapter.ViewHolder>() {
@@ -29,7 +31,12 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
 
         holder.titleTextVew.text = itemsViewModel.title
         holder.descTextView.text = itemsViewModel.desc
-        //holder.imageView.setImageResource(itemsViewModel.img)
+        val mStorage = FirebaseStorage.getInstance().reference
+
+        if(itemsViewModel.image != "")
+            mStorage.child(itemsViewModel.image).downloadUrl.addOnSuccessListener { results ->
+                Picasso.get().load(results).into(holder.imageView);
+            }
         val offerText = "Offers"
         holder.offerButton.text = offerText
         val price = "$" + String.format("%.2f", itemsViewModel.price)
@@ -74,10 +81,7 @@ class YourPostAdapter(private val mList: List<YourPostViewModel>) : RecyclerView
             intent.putExtra("covering", itemsViewModel.shipCover)
             itemsViewModel.context.startActivity(intent)
         }
-
-
         //TODO: holder.deleteButton.setOnClickListener()
-
     }
 
 
