@@ -101,8 +101,9 @@ class ViewOffers : AppCompatActivity() {
     private fun fillOffers(emails : List<String>,itemNames: List<String>, offerPrices: List<Double>)
     {
         val data = ArrayList<OfferViewModel>()
+        val listingID = intent.getStringExtra("listingID").toString()
         for (i in itemNames.indices) {
-            data.add(OfferViewModel(emails[i], itemNames[i], offerPrices[i], this))
+            data.add(OfferViewModel(listingID, emails[i], itemNames[i], offerPrices[i], this))
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.offersRecycler)
@@ -134,7 +135,7 @@ class ViewOffers : AppCompatActivity() {
                 for (document in queryResult) {
                     try {
                         if (document.get("userID") != userID && document.get("itemName") == itemName) {
-                            emails.add(document.get("BuyerEmail") as String)
+                            emails.add(document.get("buyerEmail") as String)
                             itemNames.add(document.get("itemName") as String)
                             tempString = document.get("yourOffer").toString()
                             try {

@@ -28,6 +28,7 @@ class OfferAdapter(private val mList: List<OfferViewModel>): RecyclerView.Adapte
         holder.offerbutton.setOnClickListener {
             val intent = Intent(OfferViewModel.context, PostChat::class.java)
             intent.putExtra("user", OfferViewModel.buyer)
+            intent.putExtra("listingID", OfferViewModel.listingID)
             OfferViewModel.context.startActivity(intent)
         }
 

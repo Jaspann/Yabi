@@ -243,7 +243,7 @@ class AddPost : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Offer Submitted",
                         Toast.LENGTH_LONG
                     ).show()
-                    onOfferSubmit()
+                    onOfferSubmit(listingID.toString())
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding offer document", e)
@@ -257,9 +257,9 @@ class AddPost : AppCompatActivity() {
         }
 
     }
-    private fun onOfferSubmit(){
-
+    private fun onOfferSubmit(listingID: String){
         val intent = Intent(this, PostChat::class.java)
+        intent.putExtra("listingID", listingID)
         startActivity(intent)
     }
     private fun fillScreen()

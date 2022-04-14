@@ -42,7 +42,7 @@ class Messaging : AppCompatActivity() {
     {
         val data = ArrayList<OfferViewModel>()
         for (i in itemNames.indices) {
-            data.add(OfferViewModel(emails[i], itemNames[i], offerPrices[i], this))
+            data.add(OfferViewModel("ERROR", emails[i], itemNames[i], offerPrices[i], this))
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.ChatListRecycler)

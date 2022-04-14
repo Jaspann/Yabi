@@ -58,7 +58,12 @@ class PostChat : AppCompatActivity() {
     private fun sendMessage(message: String?, price: Double?)
     {
         val db = Firebase.firestore
+        val listingID = intent.getStringExtra("listingID")
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
         val message = hashMapOf(
+            "listingID" to listingID,
+            "userID" to userID,
             "message" to message,
             "price" to price
         )
@@ -72,6 +77,9 @@ class PostChat : AppCompatActivity() {
 
     private fun getDatabaseMessages() {
         val db = Firebase.firestore
+        val listingID = intent.getStringExtra("listingID")
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
         var queryResult: MutableList<DocumentSnapshot>
         val account = arrayListOf<String>()
         val messages = arrayListOf<String>()
@@ -79,12 +87,17 @@ class PostChat : AppCompatActivity() {
         var tempString: String
 
         db.collection("chats")
+            .whereEqualTo("listingID", listingID)
             .get()
             .addOnSuccessListener { results ->
                 Log.d("Chat", "Chats retrieved.")
                 queryResult = results.documents
                 for (document in queryResult) {
-                    account.add("us")
+                    if (document.get("userID").toString() == userID.toString()) {
+                        account.add("us")
+                    } else {
+                        account.add("them")
+                    }
                     messages.add(document.get("message").toString())
                     tempString = document.get("price").toString()
                     offers.add(tempString.toDouble())
