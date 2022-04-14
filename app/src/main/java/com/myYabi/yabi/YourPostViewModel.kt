@@ -7,10 +7,11 @@ data class YourPostViewModel(
     val sellerID: String,
     val title : String,
     val desc : String,
-    // val img : Int,
+    val img : Int,
     val offers : Int,
     val price : Double,
     val location : String,
     val shippingSeller : Boolean,
     val shipCover : Double,
+    val image: String,
     val context : Context) {}

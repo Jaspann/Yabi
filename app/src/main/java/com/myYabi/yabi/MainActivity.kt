@@ -1,7 +1,6 @@
 package com.myYabi.yabi
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -9,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +19,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-import kotlinx.android.synthetic.main.activity_main.toolbar
 import myYabi.yabi.R
 
 
@@ -60,22 +58,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setRefreshRecyclers()
     {
-        refreshForYou.setOnRefreshListener(OnRefreshListener {
+        refreshForYou.setOnRefreshListener {
             refreshForYou.isRefreshing = false
             getForYouPosts()
-        })
-        refreshLocal.setOnRefreshListener(OnRefreshListener {
+        }
+        refreshLocal.setOnRefreshListener {
             refreshLocal.isRefreshing = false
             //getLocalPosts()
-        })
-        refreshNewPosts.setOnRefreshListener(OnRefreshListener {
+        }
+        refreshNewPosts.setOnRefreshListener {
             refreshNewPosts.isRefreshing = false
             getNewPosts()
-        })
-        refreshYourPosts.setOnRefreshListener(OnRefreshListener {
+        }
+        refreshYourPosts.setOnRefreshListener {
             refreshYourPosts.isRefreshing = false
             getYourPosts()
-        })
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -218,6 +216,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     locations,
                     coverShipping,
                     coveredShipping,
+                    images
                 )
             }
             .addOnFailureListener { e ->
@@ -284,9 +283,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
 
-
-                val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-
                 if(
                     sharedPreferences.getBoolean("Furniture", false) ||
                     sharedPreferences.getBoolean("Games", false) ||
@@ -322,11 +318,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun fillYourPosts(listingIDs: List<String>, sellerIDs: List<String>, itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
-                              locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>) {
+                              locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>) {
         val data = ArrayList<YourPostViewModel>()
 
         for (i in itemNames.indices) {
-            data.add(YourPostViewModel(listingIDs[i], sellerIDs[i], itemNames[i], itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i], coveredShipping[i], this))
+            data.add(YourPostViewModel(
+                listingIDs[i],
+                sellerIDs[i],
+                itemNames[i],
+                itemDescriptions[i],
+                0,
+                0,
+                itemPrices[i],
+                locations[i],
+                coverShipping[i],
+                coveredShipping[i],
+                images[i],
+                this))
         }
 
         val recyclerview = findViewById<RecyclerView>(R.id.YourPostsRecycler)
@@ -443,59 +451,56 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
 
-        if (item.itemId == R.id.local)
-        {
-            hideScreens(item.itemId)
-        }
-        else if (item.itemId == R.id.for_you)
-        {
-            hideScreens(item.itemId)
-        }
-        else if (item.itemId == R.id.new_postings)
-        {
-            hideScreens(item.itemId)
-        }
-        //change boolean expression to test things as guest
-        else if(sharedPreferences.getString("userID", "guest") != "guest")
-        {
-            when (item.itemId) {
-                /*
-                R.id.nav_account -> {
-                    val intent = Intent(this, Account::class.java)
-                    startActivity(intent)
-                }
-                */
-                R.id.nav_chat -> {
-                    val intent = Intent(this, Messaging::class.java)
-                    startActivity(intent)
-                }
-                /*
-                R.id.nav_posts -> {
-                    val intent = Intent(this, YourPosts::class.java)
-                    startActivity(intent)
-                }
-                R.id.nav_complete -> {
-                    val intent = Intent(this, CompletedOffers::class.java)
-                    startActivity(intent)
-                }
-                 */
-                R.id.nav_settings -> {
-                    val intent = Intent(this, Settings::class.java)
-                    val userID = this.intent.getStringExtra("userID")
-                    intent.putExtra("SignUp", false)
-                    startActivity(intent)
-                }
-                R.id.your_posts -> {
-                    hideScreens(item.itemId)
+        when {
+            item.itemId == R.id.local -> {
+                hideScreens(item.itemId)
+            }
+            item.itemId == R.id.for_you -> {
+                hideScreens(item.itemId)
+            }
+            item.itemId == R.id.new_postings -> {
+                hideScreens(item.itemId)
+            }
+            //change boolean expression to test things as guest
+            sharedPreferences.getString("userID", "guest") != "guest" -> {
+                when (item.itemId) {
+                    /*
+                    R.id.nav_account -> {
+                        val intent = Intent(this, Account::class.java)
+                        startActivity(intent)
+                    }
+                    */
+                    R.id.nav_chat -> {
+                        val intent = Intent(this, Messaging::class.java)
+                        startActivity(intent)
+                    }
+                    /*
+                    R.id.nav_posts -> {
+                        val intent = Intent(this, YourPosts::class.java)
+                        startActivity(intent)
+                    }
+                    R.id.nav_complete -> {
+                        val intent = Intent(this, CompletedOffers::class.java)
+                        startActivity(intent)
+                    }
+                     */
+                    R.id.nav_settings -> {
+                        val intent = Intent(this, Settings::class.java)
+                        this.intent.getStringExtra("userID")
+                        intent.putExtra("SignUp", false)
+                        startActivity(intent)
+                    }
+                    R.id.your_posts -> {
+                        hideScreens(item.itemId)
+                    }
                 }
             }
-        }
-        else
-            Toast.makeText(
+            else -> Toast.makeText(
                 applicationContext,
                 "Please sign in first",
                 Toast.LENGTH_LONG
             ).show()
+        }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
