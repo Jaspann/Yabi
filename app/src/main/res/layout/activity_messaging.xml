@@ -16,21 +16,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Messaging"/>
+        app:title="Seller Messaging"/>
 
     <FrameLayout
-        android:layout_width="409dp"
-        android:layout_height="675dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_marginTop="56dp">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refreshChatList"
             class="androidx.swiperefreshlayout.widget.SwipeRefreshLayout"
-            android:layout_width="410dp"
-            android:layout_height="694dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             tools:context=".ViewOffers">
 
             <androidx.recyclerview.widget.RecyclerView
