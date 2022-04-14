@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         refreshLocal.setOnRefreshListener {
             refreshLocal.isRefreshing = false
-            //getLocalPosts()
+            getLocalPosts()
         }
         refreshNewPosts.setOnRefreshListener {
             refreshNewPosts.isRefreshing = false
@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         getNewPosts()
         getForYouPosts()
         getYourPosts()
+        getLocalPosts()
     }
 
     private fun getNewPosts(){
@@ -317,6 +318,74 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
+    private fun getLocalPosts() {
+        val db = Firebase.firestore
+        var queryResult: MutableList<DocumentSnapshot>
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userID = sharedPreferences.getString("userID", "guest")
+        val acctZip = sharedPreferences.getInt("zipCode", 0)
+
+        db.collection("listings")
+            .whereEqualTo("postalCode", acctZip)
+            .orderBy("creationTimestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { results ->
+                Log.d("TAG", "Listings retrieved.")
+                queryResult = results.documents
+                var tempString: String
+                val listingIDs = arrayListOf<String>()
+                val sellerIDs = arrayListOf<String>()
+                val emails = arrayListOf<String>()
+                val itemNames = arrayListOf<String>()
+                val itemDescriptions = arrayListOf<String>()
+                val itemPrices = arrayListOf<Double>()
+                val locations = arrayListOf<String>()
+                val tags = arrayListOf<String>()
+                val images = arrayListOf<String>()
+                val coverShipping = arrayListOf<Boolean>()
+                val coveredShipping = arrayListOf<Double>()
+                for (document in queryResult) {
+                    try {
+                        if (document.get("userID") != userID) {
+                            listingIDs.add(document.id)
+                            sellerIDs.add(document.get("userID").toString())
+                            emails.add(document.get("acctEmail").toString())
+                            itemNames.add(document.get("itemName").toString())
+                            itemDescriptions.add(document.get("itemDescription").toString())
+                            tempString = document.get("requestedPrice").toString()
+                            itemPrices.add(tempString.toDouble())
+                            locations.add(
+                                document.get("shippingCity").toString() + ", " + document.get(
+                                    "shippingState"
+                                ).toString()
+                            )
+                            if(document.contains("tag"))
+                                tags.add(document.get("tag") as String)
+                            else
+                                tags.add("")
+                            coverShipping.add(document.get("coverShipping") as Boolean)
+                            tempString = document.get("coveredShipping").toString()
+                            coveredShipping.add(tempString.toDouble())
+                            if(document.contains("imagePath"))
+                                images.add(document.get("imagePath") as String)
+                            else
+                                images.add("")
+                        }
+                    } catch(e: NullPointerException) {
+                        Log.e("MainActivity", "Error processing listings", e)
+                    } catch(e: ClassCastException) {
+                        Log.e("MainActivity", "Error casting listing types", e)
+                    }
+                }
+
+                fillLocalPosts(listingIDs, sellerIDs, emails, itemNames, itemDescriptions, itemPrices, locations, tags, coverShipping, coveredShipping, images)
+            }
+            .addOnFailureListener{ e ->
+                Log.w("TAG", "Failed to retrieve listings.", e)
+            }
+
+    }
+
     private fun fillYourPosts(listingIDs: List<String>, sellerIDs: List<String>, itemNames: List<String>, itemDescriptions: List<String>, itemPrices: List<Double>,
                               locations: List<String>, coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>) {
         val data = ArrayList<YourPostViewModel>()
@@ -384,6 +453,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         val recyclerview = findViewById<RecyclerView>(R.id.NewPostsRecycler)
+
+        recyclerview.layoutManager = LinearLayoutManager(this)
+
+        val adapter = WantAdAdapter(data)
+
+        recyclerview.adapter = adapter
+    }
+
+    private fun fillLocalPosts(listingIDs: List<String>, sellerIDs: List<String>, emails: List<String>, itemNames: List<String>, itemDescriptions: List<String>,
+                             itemPrices: List<Double>, locations: List<String>, tags: List<String>,
+                             coverShipping: List<Boolean>, coveredShipping: List<Double>, images: List<String>) {
+        val data = ArrayList<WantAdViewModel>()
+
+        for (i in itemNames.indices) {
+            data.add(WantAdViewModel(listingIDs[i], sellerIDs[i], emails[i], -1, itemNames[i],
+                itemDescriptions[i], 0, itemPrices[i], locations[i], coverShipping[i],
+                coveredShipping[i], tags[i], images[i], this))
+        }
+
+
+        val recyclerview = findViewById<RecyclerView>(R.id.LocalRecycler)
 
         recyclerview.layoutManager = LinearLayoutManager(this)
 

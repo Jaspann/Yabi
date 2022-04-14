@@ -37,6 +37,8 @@ class LogIn : AppCompatActivity() {
         var dbpass: String
         var userID: String
         var acctEmail: String
+        var acctZip: Int
+        var tempString: String
 
         when {
             email.isEmpty() -> {
@@ -64,8 +66,10 @@ class LogIn : AppCompatActivity() {
                             dbpass = results.documents[0].get("password").toString()
                             acctEmail = results.documents[0].get("email").toString()
                             userID = results.documents[0].id
+                            tempString = results.documents[0].get("zip").toString()
+                            acctZip = tempString.toInt()
                             if (pass == dbpass) {
-                                onLogInSuccess(userID, acctEmail)
+                                onLogInSuccess(userID, acctEmail, acctZip)
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -93,11 +97,12 @@ class LogIn : AppCompatActivity() {
         }
     }
 
-    private fun onLogInSuccess(userID: String, acctEmail: String) {
+    private fun onLogInSuccess(userID: String, acctEmail: String, acctZip: Int) {
         val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("userID", userID)
         editor.putString("acctEmail", acctEmail)
+        editor.putInt("zipCode", acctZip)
         editor.apply()
 
         val intent = Intent(this, MainActivity::class.java)
@@ -119,6 +124,7 @@ class LogIn : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         editor.putString("userID", "guest")
         editor.putString("acctEmail", "guest")
+        editor.putInt("zipCode", 0)
         editor.apply()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
