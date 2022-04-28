@@ -73,8 +73,8 @@ class Messaging : AppCompatActivity() {
                 val listingIDs = arrayListOf<String>()
                 for (document in queryResult) {
                     try {
-                        if (document.get("BuyerID") == userID) {
-                            emails.add(document.get("BuyerEmail").toString())
+                        if (document.get("buyerID") == userID) {
+                            emails.add(document.get("buyerEmail").toString())
                             itemNames.add(document.get("itemName").toString())
                             tempString = (document.get("yourOffer").toString())
                             offerPrices.add(tempString.toDouble())

@@ -157,6 +157,7 @@
                     android:layout_marginStart="4dp"
                     android:backgroundTint="#2CE094"
                     android:includeFontPadding="false"
+                        android:visibility="gone"
                     android:text="@string/edit_posting"
                     android:textAllCaps="false"
                     android:textSize="13sp"
@@ -173,6 +174,7 @@
                     android:backgroundTint="#DD6363"
                     android:text="@string/delete_post"
                     android:textAllCaps="false"
+                    android:visibility="gone"
                     app:cornerRadius="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/yourDescriptionText" />
