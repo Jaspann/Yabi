@@ -1,6 +1,6 @@
 # YABI: Want ads for collectors
 
-An application desined for collectors to display want ads for the items they are searching for. Can create ads, chat with other users, and connect to Google's API to process transactions.
+An application designed for collectors to display want ads for the items they are searching for. Can create ads, chat with other users, and process transactions.
 
 Development has indefinitly stoped at this time.
 
